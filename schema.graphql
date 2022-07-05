@@ -1,0 +1,118 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type AccountDto {
+    createdAt: DateTime!
+    email: String!
+    id: Int!
+    role: String!
+    updatedAt: DateTime!
+    username: String!
+}
+
+type AuthOutput {
+    id: Int!
+    role: String!
+    username: String!
+}
+
+type ImageDto {
+    path: String
+    url: String
+}
+
+type MeOutput {
+    email: String!
+    id: Int!
+    role: String!
+    username: String!
+}
+
+type Mutation {
+    createPlace(input: CreatePlaceInput!): PlaceDto!
+    createPlaceComment(input: CreatePlaceCommentInput!): PlaceCommentDto!
+    signIn(input: SignInInput!): SignInOutput!
+    signUp(input: SignUpInput!): SignUpOutput!
+}
+
+type PlaceCommentDto {
+    account: AccountDto!
+    content: String!
+    createdAt: DateTime!
+    id: Int!
+    images: [ImageDto!]!
+    place: PlaceDto!
+    updatedAt: DateTime!
+}
+
+type PlaceDto {
+    comments: [PlaceCommentDto!]!
+    createdAt: DateTime!
+    description: String!
+    id: Int!
+    image: ImageDto
+    latitude: Float!
+    longitude: Float!
+    name: String!
+    updatedAt: DateTime!
+}
+
+type Query {
+    auth: AuthOutput!
+    getPlace(input: GetPlaceInput!): PlaceDto!
+    hello: String!
+    me: MeOutput!
+}
+
+type SignInOutput {
+    token: String!
+}
+
+type SignUpOutput {
+    createdAt: DateTime!
+    email: String!
+    id: Int!
+    username: String!
+}
+
+"A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
+scalar DateTime
+
+input CreatePlaceCommentInput {
+    accountId: Int!
+    content: String!
+    images: [ImageInput!]!
+    placeId: Int!
+}
+
+input CreatePlaceInput {
+    description: String!
+    image: ImageInput
+    latitude: Float!
+    longitude: Float!
+    name: String!
+}
+
+input GetPlaceInput {
+    id: Int!
+}
+
+input ImageInput {
+    path: String
+    url: String
+}
+
+input SignInInput {
+    email: String!
+    password: String!
+}
+
+input SignUpInput {
+    email: String!
+    password: String!
+    username: String!
+}
