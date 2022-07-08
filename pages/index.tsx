@@ -4,6 +4,8 @@ import { getApolloClient } from '../apollo/client';
 import { HELLO_QUERY } from '../graphql/hello';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import useInitialApolloClient from '../hooks/apollo/useInitialApolloClient';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserSecret } from '@fortawesome/pro-solid-svg-icons';
 
 function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useInitialApolloClient(initialState);
@@ -17,6 +19,7 @@ function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSide
       <br />
       {count}
       <button type="button" onClick={() => setCount((prev) => prev + 1)}>
+        <FontAwesomeIcon icon={faUserSecret} />
         click
       </button>
     </div>
