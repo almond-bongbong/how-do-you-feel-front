@@ -1,4 +1,5 @@
-import '../styles/globals.css';
+import '../styles/normalize.scss';
+import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import { getApolloClient } from '../apollo/client';

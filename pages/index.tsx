@@ -19,7 +19,7 @@ function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSide
       <br />
       {count}
       <button type="button" onClick={() => setCount((prev) => prev + 1)}>
-        <FontAwesomeIcon icon={faUserSecret} />
+        <FontAwesomeIcon icon={faUserSecret} color="#f00" />
         click
       </button>
     </div>
