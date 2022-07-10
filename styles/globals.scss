@@ -1,6 +1,30 @@
 @import './variables';
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   color: $base-font-color;
   font-size: $base-font-size;
+  font-family: $base-font-family;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: #000;
+  font-weight: 700;
+  font-size: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  color: $button-font-color;
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+  cursor: pointer;
 }

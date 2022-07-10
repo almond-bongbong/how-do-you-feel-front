@@ -1,5 +1,58 @@
 .container {
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
-  background-color: #333;
-  color: #fff;
+}
+
+.bg_image {
+  width: 50%;
+  overflow: hidden;
+  position: relative;
+  height: 100vh;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.form_area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 0 40px 40px;
+
+  h1 {
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+}
+
+.begin_wrap {
+  margin-top: 30px;
+}
+
+.btn_kakao {
+  display: block;
+  height: 40px;
+  padding: 0 24px 0 55px;
+  border-radius: 4px;
+  background: url(../../../images/login/kakao-logo.png) no-repeat 20px center #fee500;
+  background-size: 20px;
+  cursor: pointer;
+}
+
+.login_wrap {
+  margin-top: 60px;
+  font-size: 18px;
 }
