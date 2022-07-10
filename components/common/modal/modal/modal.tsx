@@ -15,7 +15,7 @@ interface Props {
   visible?: boolean;
   children: React.ReactNode;
   isMaskClosable?: boolean;
-  width: number | string;
+  width?: number | string;
   onClose?: () => void;
 }
 
