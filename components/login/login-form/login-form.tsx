@@ -7,8 +7,8 @@ import loginBgImage from '../../../images/login/login-bg.webp';
 import styles from './login-form.module.scss';
 import { AUTH_STATE_KEY } from '../../../constants/keys';
 import Button from '../../common/form/button';
-import Modal from '../../common/modal/modal';
 import { useModal } from '../../../hooks/modal/useModal';
+import LoginModal from '../../common/modal/login-modal';
 
 const cx = classNames.bind(styles);
 
@@ -60,12 +60,7 @@ function LoginForm() {
         </div>
       </div>
 
-      <Modal visible={visibleLoginModal} onClose={closeLoginModal}>
-        <p>로그인 폼</p>
-        <Button style={{ width: 120 }} onClick={closeLoginModal}>
-          닫기
-        </Button>
-      </Modal>
+      <LoginModal visible={visibleLoginModal} onClose={closeLoginModal} />
     </div>
   );
 }

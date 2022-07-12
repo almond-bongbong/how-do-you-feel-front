@@ -8,18 +8,30 @@ import { isServer } from '../../../../libs/environment';
 import { lockBodyScroll, unlockBodyScroll } from '../../../../libs/lock-body-scroll';
 import useIsomorphicLayoutEffect from '../../../../hooks/common/useIsomorphicLayoutEffect';
 import { MODAL_PORTAL_ID } from '../../../../constants/element';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/pro-light-svg-icons';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   visible?: boolean;
   children: React.ReactNode;
-  isMaskClosable?: boolean;
   width?: number | string;
+  isMaskClosable?: boolean;
+  hasCloseButton?: boolean;
+  contentClassName?: string;
   onClose?: () => void;
 }
 
-function Modal({ visible = false, children, isMaskClosable = false, width, onClose }: Props) {
+function Modal({
+  visible = false,
+  children,
+  width,
+  isMaskClosable = false,
+  hasCloseButton = true,
+  contentClassName,
+  onClose,
+}: Props) {
   const id = useId();
   const modalBodyRef = useRef<HTMLDivElement | null>(null);
   const [localVisible, setLocalVisible] = useState(visible);
@@ -96,7 +108,7 @@ function Modal({ visible = false, children, isMaskClosable = false, width, onClo
         <div className={cx('mask')} />
         <div className={cx('modal', { has_scroll: hasScroll })} onClick={handleClickMask}>
           <div
-            className={cx('content')}
+            className={cx('content', contentClassName)}
             ref={(el) => {
               modalBodyRef.current = el;
               resizeTargetRef.current = el;
@@ -105,6 +117,11 @@ function Modal({ visible = false, children, isMaskClosable = false, width, onClo
             onClick={(e) => e.stopPropagation()}
           >
             <div className={cx('section')}>{children}</div>
+            {hasCloseButton && (
+              <button type="button" className={cx('close_button')} onClick={onClose}>
+                <FontAwesomeIcon icon={faXmark} title="닫기" />
+              </button>
+            )}
           </div>
         </div>
       </div>

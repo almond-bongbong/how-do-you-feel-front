@@ -1,0 +1,10 @@
+@import '../../../../styles/variables';
+
+.input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 5px 10px;
+  border: 1px solid $input-border-color;
+  border-radius: 4px;
+}
