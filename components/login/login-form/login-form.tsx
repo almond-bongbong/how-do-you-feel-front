@@ -1,34 +1,19 @@
 import React from 'react';
 import Image from 'next/image';
-import qs from 'query-string';
-import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames/bind';
 import loginBgImage from '../../../images/login/login-bg.webp';
 import styles from './login-form.module.scss';
-import { AUTH_STATE_KEY } from '../../../constants/keys';
 import Button from '../../common/form/button';
 import { useModal } from '../../../hooks/modal/useModal';
 import LoginModal from '../../common/modal/login-modal';
+import KakaoButton from '../kakao-button';
+import SignUpModal from '../../common/modal/sign-up-modal';
 
 const cx = classNames.bind(styles);
 
 function LoginForm() {
+  const [visibleSignUpModal, openSignUpModal, closeSignUpModal] = useModal(false);
   const [visibleLoginModal, openLoginModal, closeLoginModal] = useModal(false);
-
-  const handleClickKaKaoAuth = () => {
-    const redirectUrl = `${window.location.origin}${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_PATH}`;
-    const clientId = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-    const state = uuidv4();
-    sessionStorage.setItem(AUTH_STATE_KEY, state);
-
-    const query = qs.stringify({
-      client_id: clientId,
-      redirect_uri: redirectUrl,
-      response_type: 'code',
-      state,
-    });
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?${query}`;
-  };
 
   return (
     <div className={cx('container')}>
@@ -47,19 +32,26 @@ function LoginForm() {
         <h2>지금 가장 괜찮은 장소</h2>
 
         <div className={cx('begin_wrap')}>
-          <button type="button" className={cx('btn_kakao')} onClick={handleClickKaKaoAuth}>
-            카카오로 시작하기
-          </button>
+          <KakaoButton text="카카오로 시작하기" />
+          <Button className={cx('btn_signup')} onClick={openSignUpModal}>
+            이메일로 가입하기
+          </Button>
         </div>
 
         <div className={cx('login_wrap')}>
           <p>이미 가입하셨나요?</p>
-          <Button style={{ width: 160 }} onClick={openLoginModal}>
-            로그인
-          </Button>
+          <Button onClick={openLoginModal}>로그인</Button>
         </div>
       </div>
 
+      <SignUpModal
+        visible={visibleSignUpModal}
+        onClose={closeSignUpModal}
+        onSuccessSignUp={() => {
+          closeSignUpModal();
+          openLoginModal();
+        }}
+      />
       <LoginModal visible={visibleLoginModal} onClose={closeLoginModal} />
     </div>
   );

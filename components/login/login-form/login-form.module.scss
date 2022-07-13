@@ -39,20 +39,20 @@
 }
 
 .begin_wrap {
+  width: 200px;
   margin-top: 30px;
 }
 
-.btn_kakao {
-  display: block;
-  height: 40px;
-  padding: 0 24px 0 55px;
-  border-radius: 4px;
-  background: url(../../../images/login/kakao-logo.png) no-repeat 20px center #fee500;
-  background-size: 20px;
-  cursor: pointer;
+.btn_signup {
+  margin-top: 10px;
 }
 
 .login_wrap {
-  margin-top: 60px;
+  width: 200px;
+  margin-top: 80px;
   font-size: 17px;
+
+  p {
+    margin-bottom: 15px;
+  }
 }

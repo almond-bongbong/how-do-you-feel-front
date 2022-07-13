@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactPortal, useEffect, useState } from 'react';
 import { isBrowser } from '../../../../libs/environment';
-import { addRootElement } from '../../../../libs/element';
+import { addRootElementOrCreate } from '../../../../libs/element';
 import { createPortal } from 'react-dom';
 
 interface Props {
@@ -13,7 +13,7 @@ function Portal({ id, children }: Props): ReactPortal | null {
   const portalContainerElement = isBrowser() && document.getElementById(id);
 
   useEffect(() => {
-    addRootElement(id);
+    addRootElementOrCreate(id);
     setIsInit(true);
   }, [id]);
 

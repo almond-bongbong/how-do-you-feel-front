@@ -7,13 +7,32 @@ const cx = classNames.bind(styles);
 interface Props {
   children: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
+  theme?: 'default' | 'primary' | 'primary-line';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
   style?: CSSProperties;
+  autoFocus?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function Button({ children, type = 'button', style, onClick }: Props) {
+function Button({
+  children,
+  type = 'button',
+  theme = 'default',
+  size = 'md',
+  className,
+  style,
+  autoFocus,
+  onClick,
+}: Props) {
   return (
-    <button type={type} className={cx('btn')} style={style} onClick={onClick}>
+    <button
+      type={type}
+      autoFocus={autoFocus}
+      className={cx('btn', theme, size, className)}
+      style={style}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

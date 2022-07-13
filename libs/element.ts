@@ -1,14 +1,17 @@
 import { isServer } from './environment';
 import { MODAL_PORTAL_ID } from '../constants/element';
 
-export const addRootElement = (id: string): void => {
-  if (isServer()) return;
-  const existElement = document.getElementById(id);
-  if (!existElement) {
+export const addRootElementOrCreate = (id: string): HTMLElement | null => {
+  if (isServer()) return null;
+  let rootElement = document.getElementById(id);
+  if (!rootElement) {
     const element = document.createElement('div');
     element.setAttribute('id', id);
     document.body.appendChild(element);
+    rootElement = element;
   }
+
+  return rootElement;
 };
 
 export const getActiveModalLength = () => {

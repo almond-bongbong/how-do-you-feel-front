@@ -8,15 +8,15 @@ schema {
 type AccountDto {
     createdAt: DateTime!
     email: String!
-    id: Int!
+    id: String!
+    platform: String!
     role: String!
     updatedAt: DateTime!
     username: String!
 }
 
 type AuthOutput {
-    id: Int!
-    role: String!
+    id: String!
     username: String!
 }
 
@@ -27,7 +27,8 @@ type ImageDto {
 
 type MeOutput {
     email: String!
-    id: Int!
+    id: String!
+    platform: String!
     role: String!
     username: String!
 }
@@ -75,7 +76,7 @@ type SignInOutput {
 type SignUpOutput {
     createdAt: DateTime!
     email: String!
-    id: Int!
+    id: String!
     username: String!
 }
 
@@ -83,7 +84,7 @@ type SignUpOutput {
 scalar DateTime
 
 input CreatePlaceCommentInput {
-    accountId: Int!
+    accountId: String!
     content: String!
     images: [ImageInput!]!
     placeId: Int!
@@ -107,8 +108,11 @@ input ImageInput {
 }
 
 input SignInInput {
-    email: String!
-    password: String!
+    email: String
+    password: String
+    "EMAIL, KAKAO"
+    platform: String!
+    platformAccessToken: String
 }
 
 input SignUpInput {

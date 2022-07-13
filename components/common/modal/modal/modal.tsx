@@ -17,6 +17,7 @@ interface Props {
   visible?: boolean;
   children: React.ReactNode;
   width?: number | string;
+  isEscClosable?: boolean;
   isMaskClosable?: boolean;
   hasCloseButton?: boolean;
   contentClassName?: string;
@@ -27,6 +28,7 @@ function Modal({
   visible = false,
   children,
   width,
+  isEscClosable = false,
   isMaskClosable = false,
   hasCloseButton = true,
   contentClassName,
@@ -82,11 +84,11 @@ function Modal({
 
   const keydownHandler = useCallback(
     (e: KeyboardEvent) => {
-      if (getLastModalId() === id && e.code === 'Escape') {
+      if (isEscClosable && getLastModalId() === id && e.code === 'Escape') {
         onClose?.();
       }
     },
-    [onClose, id],
+    [isEscClosable, id, onClose],
   );
 
   useEffect(() => {

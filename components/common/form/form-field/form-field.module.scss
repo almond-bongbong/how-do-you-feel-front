@@ -1,0 +1,11 @@
+.form_field {
+  & + & {
+    margin-top: 15px;
+  }
+
+  label {
+    display: inline-block;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+}

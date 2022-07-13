@@ -3,6 +3,9 @@ import Modal from '../modal';
 import classNames from 'classnames/bind';
 import styles from './login-modal.module.scss';
 import Input from '../../form/input';
+import FormField from '../../form/form-field';
+import KakaoButton from '../../../login/kakao-button';
+import Button from '../../form/button';
 
 const cx = classNames.bind(styles);
 
@@ -18,11 +21,22 @@ function LoginModal({ visible, onClose }: Props) {
 
   return (
     <Modal visible={visible} width={500} contentClassName={cx('login_modal')} onClose={onClose}>
-      <h2>로그인 하기</h2>
+      <div className={cx('login_form')}>
+        <form onSubmit={handleSubmit}>
+          <h2>로그인 하기</h2>
+          <FormField>
+            <Input placeholder="아이디 (이메일)" value="" onChange={console.log} />
+          </FormField>
+          <FormField>
+            <Input placeholder="비밀번호" value="" onChange={console.log} />
+          </FormField>
+          <Button theme="primary-line" className={cx('btn_login')}>로그인</Button>
+        </form>
 
-      <form className={cx('login_form')} onSubmit={handleSubmit}>
-        <Input value="abc가나" onChange={console.log} />
-      </form>
+        <div className={cx('sns_login')}>
+          <KakaoButton text="카카오로 로그인 하기" />
+        </div>
+      </div>
     </Modal>
   );
 }

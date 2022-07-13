@@ -20,7 +20,8 @@ export type AccountDto = {
   __typename?: 'AccountDto';
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
-  id: Scalars['Int'];
+  id: Scalars['String'];
+  platform: Scalars['String'];
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
@@ -28,13 +29,12 @@ export type AccountDto = {
 
 export type AuthOutput = {
   __typename?: 'AuthOutput';
-  id: Scalars['Int'];
-  role: Scalars['String'];
+  id: Scalars['String'];
   username: Scalars['String'];
 };
 
 export type CreatePlaceCommentInput = {
-  accountId: Scalars['Int'];
+  accountId: Scalars['String'];
   content: Scalars['String'];
   images: Array<ImageInput>;
   placeId: Scalars['Int'];
@@ -66,7 +66,8 @@ export type ImageInput = {
 export type MeOutput = {
   __typename?: 'MeOutput';
   email: Scalars['String'];
-  id: Scalars['Int'];
+  id: Scalars['String'];
+  platform: Scalars['String'];
   role: Scalars['String'];
   username: Scalars['String'];
 };
@@ -137,8 +138,11 @@ export type QueryGetPlaceArgs = {
 };
 
 export type SignInInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  /** EMAIL, KAKAO */
+  platform: Scalars['String'];
+  platformAccessToken?: InputMaybe<Scalars['String']>;
 };
 
 export type SignInOutput = {
@@ -156,9 +160,16 @@ export type SignUpOutput = {
   __typename?: 'SignUpOutput';
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
-  id: Scalars['Int'];
+  id: Scalars['String'];
   username: Scalars['String'];
 };
+
+export type SignUpMutationVariables = Exact<{
+  input: SignUpInput;
+}>;
+
+
+export type SignUpMutation = { __typename?: 'Mutation', signUp: { __typename?: 'SignUpOutput', id: string } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -166,6 +177,39 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
 
+export const SignUpDocument = gql`
+    mutation SignUp($input: SignUpInput!) {
+  signUp(input: $input) {
+    id
+  }
+}
+    `;
+export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+
+/**
+ * __useSignUpMutation__
+ *
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSignUpMutation(baseOptions?: Apollo.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, options);
+      }
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
+export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello

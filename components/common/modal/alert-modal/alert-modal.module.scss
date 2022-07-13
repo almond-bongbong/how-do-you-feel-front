@@ -1,0 +1,38 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  background-color: rgba(100, 100, 100, 0.5);
+}
+
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 320px;
+  max-width: calc(100% - 40px);
+  background-color: #fff;
+  border-radius: 3px;
+  text-align: center;
+  white-space: pre-line;
+  transform: translate(-50%, -50%);
+}
+
+.message {
+  padding: 30px 20px;
+  line-height: 1.7;
+}
+
+.button_wrap {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    border: 0;
+    border-radius: 0;
+  }
+}
