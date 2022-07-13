@@ -123,9 +123,9 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
             }
           />
         </FormField>
-        <FormField label="사용자명" id="username">
+        <FormField label="사용자명" id="nickname">
           <Input
-            id="username"
+            id="nickname"
             description="최소 3자이상, 영문, 한글, 숫자만 입력가능합니다."
             max={15}
             status={isValidToStatus(usernameValidation?.isValid)}

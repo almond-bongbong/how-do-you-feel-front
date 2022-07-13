@@ -9,6 +9,7 @@ interface Props {
   type?: 'button' | 'submit' | 'reset';
   theme?: 'default' | 'primary' | 'primary-line';
   size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
   className?: string;
   style?: CSSProperties;
   autoFocus?: boolean;
@@ -20,6 +21,7 @@ function Button({
   type = 'button',
   theme = 'default',
   size = 'md',
+  disabled,
   className,
   style,
   autoFocus,
@@ -29,6 +31,7 @@ function Button({
     <button
       type={type}
       autoFocus={autoFocus}
+      disabled={disabled}
       className={cx('btn', theme, size, className)}
       style={style}
       onClick={onClick}

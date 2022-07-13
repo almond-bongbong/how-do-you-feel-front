@@ -24,4 +24,9 @@
   color: $primary-color;
   border: 1px solid $primary-color;
   background-color: #fff;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }

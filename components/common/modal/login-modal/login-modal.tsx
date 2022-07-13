@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from 'react';
+import React, { FormEventHandler, useState } from 'react';
 import Modal from '../modal';
 import classNames from 'classnames/bind';
 import styles from './login-modal.module.scss';
@@ -15,6 +15,9 @@ interface Props {
 }
 
 function LoginModal({ visible, onClose }: Props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
   };
@@ -25,12 +28,27 @@ function LoginModal({ visible, onClose }: Props) {
         <form onSubmit={handleSubmit}>
           <h2>로그인 하기</h2>
           <FormField>
-            <Input placeholder="아이디 (이메일)" value="" onChange={console.log} />
+            <Input
+              placeholder="아이디 (이메일)"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </FormField>
           <FormField>
-            <Input placeholder="비밀번호" value="" onChange={console.log} />
+            <Input
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </FormField>
-          <Button theme="primary-line" className={cx('btn_login')}>로그인</Button>
+          <Button
+            type="submit"
+            disabled={!email || !password}
+            theme="primary-line"
+            className={cx('btn_login')}
+          >
+            로그인
+          </Button>
         </form>
 
         <div className={cx('sns_login')}>
