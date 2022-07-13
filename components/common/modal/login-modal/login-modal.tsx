@@ -6,6 +6,10 @@ import Input from '../../form/input';
 import FormField from '../../form/form-field';
 import KakaoButton from '../../../login/kakao-button';
 import Button from '../../form/button';
+import { SIGN_IN_MUTATION } from '../../../../graphql/account/sign-in';
+import { ApolloError, useMutation } from '@apollo/client';
+import { SignInMutation, SignInMutationVariables } from '../../../../generated/graphql';
+import alertModal from '../alert-modal';
 
 const cx = classNames.bind(styles);
 
@@ -17,9 +21,23 @@ interface Props {
 function LoginModal({ visible, onClose }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginMutation, { loading }] = useMutation<SignInMutation, SignInMutationVariables>(
+    SIGN_IN_MUTATION,
+  );
 
-  const handleSubmit: FormEventHandler = (e) => {
+  const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      const { data } = await loginMutation({
+        variables: { input: { email, password, platform: 'EMAIL' } },
+      });
+      console.log(data);
+    } catch (error) {
+      const message =
+        error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';
+      await alertModal(message);
+    }
   };
 
   return (
@@ -37,6 +55,7 @@ function LoginModal({ visible, onClose }: Props) {
           <FormField>
             <Input
               placeholder="비밀번호"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -44,6 +63,7 @@ function LoginModal({ visible, onClose }: Props) {
           <Button
             type="submit"
             disabled={!email || !password}
+            loading={loading}
             theme="primary-line"
             className={cx('btn_login')}
           >

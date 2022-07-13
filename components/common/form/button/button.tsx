@@ -1,6 +1,8 @@
 import React, { CSSProperties, MouseEventHandler } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -10,6 +12,7 @@ interface Props {
   theme?: 'default' | 'primary' | 'primary-line';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
+  loading?: boolean;
   className?: string;
   style?: CSSProperties;
   autoFocus?: boolean;
@@ -22,6 +25,7 @@ function Button({
   theme = 'default',
   size = 'md',
   disabled,
+  loading,
   className,
   style,
   autoFocus,
@@ -32,11 +36,12 @@ function Button({
       type={type}
       autoFocus={autoFocus}
       disabled={disabled}
-      className={cx('btn', theme, size, className)}
+      className={cx('btn', theme, size, className, { loading })}
       style={style}
-      onClick={onClick}
+      onClick={loading ? () => {} : onClick}
     >
       {children}
+      {loading && <FontAwesomeIcon icon={faSpinner} className={cx('spinner', 'fa-spin')} />}
     </button>
   );
 }
