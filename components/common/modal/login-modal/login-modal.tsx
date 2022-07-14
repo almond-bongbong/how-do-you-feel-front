@@ -11,6 +11,7 @@ import { useSignInMutation } from '../../../../generated/graphql';
 import alertModal from '../alert-modal';
 import { TOKEN_KEY } from '../../../../constants/keys';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +36,7 @@ function LoginModal({ visible, onClose }: Props) {
         },
       });
       if (!data) return alertModal('로그인에 실패했습니다.');
-      sessionStorage.setItem(TOKEN_KEY, data.signIn.token);
+      Cookies.set(TOKEN_KEY, data.signIn.token);
       await router.push('/');
     } catch (error) {
       const message =

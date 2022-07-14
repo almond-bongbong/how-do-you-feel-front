@@ -1,18 +1,15 @@
 import React, { ReactElement, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getKakaoToken } from '../../../api/auth';
-import { AUTH_STATE_KEY } from '../../../constants/keys';
+import { AUTH_STATE_KEY, TOKEN_KEY } from '../../../constants/keys';
 import { getOriginByRequest } from '../../../libs/url';
 import { useSignInMutation } from '../../../generated/graphql';
 import alertModal from '../../../components/common/modal/alert-modal';
 import { ApolloError } from '@apollo/client';
+import Cookies from 'js-cookie';
 
-interface Props {
-  token?: string | null;
-}
-
-function Kakao({ token }: Props): ReactElement {
+function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
   const router = useRouter();
   const [signInMutation] = useSignInMutation();
 
@@ -35,7 +32,7 @@ function Kakao({ token }: Props): ReactElement {
         },
       });
       if (!data) return alertModal('로그인에 실패했습니다.');
-      sessionStorage.setItem(AUTH_STATE_KEY, data.signIn.token);
+      Cookies.set(TOKEN_KEY, data.signIn.token);
       await router.push('/');
     } catch (error) {
       const message =
@@ -51,7 +48,7 @@ function Kakao({ token }: Props): ReactElement {
   return <div>카카오 연결중입니다</div>;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query, req }) => {
+export const getServerSideProps = async ({ query, req }: GetServerSidePropsContext) => {
   let token = null;
 
   if (typeof query.code === 'string') {
