@@ -6,10 +6,11 @@ import Input from '../../form/input';
 import FormField from '../../form/form-field';
 import KakaoButton from '../../../login/kakao-button';
 import Button from '../../form/button';
-import { SIGN_IN_MUTATION } from '../../../../graphql/account/sign-in';
-import { ApolloError, useMutation } from '@apollo/client';
-import { SignInMutation, SignInMutationVariables } from '../../../../generated/graphql';
+import { ApolloError } from '@apollo/client';
+import { useSignInMutation } from '../../../../generated/graphql';
 import alertModal from '../alert-modal';
+import { TOKEN_KEY } from '../../../../constants/keys';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
@@ -19,20 +20,23 @@ interface Props {
 }
 
 function LoginModal({ visible, onClose }: Props) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginMutation, { loading }] = useMutation<SignInMutation, SignInMutationVariables>(
-    SIGN_IN_MUTATION,
-  );
+  const [loginMutation, { loading }] = useSignInMutation();
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
 
     try {
       const { data } = await loginMutation({
-        variables: { input: { email, password, platform: 'EMAIL' } },
+        variables: {
+          input: { email, password, platform: 'EMAIL' },
+        },
       });
-      console.log(data);
+      if (!data) return alertModal('로그인에 실패했습니다.');
+      sessionStorage.setItem(TOKEN_KEY, data.signIn.token);
+      await router.push('/');
     } catch (error) {
       const message =
         error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';

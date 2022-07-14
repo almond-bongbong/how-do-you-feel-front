@@ -13,9 +13,8 @@ import {
   checkUsernameValidation,
   ValidationResult,
 } from '../../../../libs/validation';
-import { ApolloError, useMutation } from '@apollo/client';
-import { SignUpMutation, SignUpMutationVariables } from '../../../../generated/graphql';
-import { SIGN_UP_MUTATION } from '../../../../graphql/account/sign-up';
+import { ApolloError } from '@apollo/client';
+import { useSignUpMutation } from '../../../../generated/graphql';
 
 const cx = classNames.bind(styles);
 
@@ -39,9 +38,7 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
   const [passwordConfirmValidation, setPasswordConfirmValidation] = useState<ValidationResult>();
   const [username, setUsername] = useState('');
   const [usernameValidation, setUsernameValidation] = useState<ValidationResult>();
-  const [signUpMutation, { loading }] = useMutation<SignUpMutation, SignUpMutationVariables>(
-    SIGN_UP_MUTATION,
-  );
+  const [signUpMutation] = useSignUpMutation();
 
   const handleClickSignUp = async () => {
     const validationMessage =
