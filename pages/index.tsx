@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { HelloQuery, useHelloQuery } from '../generated/graphql';
+import React from 'react';
+import { HelloQuery } from '../generated/graphql';
 import { getApolloClient } from '../apollo/client';
 import { HELLO_QUERY } from '../graphql/hello';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import useInitialApolloClient from '../hooks/apollo/useInitialApolloClient';
+import HomeMain from '../components/home/home-main';
 
 function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useInitialApolloClient(initialState);
 
-  const { data } = useHelloQuery();
-  const [count, setCount] = useState(0);
+  console.log('render home');
 
-  return <div></div>;
+  return <HomeMain />;
 }
 
 export async function getServerSideProps(context: NextPageContext) {
@@ -27,6 +27,6 @@ export async function getServerSideProps(context: NextPageContext) {
   };
 }
 
-Home.isPrivate = true;
+Home.isPrivatePage = true;
 
 export default Home;

@@ -1,13 +1,15 @@
 import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { isBrowser, isServer } from '../libs/environment';
+import Cookies from 'js-cookie';
+import { TOKEN_KEY } from '../constants/keys';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4040/graphql',
 });
 
 const authLink = setContext((_, context) => {
-  const token = context.token;
+  const token = context.token ?? (isBrowser() && Cookies.get(TOKEN_KEY));
   return {
     headers: {
       authorization: token ? `Bearer ${token}` : '',

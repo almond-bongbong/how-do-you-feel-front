@@ -164,6 +164,11 @@ export type SignUpOutput = {
   username: Scalars['String'];
 };
 
+export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AuthQuery = { __typename?: 'Query', auth: { __typename?: 'AuthOutput', id: string, username: string } };
+
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
 }>;
@@ -184,6 +189,41 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
 
+export const AuthDocument = gql`
+    query Auth {
+  auth {
+    id
+    username
+  }
+}
+    `;
+
+/**
+ * __useAuthQuery__
+ *
+ * To run a query within a React component, call `useAuthQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAuthQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAuthQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAuthQuery(baseOptions?: Apollo.QueryHookOptions<AuthQuery, AuthQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+      }
+export function useAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthQuery, AuthQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+        }
+export type AuthQueryHookResult = ReturnType<typeof useAuthQuery>;
+export type AuthLazyQueryHookResult = ReturnType<typeof useAuthLazyQuery>;
+export type AuthQueryResult = Apollo.QueryResult<AuthQuery, AuthQueryVariables>;
 export const SignInDocument = gql`
     mutation SignIn($input: SignInInput!) {
   signIn(input: $input) {
