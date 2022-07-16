@@ -1,30 +1,47 @@
 @import 'styles/variables';
-$button-default-background: #eee;
 
 .btn {
   display: block;
   width: 100%;
   border-radius: 4px;
-  background-color: $button-default-background;
   font-size: $base-font-size;
   transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: darken($button-default-background, 5%);
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.sm {
+    height: 30px;
+    font-size: 0.9em;
+    line-height: 30px;
   }
 
   &.md {
     height: 40px;
+    line-height: 40px;
   }
 
   &.lg {
     height: 50px;
     font-size: 1.1em;
+    line-height: 50px;
   }
 
   &.loading {
     position: relative;
     font-size: 0;
+  }
+}
+
+.default {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: $base-font-color;
+
+  &:hover {
+    background-color: darken(#fff, 5%);
   }
 }
 
@@ -43,12 +60,15 @@ $button-default-background: #eee;
   background-color: #fff;
 
   &:hover {
-    background-color: lighten($primary-color, 55%);
+    background-color: lighten($primary-color, 53%);
   }
+}
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.gray {
+  background-color: #eee;
+
+  &:hover {
+    background-color: darken(#eee, 5%);
   }
 }
 

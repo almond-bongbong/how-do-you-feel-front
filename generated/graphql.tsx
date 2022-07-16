@@ -18,11 +18,14 @@ export type Scalars = {
 
 export type AccountDto = {
   __typename?: 'AccountDto';
+  bannerImage?: Maybe<ImageDto>;
+  bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['String'];
-  photo?: Maybe<ImageDto>;
+  location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
+  profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
@@ -49,6 +52,29 @@ export type CreatePlaceInput = {
   name: Scalars['String'];
 };
 
+export type EditProfileInput = {
+  bannerImage?: InputMaybe<ImageInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  profileImage?: InputMaybe<ImageInput>;
+  username: Scalars['String'];
+};
+
+export type EditProfileOutput = {
+  __typename?: 'EditProfileOutput';
+  bannerImage?: Maybe<ImageDto>;
+  bio?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  id: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+  platform: Scalars['String'];
+  profileImage?: Maybe<ImageDto>;
+  role: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  username: Scalars['String'];
+};
+
 export type GetPlaceInput = {
   id: Scalars['Int'];
 };
@@ -66,10 +92,13 @@ export type ImageInput = {
 
 export type MeOutput = {
   __typename?: 'MeOutput';
+  bannerImage?: Maybe<ImageDto>;
+  bio?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   id: Scalars['String'];
-  photo?: Maybe<ImageDto>;
+  location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
+  profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
   username: Scalars['String'];
 };
@@ -78,6 +107,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createPlace: PlaceDto;
   createPlaceComment: PlaceCommentDto;
+  editProfile: EditProfileOutput;
   signIn: SignInOutput;
   signUp: SignUpOutput;
 };
@@ -90,6 +120,11 @@ export type MutationCreatePlaceArgs = {
 
 export type MutationCreatePlaceCommentArgs = {
   input: CreatePlaceCommentInput;
+};
+
+
+export type MutationEditProfileArgs = {
+  input: EditProfileInput;
 };
 
 
@@ -174,7 +209,7 @@ export type AuthQuery = { __typename?: 'Query', auth: { __typename?: 'AuthOutput
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, photo?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
@@ -236,7 +271,13 @@ export const MeDocument = gql`
   me {
     id
     username
-    photo {
+    bio
+    location
+    bannerImage {
+      key
+      url
+    }
+    profileImage {
       key
       url
     }

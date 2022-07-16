@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import Modal from '../modal';
 import classNames from 'classnames/bind';
 import styles from './sign-up-modal.module.scss';
-import FormField from '../../form/form-field';
-import Input from '../../form/input';
-import Button from '../../form/button';
 import {
   checkEmailValidation,
   checkPasswordConfirmValidation,
   checkPasswordValidation,
   checkUsernameValidation,
+  isValidToInputStatus,
   ValidationResult,
-} from '../../../../libs/validation';
+} from '@src/libs/validation';
 import { ApolloError } from '@apollo/client';
-import { useSignUpMutation } from '../../../../generated/graphql';
+import { useSignUpMutation } from '@src/generated/graphql';
+import FormField from '@src/components/common/form/form-field';
+import Input from '@src/components/common/form/input';
+import Button from '@src/components/common/form/button';
 
 const cx = classNames.bind(styles);
 
@@ -22,11 +23,6 @@ interface Props {
   onClose?: () => void;
   onSuccessSignUp?: () => void;
 }
-
-const isValidToStatus = (isValid?: boolean) => {
-  if (isValid === undefined) return undefined;
-  return isValid ? 'success' : 'error';
-};
 
 function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
   const [email, setEmail] = useState('');
@@ -86,7 +82,7 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
           <Input
             id="email"
             max={40}
-            status={isValidToStatus(emailValidation?.isValid)}
+            status={isValidToInputStatus(emailValidation?.isValid)}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={(e) => setEmailValidation(checkEmailValidation(e.target.value))}
@@ -97,7 +93,7 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
             type="password"
             id="password"
             description="최소 6자 이상 입력해주세요."
-            status={isValidToStatus(passwordValidation?.isValid)}
+            status={isValidToInputStatus(passwordValidation?.isValid)}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onBlur={(e) => {
@@ -112,7 +108,7 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
           <Input
             type="password"
             id="password-confirmation"
-            status={isValidToStatus(passwordConfirmValidation?.isValid)}
+            status={isValidToInputStatus(passwordConfirmValidation?.isValid)}
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
             onBlur={(e) =>
@@ -123,9 +119,9 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
         <FormField label="사용자명" id="nickname">
           <Input
             id="nickname"
-            description="최소 3자이상, 영문, 한글, 숫자만 입력가능합니다."
+            description="최소 3자이상 최대 15자, 영문, 한글, 숫자만 입력가능합니다."
             max={15}
-            status={isValidToStatus(usernameValidation?.isValid)}
+            status={isValidToInputStatus(usernameValidation?.isValid)}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onBlur={(e) => setUsernameValidation(checkUsernameValidation(e.target.value))}

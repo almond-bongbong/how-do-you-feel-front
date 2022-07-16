@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 interface Props {
   children: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
-  theme?: 'default' | 'primary' | 'primary-line';
+  theme?: 'default' | 'primary' | 'primary-line' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;

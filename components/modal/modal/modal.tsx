@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { getActiveModalLength, getLastModalId } from '../../../../libs/element';
-import Portal from '../../util/portal';
 import classNames from 'classnames/bind';
 import styles from './modal.module.scss';
 import { useResizeDetector } from 'react-resize-detector';
-import { isServer } from '../../../../libs/environment';
-import { lockBodyScroll, unlockBodyScroll } from '../../../../libs/lock-body-scroll';
-import useIsomorphicLayoutEffect from '../../../../hooks/common/use-isomorphic-layout-effect';
-import { MODAL_PORTAL_ID } from '../../../../constants/element';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/pro-light-svg-icons';
+import useIsomorphicLayoutEffect from '@src/hooks/common/use-isomorphic-layout-effect';
+import { isServer } from '@src/libs/environment';
+import { getActiveModalLength, getLastModalId } from '@src/libs/element';
+import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
+import { MODAL_PORTAL_ID } from '@src/constants/element';
+import Portal from '@src/components/common/util/portal';
 
 const cx = classNames.bind(styles);
 

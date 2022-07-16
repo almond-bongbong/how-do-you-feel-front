@@ -1,11 +1,11 @@
 import React from 'react';
-import classNames from 'classnames/bind';
-import styles from './my-profile.module.scss';
-import Image from 'next/image';
-import useCurrentUser from '../../../hooks/auth/use-current-user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/pro-light-svg-icons';
-import Modal from '../../common/modal/modal';
+import classNames from 'classnames/bind';
+import ProfileImage from '@src/components/common/user/profile-image';
+import useCurrentUser from '@src/hooks/auth/use-current-user';
+import styles from './my-profile.module.scss';
+import Modal from '@src/components/modal/modal';
 
 const cx = classNames.bind(styles);
 
@@ -22,11 +22,10 @@ function MyProfile() {
   return (
     <div className={cx('my_profile')}>
       <div className={cx('photo')}>
-        <Image
-          src={'https://picsum.photos/200/300'}
-          width={40}
-          height={40}
-          alt={`${currentUser.username}님의 프로필`}
+        <ProfileImage
+          src={currentUser.photo?.url}
+          size={40}
+          alt={`${currentUser.username}님의 프로필사진`}
         />
       </div>
       <div className={cx('username')}>

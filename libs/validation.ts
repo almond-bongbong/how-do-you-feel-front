@@ -57,3 +57,8 @@ export const checkUsernameValidation = (username: string): ValidationResult => {
 
   return { isValid: true };
 };
+
+export const isValidToInputStatus = (isValid?: boolean) => {
+  if (isValid === undefined) return undefined;
+  return isValid ? 'success' : 'error';
+};

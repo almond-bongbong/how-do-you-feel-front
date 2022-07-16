@@ -2,15 +2,15 @@ import React, { FormEventHandler, useState } from 'react';
 import Modal from '../modal';
 import classNames from 'classnames/bind';
 import styles from './login-modal.module.scss';
-import Input from '../../form/input';
-import FormField from '../../form/form-field';
-import KakaoButton from '../../../login/kakao-button';
-import Button from '../../form/button';
 import { ApolloError } from '@apollo/client';
-import { useSignInMutation } from '../../../../generated/graphql';
-import { TOKEN_KEY } from '../../../../constants/keys';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import { useSignInMutation } from '@src/generated/graphql';
+import { TOKEN_KEY } from '@src/constants/keys';
+import FormField from '@src/components/common/form/form-field';
+import Input from '@src/components/common/form/input';
+import Button from '@src/components/common/form/button';
+import KakaoButton from '@src/components/login/kakao-button';
 
 const cx = classNames.bind(styles);
 

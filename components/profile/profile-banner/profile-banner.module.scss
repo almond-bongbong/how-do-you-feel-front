@@ -1,0 +1,55 @@
+.container {
+}
+
+.banner {
+  position: relative;
+  padding-top: 33.33333333%;
+  background-color: #eee;
+}
+
+.info {
+  position: relative;
+  margin-top: -75px;
+  padding: 0 50px;
+
+  .photo {
+    display: inline-block;
+    box-shadow: 0 0 10px 1px #999;
+    border-radius: 50%;
+  }
+
+  .user {
+    margin-top: 20px;
+
+    .name {
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .location {
+      margin-left: 15px;
+      color: #666;
+      font-size: 14px;
+
+      svg {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .people {
+    margin-top: 20px;
+    font-size: 14px;
+
+    span + span {
+      margin-left: 12px;
+    }
+  }
+
+  .edit_button {
+    position: absolute;
+    width: 100px;
+    top: 100px;
+    right: 50px;
+  }
+}

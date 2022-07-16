@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
+import loginBgImage from '@src/images/login/login-bg.webp';
 import classNames from 'classnames/bind';
-import loginBgImage from '../../../images/login/login-bg.webp';
 import styles from './login-form.module.scss';
-import Button from '../../common/form/button';
-import { useModal } from '../../../hooks/modal/use-modal';
-import LoginModal from '../../common/modal/login-modal';
-import KakaoButton from '../kakao-button';
-import SignUpModal from '../../common/modal/sign-up-modal';
+import { useModal } from '@src/hooks/modal/use-modal';
+import KakaoButton from '@src/components/login/kakao-button';
+import Button from '@src/components/common/form/button';
+import SignUpModal from '@src/components/modal/sign-up-modal';
+import LoginModal from '@src/components/modal/login-modal';
 
 const cx = classNames.bind(styles);
 
@@ -34,14 +34,16 @@ function LoginForm() {
 
           <div className={cx('begin_wrap')}>
             <KakaoButton text="카카오로 시작하기" />
-            <Button className={cx('btn_signup')} onClick={openSignUpModal}>
+            <Button theme="gray" className={cx('btn_signup')} onClick={openSignUpModal}>
               이메일로 가입하기
             </Button>
           </div>
 
           <div className={cx('login_wrap')}>
             <p>이미 가입하셨나요?</p>
-            <Button onClick={openLoginModal}>로그인</Button>
+            <Button theme="gray" onClick={openLoginModal}>
+              로그인
+            </Button>
           </div>
         </div>
 

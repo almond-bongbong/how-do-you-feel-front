@@ -6,11 +6,14 @@ schema {
 }
 
 type AccountDto {
+    bannerImage: ImageDto
+    bio: String
     createdAt: DateTime!
     email: String!
     id: String!
-    photo: ImageDto
+    location: String
     platform: String!
+    profileImage: ImageDto
     role: String!
     updatedAt: DateTime!
     username: String!
@@ -21,16 +24,33 @@ type AuthOutput {
     username: String!
 }
 
+type EditProfileOutput {
+    bannerImage: ImageDto
+    bio: String
+    createdAt: DateTime!
+    email: String!
+    id: String!
+    location: String
+    platform: String!
+    profileImage: ImageDto
+    role: String!
+    updatedAt: DateTime!
+    username: String!
+}
+
 type ImageDto {
     key: String!
     url: String!
 }
 
 type MeOutput {
+    bannerImage: ImageDto
+    bio: String
     email: String!
     id: String!
-    photo: ImageDto
+    location: String
     platform: String!
+    profileImage: ImageDto
     role: String!
     username: String!
 }
@@ -38,6 +58,7 @@ type MeOutput {
 type Mutation {
     createPlace(input: CreatePlaceInput!): PlaceDto!
     createPlaceComment(input: CreatePlaceCommentInput!): PlaceCommentDto!
+    editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
 }
@@ -98,6 +119,14 @@ input CreatePlaceInput {
     latitude: Float!
     longitude: Float!
     name: String!
+}
+
+input EditProfileInput {
+    bannerImage: ImageInput
+    bio: String
+    location: String
+    profileImage: ImageInput
+    username: String!
 }
 
 input GetPlaceInput {

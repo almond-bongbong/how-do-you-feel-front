@@ -1,13 +1,13 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { getKakaoToken } from '../../../api/auth';
-import { AUTH_STATE_KEY, TOKEN_KEY } from '../../../constants/keys';
-import { getOriginByRequest } from '../../../libs/url';
-import { useSignInMutation } from '../../../generated/graphql';
 import { ApolloError } from '@apollo/client';
 import Cookies from 'js-cookie';
-import Modal from '../../../components/common/modal/modal';
+import { useSignInMutation } from '@src/generated/graphql';
+import { AUTH_STATE_KEY, TOKEN_KEY } from '@src/constants/keys';
+import Modal from '@src/components/modal/modal';
+import { getKakaoToken } from '@src/api/auth';
+import { getOriginByRequest } from '@src/libs/url';
 
 function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
   const router = useRouter();

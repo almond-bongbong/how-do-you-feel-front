@@ -14,7 +14,13 @@ export const ME_QUERY = gql`
     me {
       id
       username
-      photo {
+      bio
+      location
+      bannerImage {
+        key
+        url
+      }
+      profileImage {
         key
         url
       }

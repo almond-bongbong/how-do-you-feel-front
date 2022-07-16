@@ -3,56 +3,60 @@ import React, {
   FocusEventHandler,
   ForwardedRef,
   forwardRef,
-  HTMLInputTypeAttribute,
   useId,
 } from 'react';
 import classNames from 'classnames/bind';
-import styles from './input.module.scss';
+import styles from './textarea.module.scss';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-  type?: HTMLInputTypeAttribute;
   value: string;
   id?: string;
   name?: string;
   placeholder?: string;
   max?: number;
   status?: 'error' | 'success';
+  row?: number;
   description?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onFocus?: FocusEventHandler<HTMLInputElement>;
-  onBlur?: FocusEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onFocus?: FocusEventHandler<HTMLTextAreaElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>;
 }
 
-function Input(
+const FONT_SIZE = 15;
+const LINE_HEIGHT = 1.2;
+const VERTICAL_PADDING = 20;
+const FONT_HEIGHT = FONT_SIZE * LINE_HEIGHT;
+
+function Textarea(
   {
-    type = 'text',
     value,
     id,
     name,
     placeholder,
     max,
     status,
+    row = 1,
     description,
     onChange,
     onFocus,
     onBlur,
   }: Props,
-  ref: ForwardedRef<HTMLInputElement>,
+  ref: ForwardedRef<HTMLTextAreaElement>,
 ) {
   const generatedId = useId();
 
   return (
-    <div className={cx('input', status)}>
-      <input
+    <div className={cx('textarea', status)}>
+      <textarea
         ref={ref}
-        type={type}
         id={id ?? generatedId}
         name={name}
         placeholder={placeholder}
         value={value}
         maxLength={max}
+        style={{ height: row * FONT_HEIGHT + VERTICAL_PADDING }}
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
@@ -67,4 +71,4 @@ function Input(
   );
 }
 
-export default forwardRef(Input);
+export default forwardRef(Textarea);
