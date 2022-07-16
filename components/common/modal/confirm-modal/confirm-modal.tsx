@@ -13,7 +13,7 @@ interface Options {
   okText?: string;
 }
 
-function alertModal(message: ReactNode, options?: Options): Promise<void> {
+function Modal.alert(message: ReactNode, options?: Options): Promise<void> {
   const { okText = '확인' } = options || {};
 
   return new Promise((resolve) => {

@@ -8,7 +8,6 @@ import KakaoButton from '../../../login/kakao-button';
 import Button from '../../form/button';
 import { ApolloError } from '@apollo/client';
 import { useSignInMutation } from '../../../../generated/graphql';
-import alertModal from '../alert-modal';
 import { TOKEN_KEY } from '../../../../constants/keys';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
@@ -24,24 +23,28 @@ function LoginModal({ visible, onClose }: Props) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginMutation, { loading }] = useSignInMutation();
+  const [loginMutation] = useSignInMutation();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const { data } = await loginMutation({
         variables: {
           input: { email, password, platform: 'EMAIL' },
         },
       });
-      if (!data) return alertModal('로그인에 실패했습니다.');
+      if (!data) return Modal.alert('로그인에 실패했습니다.');
       Cookies.set(TOKEN_KEY, data.signIn.token);
       await router.push('/');
     } catch (error) {
       const message =
         error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';
-      await alertModal(message);
+      await Modal.alert(message);
+    } finally {
+      setLoading(false);
     }
   };
 

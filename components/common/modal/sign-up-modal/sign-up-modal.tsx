@@ -5,7 +5,6 @@ import styles from './sign-up-modal.module.scss';
 import FormField from '../../form/form-field';
 import Input from '../../form/input';
 import Button from '../../form/button';
-import alertModal from '../alert-modal';
 import {
   checkEmailValidation,
   checkPasswordConfirmValidation,
@@ -47,10 +46,11 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
       passwordConfirmValidation?.message ??
       usernameValidation?.message;
 
-    if (validationMessage) {
-      await alertModal(validationMessage);
-      return;
-    }
+    if (validationMessage) return Modal.alert(validationMessage);
+    if (!email) return Modal.alert('이메일을 입력해주세요.');
+    if (!password) return Modal.alert('비밀번호를 입력해주세요.');
+    if (!passwordConfirm) return Modal.alert('비밀번호 확인을 입력해주세요.');
+    if (!username) return Modal.alert('사용자명을 입력해주세요.');
 
     try {
       const { errors } = await signUpMutation({
@@ -64,16 +64,16 @@ function SignUpModal({ visible, onClose, onSuccessSignUp }: Props) {
       });
 
       if (errors) {
-        await alertModal(errors[0].message);
+        await Modal.alert(errors[0].message);
         return;
       }
 
-      await alertModal('가입이 완료되었습니다.\n로그인 해주세요!');
+      await Modal.alert('가입이 완료되었습니다.\n로그인 해주세요!');
       onSuccessSignUp?.();
     } catch (error) {
       const message =
         error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';
-      await alertModal(message);
+      await Modal.alert(message);
     }
   };
 

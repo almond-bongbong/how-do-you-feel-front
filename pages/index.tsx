@@ -3,15 +3,18 @@ import { HelloQuery } from '../generated/graphql';
 import { getApolloClient } from '../apollo/client';
 import { HELLO_QUERY } from '../graphql/hello';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
-import useInitialApolloClient from '../hooks/apollo/useInitialApolloClient';
-import HomeMain from '../components/home/home-main';
+import useInitializeApolloClient from '../hooks/apollo/use-initialize-apollo-client';
+import Timeline from '../components/home/timeline';
+import Layout from '../components/layout/layout';
 
 function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  useInitialApolloClient(initialState);
+  useInitializeApolloClient(initialState);
 
-  console.log('render home');
-
-  return <HomeMain />;
+  return (
+    <Layout>
+      <Timeline />
+    </Layout>
+  );
 }
 
 export async function getServerSideProps(context: NextPageContext) {

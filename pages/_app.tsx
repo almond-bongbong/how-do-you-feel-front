@@ -14,8 +14,6 @@ export interface SharedComponentAttributes {
 function MyApp({ Component, pageProps }: AppProps) {
   const PageComponent = Component as NextComponentType & SharedComponentAttributes;
 
-  console.log('render');
-
   return (
     <ApolloProvider client={client}>
       <AuthProvider isPrivatePage={PageComponent.isPrivatePage}>

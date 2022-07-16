@@ -1,0 +1,13 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.main {
+  width: 700px;
+  min-height: 100vh;
+  border-right: 1px solid #e6e6e6;
+  border-left: 1px solid #e6e6e6;
+}

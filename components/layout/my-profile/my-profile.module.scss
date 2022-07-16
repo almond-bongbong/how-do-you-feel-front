@@ -1,0 +1,32 @@
+.my_profile {
+  display: flex;
+  flex-direction: row;
+  margin-top: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.photo {
+  flex: 0 0 auto;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.username {
+  flex: 1;
+  position: relative;
+  padding: 0 30px 0 15px;
+}
+
+.logout {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  padding: 5px;
+  background-color: transparent;
+  transform: translateY(-50%);
+}

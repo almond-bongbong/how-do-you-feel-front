@@ -6,7 +6,7 @@ import styles from './modal.module.scss';
 import { useResizeDetector } from 'react-resize-detector';
 import { isServer } from '../../../../libs/environment';
 import { lockBodyScroll, unlockBodyScroll } from '../../../../libs/lock-body-scroll';
-import useIsomorphicLayoutEffect from '../../../../hooks/common/useIsomorphicLayoutEffect';
+import useIsomorphicLayoutEffect from '../../../../hooks/common/use-isomorphic-layout-effect';
 import { MODAL_PORTAL_ID } from '../../../../constants/element';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/pro-light-svg-icons';

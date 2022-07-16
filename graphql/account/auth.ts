@@ -8,3 +8,16 @@ export const AUTH_QUERY = gql`
     }
   }
 `;
+
+export const ME_QUERY = gql`
+  query Me {
+    me {
+      id
+      username
+      photo {
+        key
+        url
+      }
+    }
+  }
+`;

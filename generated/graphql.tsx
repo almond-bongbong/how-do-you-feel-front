@@ -21,6 +21,7 @@ export type AccountDto = {
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['String'];
+  photo?: Maybe<ImageDto>;
   platform: Scalars['String'];
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -54,19 +55,20 @@ export type GetPlaceInput = {
 
 export type ImageDto = {
   __typename?: 'ImageDto';
-  path?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
+  key: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type ImageInput = {
-  path?: InputMaybe<Scalars['String']>;
-  url?: InputMaybe<Scalars['String']>;
+  key: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type MeOutput = {
   __typename?: 'MeOutput';
   email: Scalars['String'];
   id: Scalars['String'];
+  photo?: Maybe<ImageDto>;
   platform: Scalars['String'];
   role: Scalars['String'];
   username: Scalars['String'];
@@ -169,6 +171,11 @@ export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AuthQuery = { __typename?: 'Query', auth: { __typename?: 'AuthOutput', id: string, username: string } };
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, photo?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
 }>;
@@ -224,6 +231,45 @@ export function useAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthQ
 export type AuthQueryHookResult = ReturnType<typeof useAuthQuery>;
 export type AuthLazyQueryHookResult = ReturnType<typeof useAuthLazyQuery>;
 export type AuthQueryResult = Apollo.QueryResult<AuthQuery, AuthQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    username
+    photo {
+      key
+      url
+    }
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SignInDocument = gql`
     mutation SignIn($input: SignInInput!) {
   signIn(input: $input) {

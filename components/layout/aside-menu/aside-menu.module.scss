@@ -1,0 +1,33 @@
+.aside {
+  width: 250px;
+  padding: 20px 20px 20px 0;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+
+.navigation {
+  margin-bottom: 30px;
+
+  li {
+    + li {
+      margin-top: 10px;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 6px 0;
+    font-size: 22px;
+
+    &:hover {
+      color: #000;
+    }
+
+    svg {
+      width: 24px;
+      margin-right: 18px;
+    }
+  }
+}

@@ -1,11 +1,11 @@
 import { ReactElement, ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import useIsomorphicLayoutEffect from '../hooks/common/useIsomorphicLayoutEffect';
+import useIsomorphicLayoutEffect from '../hooks/common/use-isomorphic-layout-effect';
 import { TOKEN_KEY } from '../constants/keys';
-import { useAuthQuery } from '../generated/graphql';
+import { useMeQuery } from '../generated/graphql';
 import { authVar } from '../apollo/cache';
-import useCurrentUser from '../hooks/auth/useCurrentUser';
+import useCurrentUser from '../hooks/auth/use-current-user';
 
 interface Props {
   children: ReactNode;
@@ -16,15 +16,15 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
   const token = Cookies.get(TOKEN_KEY);
   const router = useRouter();
   const { isLoggedIn } = useCurrentUser();
-  const { data, error } = useAuthQuery({
+  const { data, error } = useMeQuery({
     skip: !token,
   });
 
   useIsomorphicLayoutEffect(() => {
-    if (data?.auth) {
+    if (data?.me) {
       authVar({
         isLoggedIn: true,
-        user: data.auth,
+        user: data.me,
       });
     }
   }, [data]);

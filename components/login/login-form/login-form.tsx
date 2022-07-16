@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import loginBgImage from '../../../images/login/login-bg.webp';
 import styles from './login-form.module.scss';
 import Button from '../../common/form/button';
-import { useModal } from '../../../hooks/modal/useModal';
+import { useModal } from '../../../hooks/modal/use-modal';
 import LoginModal from '../../common/modal/login-modal';
 import KakaoButton from '../kakao-button';
 import SignUpModal from '../../common/modal/sign-up-modal';

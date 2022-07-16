@@ -9,6 +9,7 @@ type AccountDto {
     createdAt: DateTime!
     email: String!
     id: String!
+    photo: ImageDto
     platform: String!
     role: String!
     updatedAt: DateTime!
@@ -21,13 +22,14 @@ type AuthOutput {
 }
 
 type ImageDto {
-    path: String
-    url: String
+    key: String!
+    url: String!
 }
 
 type MeOutput {
     email: String!
     id: String!
+    photo: ImageDto
     platform: String!
     role: String!
     username: String!
@@ -103,8 +105,8 @@ input GetPlaceInput {
 }
 
 input ImageInput {
-    path: String
-    url: String
+    key: String!
+    url: String!
 }
 
 input SignInInput {

@@ -5,9 +5,9 @@ import { getKakaoToken } from '../../../api/auth';
 import { AUTH_STATE_KEY, TOKEN_KEY } from '../../../constants/keys';
 import { getOriginByRequest } from '../../../libs/url';
 import { useSignInMutation } from '../../../generated/graphql';
-import alertModal from '../../../components/common/modal/alert-modal';
 import { ApolloError } from '@apollo/client';
 import Cookies from 'js-cookie';
+import Modal from '../../../components/common/modal/modal';
 
 function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
   const router = useRouter();
@@ -19,7 +19,7 @@ function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>
       const myState = sessionStorage.getItem(AUTH_STATE_KEY);
 
       if (myState !== state || !token) {
-        await alertModal('잘못된 접근입니다.');
+        await Modal.alert('잘못된 접근입니다.');
         return router.replace('/');
       }
 
@@ -32,13 +32,13 @@ function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>
             },
           },
         });
-        if (!data) return alertModal('로그인에 실패했습니다.');
+        if (!data) return Modal.alert('로그인에 실패했습니다.');
         Cookies.set(TOKEN_KEY, data.signIn.token);
         router.push('/');
       } catch (error) {
         const message =
           error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';
-        await alertModal(message);
+        await Modal.alert(message);
       }
     })();
   }, [router, token, signInMutation]);
