@@ -27,7 +27,9 @@
     "next": "12.2.1",
     "nprogress": "^0.2.0",
     "query-string": "^7.1.1",
+    "rc-slider": "^10.0.1",
     "react": "18.2.0",
+    "react-avatar-editor": "^13.0.0",
     "react-dom": "18.2.0",
     "react-resize-detector": "^7.1.2",
     "uuid": "^8.3.2"
@@ -46,6 +48,7 @@
     "@types/nprogress": "^0.2.0",
     "@types/query-string": "^6.3.0",
     "@types/react": "18.0.14",
+    "@types/react-avatar-editor": "^12.0.0",
     "@types/react-dom": "18.0.6",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
