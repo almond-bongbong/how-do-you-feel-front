@@ -1,8 +1,8 @@
 import Modal from '@src/components/modal/modal';
-import { imageFileRegExp } from '@src/libs/regexp';
+import { IMAGE_FILE_EXTENSION_REGEXP } from '@src/libs/regexp';
 
 export const validateImage = (file: File, options: { maxSize: number }): boolean => {
-  if (!imageFileRegExp.test(file.name)) {
+  if (!IMAGE_FILE_EXTENSION_REGEXP.test(file.name)) {
     Modal.alert('jpg, jpeg, png, gif 이미지만 사용할 수 있습니다.');
     return false;
   }

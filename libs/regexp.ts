@@ -3,4 +3,4 @@ export const EMAIL_REGEXP =
 
 export const USERNAME_REGEXP = /^[a-zA-Z가-힣0-9]{3,15}$/;
 
-export const imageFileRegExp = /(.*?)\.(jpg|jpeg|png|gif)$/i;
+export const IMAGE_FILE_EXTENSION_REGEXP = /(.*?)\.(jpg|jpeg|png|gif)$/i;
