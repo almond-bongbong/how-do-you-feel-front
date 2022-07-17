@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -11,15 +11,18 @@ const cx = classNames.bind(styles);
 
 interface Props {
   visible: boolean;
+  imageType?: 'profile' | 'banner';
   profilePhotoFile?: File | null;
+  aspectRatioWidth?: number;
   onClose: () => void;
   onConfirm: (file: File, dataUrl: string) => void;
 }
 
-const DEFAULT_SCALE = 1.1;
+const DEFAULT_SCALE = 1;
 
 function EditProfilePhotoModal({
   visible,
+  imageType,
   profilePhotoFile,
   onConfirm,
   onClose,
@@ -58,11 +61,18 @@ function EditProfilePhotoModal({
     });
   };
 
+  const { width, height, border } = useMemo(() => {
+    if (imageType === 'banner') return { width: 500, height: 500 / 3, border: [0, 100] };
+    return { width: 340, height: 340, border: 80 };
+  }, [imageType]);
+
   return (
     <Modal
       visible={visible}
       width={500}
+      center
       contentClassName={cx('edit_image_modal')}
+      closeButtonClassName={cx('edit_image_close')}
       onClose={onClose}
     >
       <div className={cx('image_wrap')}>
@@ -70,9 +80,9 @@ function EditProfilePhotoModal({
           <AvatarEditor
             ref={editorRef}
             image={profilePhotoFile}
-            width={320}
-            height={320}
-            border={90}
+            width={width}
+            height={height}
+            border={border}
             color={[50, 50, 50, 0.6]}
             scale={scale}
           />

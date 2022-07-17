@@ -21,6 +21,8 @@ interface Props {
   isMaskClosable?: boolean;
   hasCloseButton?: boolean;
   contentClassName?: string;
+  closeButtonClassName?: string;
+  center?: boolean;
   onClose?: () => void;
 }
 
@@ -32,6 +34,8 @@ function Modal({
   isMaskClosable = false,
   hasCloseButton = true,
   contentClassName,
+  closeButtonClassName,
+  center = false,
   onClose,
 }: Props) {
   const id = useId();
@@ -108,7 +112,7 @@ function Modal({
     <Portal id={MODAL_PORTAL_ID}>
       <div id={id} className={cx({ active: visible && localVisible })}>
         <div className={cx('mask')} />
-        <div className={cx('modal', { has_scroll: hasScroll })} onClick={handleClickMask}>
+        <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
           <div
             className={cx('content', contentClassName)}
             ref={(el) => {
@@ -120,7 +124,11 @@ function Modal({
           >
             <div className={cx('section')}>{children}</div>
             {hasCloseButton && (
-              <button type="button" className={cx('close_button')} onClick={onClose}>
+              <button
+                type="button"
+                className={cx('close_button', closeButtonClassName)}
+                onClick={onClose}
+              >
                 <FontAwesomeIcon icon={faXmark} title="닫기" />
               </button>
             )}

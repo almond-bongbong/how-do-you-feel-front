@@ -39,13 +39,13 @@
 }
 
 .overflow_body .content,
-.overflow_body.center_mode .content {
+.overflow_body.center .content {
   top: 0;
   margin: 50px auto;
   transform: none;
 }
 
-.center_mode .content {
+.center .content {
   margin: auto;
   position: relative;
   top: 50%;
@@ -70,7 +70,8 @@
   font-size: 0;
 
   svg {
-    font-size: 24px;
+    width: 24px;
+    height: 24px;
   }
 }
 

@@ -11,19 +11,25 @@ import { MAX_PROFILE_PHOTO_SIZE } from '@src/constants/file';
 
 const cx = classNames.bind(styles);
 
+type ImageType = 'profile' | 'banner';
+
 function EditProfileImage() {
   const { currentUser } = useCurrentUser();
-  const [selectedImageForEdit, setSelectedImageForEdit] = useState<{ file: File } | null>(null);
+  const [uploadImageKey, setUploadImageKey] = useState(0);
+  const [selectedImageForEdit, setSelectedImageForEdit] = useState<{
+    type: ImageType;
+    file: File;
+  } | null>(null);
 
-  const handleChangeBannerImage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeImage = (type: ImageType, e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     const selectedFile = files?.[0];
+    setUploadImageKey((prev) => prev + 1);
 
     if (selectedFile) {
       const validFile = validateImage(selectedFile, { maxSize: MAX_PROFILE_PHOTO_SIZE });
       if (!validFile) return;
-
-      setSelectedImageForEdit({ file: selectedFile });
+      setSelectedImageForEdit({ type, file: selectedFile });
     }
   };
 
@@ -38,15 +44,24 @@ function EditProfileImage() {
             alt="프로필 배경 이미지"
           />
         )}
-        <UploadImageButton className={cx('upload_banner')} onChange={handleChangeBannerImage} />
+        <UploadImageButton
+          key={uploadImageKey}
+          className={cx('upload_banner')}
+          onChange={(e) => handleChangeImage('banner', e)}
+        />
       </div>
       <div className={cx('profile_image')}>
         <ProfileImage src={currentUser?.profileImage?.url} size={100} />
-        <UploadImageButton className={cx('upload_profile')} onChange={handleChangeBannerImage} />
+        <UploadImageButton
+          key={uploadImageKey}
+          className={cx('upload_profile')}
+          onChange={(e) => handleChangeImage('profile', e)}
+        />
       </div>
 
       <EditProfilePhotoModal
         visible={selectedImageForEdit != null}
+        imageType={selectedImageForEdit?.type}
         profilePhotoFile={selectedImageForEdit?.file}
         onClose={() => setSelectedImageForEdit(null)}
         onConfirm={console.log}
