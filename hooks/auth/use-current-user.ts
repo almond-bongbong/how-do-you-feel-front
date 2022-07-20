@@ -1,18 +1,18 @@
 import { useReactiveVar } from '@apollo/client';
-import { authVar } from '../../apollo/cache';
 import { useCallback } from 'react';
 import Cookies from 'js-cookie';
-import { TOKEN_KEY } from '../../constants/keys';
 import { useRouter } from 'next/router';
+import { authVar } from '@src/apollo/cache';
+import { TOKEN_KEY } from '@src/constants/keys';
 
 function useCurrentUser() {
   const router = useRouter();
-  const { isLoggedIn, user } = useReactiveVar(authVar);
+  const { isLoggedIn, user, refetchMe } = useReactiveVar(authVar);
 
   const logout = useCallback(async () => {
     Cookies.remove(TOKEN_KEY);
     await router.push('/login');
-    authVar({ isLoggedIn: false, user: null });
+    authVar({ isLoggedIn: false, user: null, refetchMe: null });
   }, [router]);
 
   return {
@@ -20,6 +20,7 @@ function useCurrentUser() {
     isLoggedIn,
     currentUser: user,
     logout,
+    refetchMe,
   };
 }
 

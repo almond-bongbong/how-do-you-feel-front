@@ -36,7 +36,6 @@ function EditProfilePhotoModal({
   }, [visible]);
 
   const handleScale = (value: number | number[]) => {
-    console.log(value);
     if (Array.isArray(value)) return;
     setScale(1 + value / 100);
   };
@@ -105,7 +104,12 @@ function EditProfilePhotoModal({
         />
       </div>
 
-      <Button theme="primary-line" className={cx('submit_button')} onClick={handleConfirm}>
+      <Button
+        theme="primary-line"
+        loading={loading}
+        className={cx('submit_button')}
+        onClick={handleConfirm}
+      >
         확인
       </Button>
     </Modal>

@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './edit-profile-image.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
-import useCurrentUser from '@src/hooks/auth/use-current-user';
 import Image from 'next/image';
 import UploadImageButton from '@src/components/profile/upload-image-button';
 import { validateImage } from '@src/libs/file';
@@ -11,10 +10,21 @@ import { MAX_PROFILE_PHOTO_SIZE } from '@src/constants/file';
 
 const cx = classNames.bind(styles);
 
+interface Props {
+  bannerImage?: string | null;
+  profileImage?: string | null;
+  onChangeBannerImage: (file: File, dataUrl: string) => void;
+  onChangeProfileImage: (file: File, dataUrl: string) => void;
+}
+
 type ImageType = 'profile' | 'banner';
 
-function EditProfileImage() {
-  const { currentUser } = useCurrentUser();
+function EditProfileImage({
+  bannerImage,
+  profileImage,
+  onChangeBannerImage,
+  onChangeProfileImage,
+}: Props) {
   const [uploadImageKey, setUploadImageKey] = useState(0);
   const [selectedImageForEdit, setSelectedImageForEdit] = useState<{
     type: ImageType;
@@ -36,13 +46,8 @@ function EditProfileImage() {
   return (
     <div className={cx('container')}>
       <div className={cx('banner_image')}>
-        {currentUser?.bannerImage?.url && (
-          <Image
-            layout="fill"
-            objectFit="cover"
-            src={currentUser.bannerImage.url}
-            alt="프로필 배경 이미지"
-          />
+        {bannerImage && (
+          <Image layout="fill" objectFit="cover" src={bannerImage} alt="프로필 배경 이미지" />
         )}
         <UploadImageButton
           key={uploadImageKey}
@@ -51,7 +56,7 @@ function EditProfileImage() {
         />
       </div>
       <div className={cx('profile_image')}>
-        <ProfileImage src={currentUser?.profileImage?.url} size={100} />
+        <ProfileImage src={profileImage} size={100} alt="edit" />
         <UploadImageButton
           key={uploadImageKey}
           className={cx('upload_profile')}
@@ -64,7 +69,11 @@ function EditProfileImage() {
         imageType={selectedImageForEdit?.type}
         profilePhotoFile={selectedImageForEdit?.file}
         onClose={() => setSelectedImageForEdit(null)}
-        onConfirm={console.log}
+        onConfirm={(file, dataUrl) => {
+          if (selectedImageForEdit?.type === 'banner') onChangeBannerImage(file, dataUrl);
+          else onChangeProfileImage(file, dataUrl);
+          setSelectedImageForEdit(null);
+        }}
       />
     </div>
   );

@@ -23,7 +23,7 @@ function MyProfile() {
     <div className={cx('my_profile')}>
       <div className={cx('photo')}>
         <ProfileImage
-          src={currentUser.photo?.url}
+          src={currentUser.profileImage?.url}
           size={40}
           alt={`${currentUser.username}님의 프로필사진`}
         />

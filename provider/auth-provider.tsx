@@ -16,7 +16,7 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
   const token = Cookies.get(TOKEN_KEY);
   const router = useRouter();
   const { isLoggedIn } = useCurrentUser();
-  const { data, error } = useMeQuery({
+  const { data, error, refetch } = useMeQuery({
     skip: !token,
   });
 
@@ -25,6 +25,7 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
       authVar({
         isLoggedIn: true,
         user: data.me,
+        refetchMe: refetch,
       });
     }
   }, [data]);
@@ -35,6 +36,7 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
       authVar({
         isLoggedIn: false,
         user: null,
+        refetchMe: null,
       });
 
       if (isPrivatePage) {
