@@ -33,7 +33,7 @@ function AsideMenu() {
             </Link>
           </li>
           <li>
-            <Link href="/profile">
+            <Link href="/roadmap">
               <a>
                 <FontAwesomeIcon icon={faRoad} />
                 로드맵
