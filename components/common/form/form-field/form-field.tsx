@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 
 interface Props {
   children: ReactNode;
-  label?: string;
+  label?: ReactNode;
   id?: string;
 }
 

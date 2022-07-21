@@ -11,6 +11,11 @@ import useCurrentUser from '@src/hooks/auth/use-current-user';
 import * as fileApi from '@src/api/file';
 import { EditProfileMutationVariables, useEditProfileMutation } from '@src/generated/graphql';
 import { ApolloError } from '@apollo/client';
+import {
+  checkUsernameValidation,
+  isValidToInputStatus,
+  ValidationResult,
+} from '@src/libs/validation';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +38,7 @@ function EditProfileModal({ visible, onClose, onSuccess }: Props) {
   const bannerImage = updatedBannerImage?.dataUrl ?? currentUser?.bannerImage?.url;
   const profileImage = updatedProfileImage?.dataUrl || currentUser?.profileImage?.url;
   const [username, setUsername] = useState(currentUser?.username ?? '');
+  const [usernameValidation, setUsernameValidation] = useState<ValidationResult>();
   const [location, setLocation] = useState(currentUser?.location ?? '');
   const [bio, setBio] = useState(currentUser?.bio ?? '');
   const [loading, setLoading] = useState(false);
@@ -43,6 +49,9 @@ function EditProfileModal({ visible, onClose, onSuccess }: Props) {
       bio,
       location,
     };
+
+    const validationMessage = usernameValidation?.message;
+    if (validationMessage) return Modal.alert(validationMessage);
 
     try {
       setLoading(true);
@@ -99,7 +108,9 @@ function EditProfileModal({ visible, onClose, onSuccess }: Props) {
             max={15}
             description="최소 3자이상 최대 15자, 영문, 한글, 숫자만 입력가능합니다."
             value={username}
+            status={isValidToInputStatus(usernameValidation?.isValid)}
             onChange={(e) => setUsername(e.target.value)}
+            onBlur={(e) => setUsernameValidation(checkUsernameValidation(e.target.value))}
           />
         </FormField>
         <FormField label="장소" id="location">

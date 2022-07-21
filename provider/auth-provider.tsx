@@ -21,6 +21,12 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
   });
 
   useIsomorphicLayoutEffect(() => {
+    if (isPrivatePage && !isLoggedIn && token) {
+      refetch();
+    }
+  }, [isPrivatePage, isLoggedIn, token, refetch]);
+
+  useIsomorphicLayoutEffect(() => {
     if (data?.me) {
       authVar({
         isLoggedIn: true,

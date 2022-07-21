@@ -20,10 +20,7 @@ function SEO({
 }: Props): ReactElement {
   return (
     <Head>
-      <title>
-        {title && `${title} - `}
-        {SITE_TITLE}
-      </title>
+      <title>{title ? `${title} - ${SITE_TITLE}` : SITE_TITLE}</title>
       <meta name="description" content={description} />
       <meta name="keyword" content={keyword} />
       <meta property="og:type" content="website" />

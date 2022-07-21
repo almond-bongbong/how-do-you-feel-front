@@ -1,0 +1,28 @@
+@import 'styles/variables';
+
+.write_form {
+  padding: 30px 20px;
+}
+
+.icon_write {
+  margin-bottom: 10px;
+  padding: 5px;
+  color: $primary-color;
+  font-size: 26px;
+}
+
+.util_area {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.image_button {
+  padding: 5px;
+  color: $primary-color;
+  font-size: 24px;
+}
+
+.submit_button {
+  width: 80px;
+}

@@ -46,6 +46,8 @@ function ProfileBanner() {
           )}
         </div>
 
+        {currentUser.bio && <div className={cx('bio')}>{currentUser.bio}</div>}
+
         <div className={cx('people')}>
           <span>0 팔로잉</span>
           <span>0 팔로워</span>

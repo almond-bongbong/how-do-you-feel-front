@@ -75,19 +75,15 @@ function EditProfilePhotoModal({
       onClose={onClose}
     >
       <div className={cx('image_wrap')}>
-        {profilePhotoFile ? (
-          <AvatarEditor
-            ref={editorRef}
-            image={profilePhotoFile}
-            width={width}
-            height={height}
-            border={border}
-            color={[50, 50, 50, 0.6]}
-            scale={scale}
-          />
-        ) : (
-          <div>파일을 찾을 수 없습니다.</div>
-        )}
+        <AvatarEditor
+          ref={editorRef}
+          image={profilePhotoFile || ''}
+          width={width}
+          height={height}
+          border={border}
+          color={[50, 50, 50, 0.6]}
+          scale={scale}
+        />
       </div>
 
       <div className={cx('slider_wrap')}>

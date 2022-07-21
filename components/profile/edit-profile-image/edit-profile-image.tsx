@@ -3,10 +3,11 @@ import classNames from 'classnames/bind';
 import styles from './edit-profile-image.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
-import UploadImageButton from '@src/components/profile/upload-image-button';
-import { validateImage } from '@src/libs/file';
 import EditProfilePhotoModal from '@src/components/modal/edit-profile-image-modal';
 import { MAX_PROFILE_PHOTO_SIZE } from '@src/constants/file';
+import { faCamera } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ImageUploadButton from '@src/components/common/form/image-upload-button';
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +26,7 @@ function EditProfileImage({
   onChangeBannerImage,
   onChangeProfileImage,
 }: Props) {
-  const [uploadImageKey, setUploadImageKey] = useState(0);
+  const [visibleEditImageModal, setVisibleEditImageModal] = useState(false);
   const [selectedImageForEdit, setSelectedImageForEdit] = useState<{
     type: ImageType;
     file: File;
@@ -34,12 +35,10 @@ function EditProfileImage({
   const handleChangeImage = (type: ImageType, e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     const selectedFile = files?.[0];
-    setUploadImageKey((prev) => prev + 1);
 
     if (selectedFile) {
-      const validFile = validateImage(selectedFile, { maxSize: MAX_PROFILE_PHOTO_SIZE });
-      if (!validFile) return;
       setSelectedImageForEdit({ type, file: selectedFile });
+      setVisibleEditImageModal(true);
     }
   };
 
@@ -49,30 +48,32 @@ function EditProfileImage({
         {bannerImage && (
           <Image layout="fill" objectFit="cover" src={bannerImage} alt="프로필 배경 이미지" />
         )}
-        <UploadImageButton
-          key={uploadImageKey}
-          className={cx('upload_banner')}
+        <ImageUploadButton
+          className={cx('upload_image', 'upload_banner')}
+          icon={<FontAwesomeIcon icon={faCamera} />}
+          maxImageSize={MAX_PROFILE_PHOTO_SIZE}
           onChange={(e) => handleChangeImage('banner', e)}
         />
       </div>
       <div className={cx('profile_image')}>
         <ProfileImage src={profileImage} size={100} alt="edit" />
-        <UploadImageButton
-          key={uploadImageKey}
-          className={cx('upload_profile')}
+        <ImageUploadButton
+          className={cx('upload_image', 'upload_profile')}
+          icon={<FontAwesomeIcon icon={faCamera} />}
+          maxImageSize={MAX_PROFILE_PHOTO_SIZE}
           onChange={(e) => handleChangeImage('profile', e)}
         />
       </div>
 
       <EditProfilePhotoModal
-        visible={selectedImageForEdit != null}
+        visible={visibleEditImageModal}
         imageType={selectedImageForEdit?.type}
         profilePhotoFile={selectedImageForEdit?.file}
-        onClose={() => setSelectedImageForEdit(null)}
+        onClose={() => setVisibleEditImageModal(false)}
         onConfirm={(file, dataUrl) => {
           if (selectedImageForEdit?.type === 'banner') onChangeBannerImage(file, dataUrl);
           else onChangeProfileImage(file, dataUrl);
-          setSelectedImageForEdit(null);
+          setVisibleEditImageModal(false);
         }}
       />
     </div>

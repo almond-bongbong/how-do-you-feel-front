@@ -34,7 +34,7 @@ function Kakao({ token }: InferGetServerSidePropsType<typeof getServerSideProps>
         });
         if (!data) return Modal.alert('로그인에 실패했습니다.');
         Cookies.set(TOKEN_KEY, data.signIn.token);
-        router.push('/');
+        return router.push('/');
       } catch (error) {
         const message =
           error instanceof ApolloError ? error.message : '알 수 없는 오류가 발생했습니다.';

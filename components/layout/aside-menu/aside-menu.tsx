@@ -7,10 +7,13 @@ import { faHome } from '@fortawesome/pro-solid-svg-icons';
 import { faRoad, faUser } from '@fortawesome/pro-light-svg-icons';
 import Button from '../../common/form/button';
 import MyProfile from '../my-profile';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
 function AsideMenu() {
+  const router = useRouter();
+
   return (
     <header className={cx('aside')}>
       <h1>로고</h1>
@@ -43,7 +46,7 @@ function AsideMenu() {
         </ul>
       </nav>
 
-      <Button theme="primary" size="lg">
+      <Button theme="primary" size="lg" onClick={() => router.push('/place/write')}>
         작성하기
       </Button>
 
