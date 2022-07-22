@@ -38,7 +38,7 @@ function Button({
       disabled={disabled}
       className={cx('btn', theme, size, className, { loading })}
       style={style}
-      onClick={loading ? () => {} : onClick}
+      onClick={loading ? undefined : onClick}
     >
       {children}
       {loading && <FontAwesomeIcon icon={faSpinner} className={cx('spinner', 'fa-spin')} />}

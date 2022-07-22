@@ -5,8 +5,9 @@ import Textarea from '@src/components/common/form/textarea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFeatherPointed } from '@fortawesome/pro-solid-svg-icons';
 import ImageUploadButton from '@src/components/common/form/image-upload-button';
-import { faImage } from '@fortawesome/pro-light-svg-icons';
+import { faImage, faLocationPlus } from '@fortawesome/pro-light-svg-icons';
 import Button from '@src/components/common/form/button';
+import LocationSelectButton from '@src/components/common/form/location-select-button';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +29,10 @@ function WritePlaceForm() {
             icon={<FontAwesomeIcon icon={faImage} />}
             className={cx('image_button')}
             onChange={console.log}
+          />
+          <LocationSelectButton
+            icon={<FontAwesomeIcon icon={faLocationPlus} />}
+            className={cx('location_button')}
           />
         </div>
         <Button theme="primary" className={cx('submit_button')}>

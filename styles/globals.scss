@@ -35,6 +35,12 @@ button {
   outline: 0;
 }
 
+input {
+  color: $button-font-color;
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+}
+
 ul,
 ol {
   margin: 0;

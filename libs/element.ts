@@ -28,3 +28,21 @@ export const getLastModalId = (): string | null => {
   const lastModal = container.children[container.children.length - 1];
   return lastModal?.getAttribute('id');
 };
+
+export const loadScript = (src: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    const existScript = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    if (existScript) {
+      if (existScript.dataset.loaded === 'true') resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });

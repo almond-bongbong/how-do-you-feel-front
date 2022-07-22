@@ -60,7 +60,7 @@
   background-color: #fff;
 
   &:hover {
-    background-color: lighten($primary-color, 53%);
+    background-color: rgba($primary-color, 0.07);
   }
 }
 
