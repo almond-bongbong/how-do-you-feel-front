@@ -6,7 +6,13 @@ export interface UploadFileResponse {
   bucketUrl: string;
 }
 
-export interface AddressResponse {
+export interface AddressMeta {
+  total_count: number;
+  pageable_count: number;
+  is_end: boolean;
+}
+
+export interface Address {
   address_name: string;
   address_type: string;
   x: string;
@@ -42,10 +48,26 @@ export interface AddressResponse {
 }
 
 export interface AddressListResponse {
-  meta: {
-    total_count: number;
-    pageable_count: number;
-    is_end: boolean;
-  };
-  documents: AddressResponse[];
+  meta: AddressMeta;
+  documents: Address[];
+}
+
+export interface AddressByKeyword {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
+export interface AddressByKeywordListResponse {
+  meta: AddressMeta;
+  documents: AddressByKeyword[];
 }

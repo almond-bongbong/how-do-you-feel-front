@@ -3,6 +3,7 @@ import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './address-search-modal.module.scss';
 import { loadScript } from '@src/libs/element';
+import * as localApi from '@src/api/local';
 
 const cx = classNames.bind(styles);
 
@@ -82,6 +83,12 @@ function AddressSearchModal({ visible, onClose, onSelect }: Props) {
       setIsLoaded(false);
     }
   }, [visible, loadAddressSearch]);
+
+  useEffect(() => {
+    localApi.getAddressByKeyword('포폴로피자').then((res) => {
+      console.log(res);
+    });
+  }, []);
 
   return (
     <Modal visible={visible} contentClassName={cx('address_modal')} onClose={onClose}>
