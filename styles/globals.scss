@@ -35,7 +35,8 @@ button {
   outline: 0;
 }
 
-input {
+input,
+textarea {
   color: $button-font-color;
   font-size: $base-font-size;
   font-family: $base-font-family;

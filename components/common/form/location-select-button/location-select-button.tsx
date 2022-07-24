@@ -8,10 +8,11 @@ const cx = classNames.bind(styles);
 interface Props {
   icon: ReactNode;
   className?: string;
+  onSelect: (data: { postcode: string; address: string; extraAddress: string }) => void;
 }
 
-function LocationSelectButton({ icon, className }: Props) {
-  const [visibleAddressModal, setVisibleAddressModal] = useState(true);
+function LocationSelectButton({ icon, className, onSelect }: Props) {
+  const [visibleAddressModal, setVisibleAddressModal] = useState(false);
 
   return (
     <>
@@ -25,6 +26,10 @@ function LocationSelectButton({ icon, className }: Props) {
       <AddressSearchModal
         visible={visibleAddressModal}
         onClose={() => setVisibleAddressModal(false)}
+        onSelect={(data) => {
+          setVisibleAddressModal(false);
+          onSelect(data);
+        }}
       />
     </>
   );
