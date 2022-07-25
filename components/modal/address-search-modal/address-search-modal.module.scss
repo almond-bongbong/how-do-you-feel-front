@@ -1,16 +1,3 @@
 .address_modal {
   padding: 60px 25px 25px;
 }
-
-.address_area {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-
-  &.active {
-    opacity: 1;
-  }
-}
-
-.address_wrap {
-  height: 500px;
-}
