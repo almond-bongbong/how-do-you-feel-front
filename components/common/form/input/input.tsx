@@ -8,11 +8,14 @@ import React, {
 } from 'react';
 import classNames from 'classnames/bind';
 import styles from './input.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/pro-light-svg-icons';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   type?: HTMLInputTypeAttribute;
+  search?: boolean;
   value: string;
   id?: string;
   name?: string;
@@ -28,6 +31,7 @@ interface Props {
 function Input(
   {
     type = 'text',
+    search,
     value,
     id,
     name,
@@ -57,6 +61,7 @@ function Input(
         onFocus={onFocus}
         onBlur={onBlur}
       />
+      {search && <FontAwesomeIcon icon={faMagnifyingGlass} className={cx('icon')} />}
       {max && (
         <span className={cx('max')}>
           {value.length}/{max}

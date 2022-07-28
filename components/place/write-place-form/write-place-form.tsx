@@ -9,13 +9,14 @@ import { faImage, faLocationPlus, faXmark } from '@fortawesome/pro-light-svg-ico
 import Button from '@src/components/common/form/button';
 import LocationSelectButton from '@src/components/common/form/location-select-button';
 import { convertImageFile, validateImage } from '@src/libs/file';
+import { SelectedAddress } from '@src/types/address';
 
 const cx = classNames.bind(styles);
 
 function WritePlaceForm() {
   const [content, setContent] = useState('');
   const [images, setImages] = useState<{ file: File; url: string }[]>([]);
-  const [location, setLocation] = useState<string>();
+  const [location, setLocation] = useState<SelectedAddress>();
 
   const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files?.[0];
@@ -52,6 +53,7 @@ function WritePlaceForm() {
         <div className={cx('image_area')}>
           {images.map((image, i) => (
             <div className={cx('image_item')} key={image.url}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image.url} alt="이미지" />
               <button
                 type="button"
@@ -65,7 +67,7 @@ function WritePlaceForm() {
         </div>
       )}
 
-      {location && <div className={cx('location_area')}>{location}</div>}
+      {location && <div className={cx('location_area')}>{location.roadAddress}</div>}
 
       <div className={cx('util_area')}>
         <div className={cx('attachment')}>
@@ -77,9 +79,7 @@ function WritePlaceForm() {
           <LocationSelectButton
             icon={<FontAwesomeIcon icon={faLocationPlus} />}
             className={cx('location_button')}
-            onSelect={(data) =>
-              setLocation([data.postcode, data.address, data.extraAddress].join(' '))
-            }
+            onSelect={setLocation}
           />
         </div>
         <Button theme="primary" className={cx('submit_button')}>

@@ -1,0 +1,23 @@
+@import 'styles/variables';
+
+.container {
+  display: flex;
+  background-color: rgba(200, 200, 200, 0.1);
+}
+
+.tab {
+  display: block;
+  position: relative;
+  flex: 1;
+  padding: 15px 0;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba($primary-color, 0.1);
+  }
+
+  &.active {
+    color: $primary-color;
+  }
+}

@@ -1,3 +1,15 @@
 .address_modal {
-  padding: 60px 25px 25px;
+  padding: 50px;
+}
+
+.address_tab {
+  margin-bottom: 20px;
+}
+
+.tab_panel {
+  display: none;
+
+  &.active {
+    display: block;
+  }
 }

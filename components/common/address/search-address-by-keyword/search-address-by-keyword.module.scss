@@ -1,0 +1,21 @@
+.address_list {
+  overflow-y: auto;
+  max-height: 400px;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: #fafafa;
+
+  li + li {
+    margin-top: 15px;
+  }
+
+  button {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .place_name {
+    margin-left: 4px;
+  }
+}

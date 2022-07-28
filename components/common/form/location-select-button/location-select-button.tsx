@@ -2,13 +2,14 @@ import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './location-select-button.module.scss';
 import AddressSearchModal from '@src/components/modal/address-search-modal';
+import { SelectedAddress } from '@src/types/address';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   icon: ReactNode;
   className?: string;
-  onSelect: (data: { postcode: string; address: string; extraAddress: string }) => void;
+  onSelect: (data: SelectedAddress) => void;
 }
 
 function LocationSelectButton({ icon, className, onSelect }: Props) {
