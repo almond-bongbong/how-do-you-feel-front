@@ -38,6 +38,11 @@ type EditProfileOutput {
     username: String!
 }
 
+type GetPlaceListOutput {
+    items: [PlaceDto!]!
+    totalCount: Int!
+}
+
 type ImageDto {
     key: String!
     url: String!
@@ -89,6 +94,7 @@ type PlaceDto {
 type Query {
     auth: AuthOutput!
     getPlace(input: GetPlaceInput!): PlaceDto!
+    getPlaceList(input: GetPlaceListInput!): GetPlaceListOutput!
     hello: String!
     me: MeOutput!
 }
@@ -133,6 +139,11 @@ input EditProfileInput {
 
 input GetPlaceInput {
     id: Int!
+}
+
+input GetPlaceListInput {
+    limit: Int = 10
+    offset: Int = 0
 }
 
 input ImageInput {

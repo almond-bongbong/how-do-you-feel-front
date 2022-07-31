@@ -80,6 +80,17 @@ export type GetPlaceInput = {
   id: Scalars['Int'];
 };
 
+export type GetPlaceListInput = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetPlaceListOutput = {
+  __typename?: 'GetPlaceListOutput';
+  items: Array<PlaceDto>;
+  totalCount: Scalars['Int'];
+};
+
 export type ImageDto = {
   __typename?: 'ImageDto';
   key: Scalars['String'];
@@ -167,6 +178,7 @@ export type Query = {
   __typename?: 'Query';
   auth: AuthOutput;
   getPlace: PlaceDto;
+  getPlaceList: GetPlaceListOutput;
   hello: Scalars['String'];
   me: MeOutput;
 };
@@ -174,6 +186,11 @@ export type Query = {
 
 export type QueryGetPlaceArgs = {
   input: GetPlaceInput;
+};
+
+
+export type QueryGetPlaceListArgs = {
+  input: GetPlaceListInput;
 };
 
 export type SignInInput = {
