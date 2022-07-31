@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './address-search-modal.module.scss';
@@ -21,7 +21,11 @@ const TABS = [
 ];
 
 function AddressSearchModal({ visible, onClose, onSelect }: Props) {
-  const [selectedTab, setSelectedTab] = React.useState(TABS[0].key);
+  const [selectedTab, setSelectedTab] = useState(TABS[0].key);
+
+  useEffect(() => {
+    setSelectedTab(TABS[0].key);
+  }, [visible]);
 
   return (
     <Modal visible={visible} contentClassName={cx('address_modal')} onClose={onClose}>

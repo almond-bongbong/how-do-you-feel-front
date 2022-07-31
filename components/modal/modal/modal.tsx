@@ -108,9 +108,17 @@ function Modal({
     if (isMaskClosable) onClose?.();
   }, [isMaskClosable, onClose]);
 
-  return visible || (!visible && localVisible) ? (
+  const display = visible || (!visible && localVisible);
+
+  return (
     <Portal id={MODAL_PORTAL_ID}>
-      <div id={id} className={cx({ active: visible && localVisible })}>
+      <div
+        id={id}
+        className={cx('modal_wrap', {
+          display,
+          active: visible && localVisible,
+        })}
+      >
         <div className={cx('mask')} />
         <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
           <div
@@ -136,7 +144,7 @@ function Modal({
         </div>
       </div>
     </Portal>
-  ) : null;
+  );
 }
 
 export default Modal;

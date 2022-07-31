@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './search-address.module.scss';
 import { loadScript } from '@src/libs/element';
+import { SelectedAddress } from '@src/types/address';
 
 const cx = classNames.bind(styles);
 
 export interface Props {
-  onSelect: (data: { address: string; roadAddress: string; buildingName: string }) => void;
+  onSelect: (data: SelectedAddress) => void;
 }
 
 interface Address {
@@ -22,12 +23,18 @@ interface Address {
 function SearchAddress({ onSelect }: Props) {
   const addressSearchRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const onSelectRef = useRef<(data: SelectedAddress) => void>(onSelect);
+
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
 
   const loadAddressSearch = useCallback(async () => {
+    console.log('loadAddressSearch');
     await loadScript('//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
     new window.daum.Postcode({
       oncomplete: function (data: Address) {
-        onSelect({
+        onSelectRef.current?.({
           address: data.jibunAddress,
           roadAddress: data.roadAddress,
           buildingName: data.buildingName,
@@ -37,10 +44,10 @@ function SearchAddress({ onSelect }: Props) {
       height: '100%',
     }).embed(addressSearchRef.current);
     setIsLoaded(true);
-  }, [onSelect]);
+  }, []);
 
   useEffect(() => {
-    setTimeout(() => loadAddressSearch(), 16);
+    loadAddressSearch();
 
     return () => {
       setIsLoaded(false);

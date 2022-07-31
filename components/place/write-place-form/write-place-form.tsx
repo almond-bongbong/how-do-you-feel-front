@@ -10,6 +10,7 @@ import Button from '@src/components/common/form/button';
 import LocationSelectButton from '@src/components/common/form/location-select-button';
 import { convertImageFile, validateImage } from '@src/libs/file';
 import { SelectedAddress } from '@src/types/address';
+import { getAddressData } from '@src/libs/map';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,12 @@ function WritePlaceForm() {
 
   const handleClickRemoveImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async () => {
+    const address = location?.roadAddress || location?.address;
+    const [addressData] = (address ? await getAddressData(address) : null) ?? [];
+    console.log(addressData.x, addressData.y);
   };
 
   const hasImage = images?.length > 0;
@@ -67,7 +74,11 @@ function WritePlaceForm() {
         </div>
       )}
 
-      {location && <div className={cx('location_area')}>{location.roadAddress}</div>}
+      {location && (
+        <div className={cx('location_area')}>
+          {`${location.roadAddress} ${location.buildingName}`}
+        </div>
+      )}
 
       <div className={cx('util_area')}>
         <div className={cx('attachment')}>
@@ -82,7 +93,7 @@ function WritePlaceForm() {
             onSelect={setLocation}
           />
         </div>
-        <Button theme="primary" className={cx('submit_button')}>
+        <Button theme="primary" className={cx('submit_button')} onClick={handleSubmit}>
           확인
         </Button>
       </div>

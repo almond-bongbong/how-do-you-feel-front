@@ -32,31 +32,33 @@ function SearchAddressByKeyword({ onSelect }: Props) {
   };
 
   return (
-    <div>
+    <div className={cx('container')}>
       <form onSubmit={handleSubmit}>
         <Input search name="keyword" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
       </form>
-      <ul className={cx('address_list')}>
-        {addressList.map((address) => (
-          <li key={address.id}>
-            <button
-              type="button"
-              onClick={() =>
-                onSelect({
-                  address: address.address_name,
-                  roadAddress: address.road_address_name,
-                  buildingName: address.place_name,
-                })
-              }
-            >
-              <span className={cx('address')}>{address.road_address_name}</span>
-              {address.place_name && (
-                <span className={cx('place_name')}>({address.place_name})</span>
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className={cx('address_list_wrap')}>
+        <ul className={cx('address_list')}>
+          {addressList.map((address) => (
+            <li key={address.id}>
+              <button
+                type="button"
+                onClick={() =>
+                  onSelect({
+                    address: address.address_name,
+                    roadAddress: address.road_address_name,
+                    buildingName: address.place_name,
+                  })
+                }
+              >
+                <span className={cx('address')}>{address.road_address_name}</span>
+                {address.place_name && (
+                  <span className={cx('place_name')}>({address.place_name})</span>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

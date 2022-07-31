@@ -21,7 +21,7 @@ export type AccountDto = {
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
@@ -45,11 +45,12 @@ export type CreatePlaceCommentInput = {
 };
 
 export type CreatePlaceInput = {
-  description: Scalars['String'];
-  image?: InputMaybe<ImageInput>;
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
-  name: Scalars['String'];
+  address?: InputMaybe<Scalars['String']>;
+  buildingName?: InputMaybe<Scalars['String']>;
+  content: Scalars['String'];
+  image?: InputMaybe<Array<ImageInput>>;
+  latitude?: InputMaybe<Scalars['String']>;
+  longitude?: InputMaybe<Scalars['String']>;
 };
 
 export type EditProfileInput = {
@@ -65,7 +66,7 @@ export type EditProfileOutput = {
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
@@ -94,7 +95,7 @@ export type MeOutput = {
   __typename?: 'MeOutput';
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
@@ -150,14 +151,15 @@ export type PlaceCommentDto = {
 
 export type PlaceDto = {
   __typename?: 'PlaceDto';
+  address?: Maybe<Scalars['String']>;
+  buildingName?: Maybe<Scalars['String']>;
   comments: Array<PlaceCommentDto>;
+  content: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
   id: Scalars['Int'];
-  image?: Maybe<ImageDto>;
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
-  name: Scalars['String'];
+  image?: Maybe<Array<ImageDto>>;
+  latitude?: Maybe<Scalars['String']>;
+  longitude?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -196,7 +198,7 @@ export type SignUpInput = {
 export type SignUpOutput = {
   __typename?: 'SignUpOutput';
   createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   username: Scalars['String'];
 };
