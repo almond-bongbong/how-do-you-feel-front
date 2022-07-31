@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, ReactNode, useId, useRef } from 'react';
+import React, { ChangeEvent, ReactNode, useId, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './image-upload-button.module.scss';
 import { validateImage } from '@src/libs/file';
@@ -10,14 +10,18 @@ interface Props {
   icon: ReactNode;
   id?: string;
   maxImageSize?: number;
+  multiple?: boolean;
+  disabled?: boolean;
   className?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange: (files: File[]) => void;
 }
 
 function ImageUploadButton({
   icon,
   id,
   maxImageSize = DEFAULT_MAX_IMAGE_SIZE,
+  multiple = false,
+  disabled = false,
   className,
   onChange,
 }: Props) {
@@ -30,22 +34,29 @@ function ImageUploadButton({
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    const selectedFile = files?.[0];
 
-    if (!selectedFile) {
+    if (!files?.length) {
       resetInput();
       return;
     }
 
-    const validFile = validateImage(selectedFile, { maxSize: maxImageSize });
-    if (!validFile) return;
-    onChange(e);
+    const validFiles = Array.from(files).filter((file) =>
+      validateImage(file, { maxSize: maxImageSize }),
+    );
+    onChange(validFiles);
     resetInput();
   };
 
   return (
-    <label className={cx('upload_button', className)} id={id || generatedId}>
-      <input ref={inputRef} type="file" id={id || generatedId} onChange={handleChangeFile} />
+    <label className={cx('upload_button', className, { disabled })} id={id || generatedId}>
+      <input
+        ref={inputRef}
+        type="file"
+        id={id || generatedId}
+        multiple={multiple}
+        disabled={disabled}
+        onChange={handleChangeFile}
+      />
       {icon}
     </label>
   );

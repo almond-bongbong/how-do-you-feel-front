@@ -17,10 +17,15 @@ export const validateImage = (file: File, options?: { maxSize: number }): boolea
   return true;
 };
 
+export interface ConvertedImageFile {
+  file: File;
+  url: string;
+}
+
 export const convertImageFile = async (
   file: File,
   options?: ConvertImageFileOptions,
-): Promise<{ file: File; url: string } | null> =>
+): Promise<ConvertedImageFile | null> =>
   new Promise((resolve, reject) => {
     loadImage(file, { canvas: true, orientation: true, ...options })
       .then((data) => {

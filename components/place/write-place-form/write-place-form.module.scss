@@ -94,6 +94,13 @@
   }
 }
 
+.map_wrap {
+  overflow: hidden;
+  border-radius: 4px;
+  height: 300px;
+  margin-top: 15px;
+}
+
 .submit_button {
   width: 80px;
 }

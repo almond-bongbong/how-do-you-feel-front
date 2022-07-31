@@ -7,6 +7,10 @@ export const loadKakaoMapScript = (): Promise<void> =>
       `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_KEY}&libraries=services&autoload=false`,
     )
       .then(() => {
+        if (kakao.maps.Map) {
+          resolve();
+          return;
+        }
         kakao.maps.load(resolve);
       })
       .catch(reject);

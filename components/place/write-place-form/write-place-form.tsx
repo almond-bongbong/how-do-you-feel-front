@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './write-place-form.module.scss';
 import Textarea from '@src/components/common/form/textarea';
@@ -8,38 +8,86 @@ import ImageUploadButton from '@src/components/common/form/image-upload-button';
 import { faImage, faLocationPlus, faXmark } from '@fortawesome/pro-light-svg-icons';
 import Button from '@src/components/common/form/button';
 import LocationSelectButton from '@src/components/common/form/location-select-button';
-import { convertImageFile, validateImage } from '@src/libs/file';
+import { ConvertedImageFile, convertImageFile } from '@src/libs/file';
 import { SelectedAddress } from '@src/types/address';
 import { getAddressData } from '@src/libs/map';
+import { useCreatePlaceMutation } from '@src/generated/graphql';
+import * as fileApi from '@src/api/file';
+import Modal from '@src/components/modal/modal';
+import { useRouter } from 'next/router';
+import StaticMap from '@src/components/common/map/static-map';
 
 const cx = classNames.bind(styles);
+const MAX_IMAGES_COUNT = 5;
 
 function WritePlaceForm() {
+  const router = useRouter();
   const [content, setContent] = useState('');
   const [images, setImages] = useState<{ file: File; url: string }[]>([]);
   const [location, setLocation] = useState<SelectedAddress>();
+  const [locationPosition, setLocationPosition] = useState<{ x: string; y: string }>();
+  const [createPlaceMutation] = useCreatePlaceMutation();
+  const [loading, setLoading] = useState(false);
 
-  const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
-    const imageFile = e.target.files?.[0];
-    if (!imageFile) return;
+  const handleChangeImage = async (files: File[]) => {
+    if (!files?.length) return;
 
-    const isValid = validateImage(imageFile);
-    if (!isValid) return;
+    const convertImagesPromises = files.map((file) =>
+      convertImageFile(file, { maxWidth: 1200, maxHeight: 1200 }),
+    );
+    const convertedImages = (await Promise.all(convertImagesPromises)).filter(
+      (image): image is ConvertedImageFile => image != null,
+    );
+    if (!convertedImages) return;
 
-    const convertedImage = await convertImageFile(imageFile, { maxWidth: 1200, maxHeight: 1200 });
-    if (!convertedImage) return;
-
-    setImages((prev) => prev.concat(convertedImage));
+    setImages((prev) => prev.concat(...convertedImages).slice(0, MAX_IMAGES_COUNT));
   };
 
   const handleClickRemoveImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleSelectLocation = async (address: SelectedAddress) => {
+    setLocation(address);
+    const addressName = address?.roadAddress || address?.address;
+    if (!addressName) return;
+
+    const [addressData] = (address ? await getAddressData(addressName) : null) ?? [];
+    setLocationPosition({ x: addressData?.x, y: addressData?.y });
+  };
+
   const handleSubmit = async () => {
-    const address = location?.roadAddress || location?.address;
-    const [addressData] = (address ? await getAddressData(address) : null) ?? [];
-    console.log(addressData.x, addressData.y);
+    setLoading(true);
+
+    try {
+      const address = location?.roadAddress || location?.address;
+      const uploadedImages = await Promise.all(
+        images.map((image) => fileApi.uploadFile(image.file).then(({ data }) => data)),
+      );
+      await createPlaceMutation({
+        variables: {
+          input: {
+            content,
+            images: uploadedImages.map((image) => ({
+              key: image.key,
+              url: `${image.bucketUrl}/${image.key}`,
+            })),
+            ...(address && {
+              address,
+              buildingName: location?.buildingName,
+              longitude: locationPosition?.x,
+              latitude: locationPosition?.y,
+            }),
+          },
+        },
+      });
+      await Modal.alert('작성이 완료되었습니다');
+      await router.push('/');
+    } catch (error) {
+      console.error(error);
+      await Modal.alert('저장에 실패했습니다');
+      setLoading(false);
+    }
   };
 
   const hasImage = images?.length > 0;
@@ -51,7 +99,7 @@ function WritePlaceForm() {
         value={content}
         id="content"
         row={18}
-        placeholder="좋은건 함께 나눠요!"
+        placeholder="좋은곳은 함께!"
         max={1000}
         onChange={(e) => setContent(e.target.value)}
       />
@@ -76,7 +124,12 @@ function WritePlaceForm() {
 
       {location && (
         <div className={cx('location_area')}>
-          {`${location.roadAddress} ${location.buildingName}`}
+          <div className={cx('address_name')}>
+            {`${location.roadAddress} ${location.buildingName}`}
+          </div>
+          {locationPosition && (
+            <StaticMap x={locationPosition.x} y={locationPosition.y} className={cx('map_wrap')} />
+          )}
         </div>
       )}
 
@@ -84,16 +137,23 @@ function WritePlaceForm() {
         <div className={cx('attachment')}>
           <ImageUploadButton
             icon={<FontAwesomeIcon icon={faImage} />}
+            multiple
+            disabled={images.length >= MAX_IMAGES_COUNT}
             className={cx('image_button')}
             onChange={handleChangeImage}
           />
           <LocationSelectButton
             icon={<FontAwesomeIcon icon={faLocationPlus} />}
             className={cx('location_button')}
-            onSelect={setLocation}
+            onSelect={handleSelectLocation}
           />
         </div>
-        <Button theme="primary" className={cx('submit_button')} onClick={handleSubmit}>
+        <Button
+          theme="primary"
+          className={cx('submit_button')}
+          loading={loading}
+          onClick={handleSubmit}
+        >
           확인
         </Button>
       </div>

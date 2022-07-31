@@ -11,4 +11,9 @@
     display: block;
     margin: 0 auto;
   }
+
+  &.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
 }

@@ -29,6 +29,12 @@
   padding: 25px;
   background-color: #fafafa;
 
+  .info_text {
+    padding: 30px 0;
+    color: #888;
+    text-align: center;
+  }
+
   li + li {
     margin-top: 16px;
   }

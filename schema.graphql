@@ -9,7 +9,7 @@ type AccountDto {
     bannerImage: ImageDto
     bio: String
     createdAt: DateTime!
-    email: String!
+    email: String
     id: String!
     location: String
     platform: String!
@@ -28,7 +28,7 @@ type EditProfileOutput {
     bannerImage: ImageDto
     bio: String
     createdAt: DateTime!
-    email: String!
+    email: String
     id: String!
     location: String
     platform: String!
@@ -46,7 +46,7 @@ type ImageDto {
 type MeOutput {
     bannerImage: ImageDto
     bio: String
-    email: String!
+    email: String
     id: String!
     location: String
     platform: String!
@@ -74,14 +74,15 @@ type PlaceCommentDto {
 }
 
 type PlaceDto {
+    address: String
+    buildingName: String
     comments: [PlaceCommentDto!]!
+    content: String!
     createdAt: DateTime!
-    description: String!
     id: Int!
-    image: ImageDto
-    latitude: Float!
-    longitude: Float!
-    name: String!
+    images: [ImageDto!]
+    latitude: String
+    longitude: String
     updatedAt: DateTime!
 }
 
@@ -98,7 +99,7 @@ type SignInOutput {
 
 type SignUpOutput {
     createdAt: DateTime!
-    email: String!
+    email: String
     id: String!
     username: String!
 }
@@ -114,11 +115,12 @@ input CreatePlaceCommentInput {
 }
 
 input CreatePlaceInput {
-    description: String!
-    image: ImageInput
-    latitude: Float!
-    longitude: Float!
-    name: String!
+    address: String
+    buildingName: String
+    content: String!
+    images: [ImageInput!]
+    latitude: String
+    longitude: String
 }
 
 input EditProfileInput {

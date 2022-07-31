@@ -15,7 +15,7 @@ interface Props {
 
 function SearchAddressByKeyword({ onSelect }: Props) {
   const [keyword, setKeyword] = useState('');
-  const [addressList, setAddressList] = useState<AddressByKeyword[]>([]);
+  const [addressList, setAddressList] = useState<AddressByKeyword[]>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -38,7 +38,11 @@ function SearchAddressByKeyword({ onSelect }: Props) {
       </form>
       <div className={cx('address_list_wrap')}>
         <ul className={cx('address_list')}>
-          {addressList.map((address) => (
+          {addressList == null && (
+            <li className={cx('info_text')}>가게 또는 건물명으로 검색해보세요</li>
+          )}
+          {addressList?.length === 0 && <li className={cx('info_text')}>검색된 결과가 없습니다</li>}
+          {addressList?.map((address) => (
             <li key={address.id}>
               <button
                 type="button"

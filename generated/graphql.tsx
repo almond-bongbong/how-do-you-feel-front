@@ -48,7 +48,7 @@ export type CreatePlaceInput = {
   address?: InputMaybe<Scalars['String']>;
   buildingName?: InputMaybe<Scalars['String']>;
   content: Scalars['String'];
-  image?: InputMaybe<Array<ImageInput>>;
+  images?: InputMaybe<Array<ImageInput>>;
   latitude?: InputMaybe<Scalars['String']>;
   longitude?: InputMaybe<Scalars['String']>;
 };
@@ -157,7 +157,7 @@ export type PlaceDto = {
   content: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['Int'];
-  image?: Maybe<Array<ImageDto>>;
+  images?: Maybe<Array<ImageDto>>;
   latitude?: Maybe<Scalars['String']>;
   longitude?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -238,6 +238,13 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
+
+export type CreatePlaceMutationVariables = Exact<{
+  input: CreatePlaceInput;
+}>;
+
+
+export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'PlaceDto', id: number } };
 
 
 export const AuthDocument = gql`
@@ -451,3 +458,36 @@ export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Hell
 export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
 export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
 export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;
+export const CreatePlaceDocument = gql`
+    mutation CreatePlace($input: CreatePlaceInput!) {
+  createPlace(input: $input) {
+    id
+  }
+}
+    `;
+export type CreatePlaceMutationFn = Apollo.MutationFunction<CreatePlaceMutation, CreatePlaceMutationVariables>;
+
+/**
+ * __useCreatePlaceMutation__
+ *
+ * To run a mutation, you first call `useCreatePlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPlaceMutation, { data, loading, error }] = useCreatePlaceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePlaceMutation(baseOptions?: Apollo.MutationHookOptions<CreatePlaceMutation, CreatePlaceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePlaceMutation, CreatePlaceMutationVariables>(CreatePlaceDocument, options);
+      }
+export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
+export type CreatePlaceMutationResult = Apollo.MutationResult<CreatePlaceMutation>;
+export type CreatePlaceMutationOptions = Apollo.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;

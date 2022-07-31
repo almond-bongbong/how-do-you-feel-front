@@ -20,6 +20,13 @@ function Roadmap() {
             targetDate: '2022 3Q',
             isDone: false,
           },
+          {
+            title: '글 작성시 이미지 순서 변경',
+            description:
+              '글 작성시 드래그앤 드랍을 이용하여 선택한 이미지들의 순서를 변경할 수 있습니다.',
+            targetDate: '2022 3Q',
+            isDone: false,
+          },
         ]}
       />
     </Layout>

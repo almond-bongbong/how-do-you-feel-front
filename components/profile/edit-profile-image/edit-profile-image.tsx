@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './edit-profile-image.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
@@ -32,8 +32,7 @@ function EditProfileImage({
     file: File;
   } | null>(null);
 
-  const handleChangeImage = (type: ImageType, e: ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
+  const handleChangeImage = (type: ImageType, files: File[]) => {
     const selectedFile = files?.[0];
 
     if (selectedFile) {
@@ -52,7 +51,7 @@ function EditProfileImage({
           className={cx('upload_image', 'upload_banner')}
           icon={<FontAwesomeIcon icon={faCamera} />}
           maxImageSize={MAX_PROFILE_PHOTO_SIZE}
-          onChange={(e) => handleChangeImage('banner', e)}
+          onChange={(files) => handleChangeImage('banner', files)}
         />
       </div>
       <div className={cx('profile_image')}>
@@ -61,7 +60,7 @@ function EditProfileImage({
           className={cx('upload_image', 'upload_profile')}
           icon={<FontAwesomeIcon icon={faCamera} />}
           maxImageSize={MAX_PROFILE_PHOTO_SIZE}
-          onChange={(e) => handleChangeImage('profile', e)}
+          onChange={(files) => handleChangeImage('profile', files)}
         />
       </div>
 
