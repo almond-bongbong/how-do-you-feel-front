@@ -30,10 +30,12 @@
   background-color: #fafafa;
 
   li + li {
-    margin-top: 15px;
+    margin-top: 16px;
   }
 
   button {
+    text-align: left;
+
     &:hover {
       text-decoration: underline;
     }

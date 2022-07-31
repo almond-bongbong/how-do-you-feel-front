@@ -23,6 +23,7 @@ interface Address {
 function SearchAddress({ onSelect }: Props) {
   const addressSearchRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const isLoadedRef = useRef(false);
   const onSelectRef = useRef<(data: SelectedAddress) => void>(onSelect);
 
   useEffect(() => {
@@ -30,8 +31,12 @@ function SearchAddress({ onSelect }: Props) {
   }, [onSelect]);
 
   const loadAddressSearch = useCallback(async () => {
-    console.log('loadAddressSearch');
-    await loadScript('//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
+    if (isLoadedRef.current) return;
+    isLoadedRef.current = true;
+
+    await loadScript('//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js', {
+      isReload: true,
+    });
     new window.daum.Postcode({
       oncomplete: function (data: Address) {
         onSelectRef.current?.({
@@ -43,6 +48,7 @@ function SearchAddress({ onSelect }: Props) {
       width: '100%',
       height: '100%',
     }).embed(addressSearchRef.current);
+
     setIsLoaded(true);
   }, []);
 

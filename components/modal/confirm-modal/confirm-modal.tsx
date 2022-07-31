@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import classNames from 'classnames/bind';
 import styles from './alert-modal.module.scss';
-import { lockBodyScroll, unlockBodyScroll } from '../../../../libs/lock-body-scroll';
-import Button from '../../form/button';
-import { addRootElementOrCreate } from '../../../../libs/element';
+import { addRootElementOrCreate } from '@src/libs/element';
+import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
+import Button from '@src/components/common/form/button';
 
 const cx = classNames.bind(styles);
 const CONTAINER_ID = 'alert-modal-container';
@@ -13,7 +13,7 @@ interface Options {
   okText?: string;
 }
 
-function Modal.alert(message: ReactNode, options?: Options): Promise<void> {
+function alertModal(message: ReactNode, options?: Options): Promise<void> {
   const { okText = '확인' } = options || {};
 
   return new Promise((resolve) => {

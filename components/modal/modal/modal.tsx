@@ -4,7 +4,6 @@ import styles from './modal.module.scss';
 import { useResizeDetector } from 'react-resize-detector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/pro-light-svg-icons';
-import useIsomorphicLayoutEffect from '@src/hooks/common/use-isomorphic-layout-effect';
 import { isServer } from '@src/libs/environment';
 import { getActiveModalLength, getLastModalId } from '@src/libs/element';
 import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
@@ -43,6 +42,7 @@ function Modal({
   const [localVisible, setLocalVisible] = useState(visible);
   const [hasScroll, setHasScroll] = useState(false);
   const { height: contentHeight, ref: resizeTargetRef } = useResizeDetector();
+  const display = visible || (!visible && localVisible);
 
   const checkHasScroll = useCallback(() => {
     if (modalBodyRef.current) {
@@ -69,22 +69,20 @@ function Modal({
     }
   }, [visible, localVisible]);
 
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
     if (isServer()) return;
 
-    const isFirstModal = getActiveModalLength() === 0;
+    const isFirstModal = getActiveModalLength() === 1;
     if (isFirstModal) {
       lockBodyScroll();
     }
 
     return () => {
-      setTimeout(() => {
-        if (getActiveModalLength() === 0) {
-          unlockBodyScroll();
-        }
-      }, 16);
+      if (getActiveModalLength() === 0) {
+        unlockBodyScroll();
+      }
     };
-  }, []);
+  }, [display]);
 
   const keydownHandler = useCallback(
     (e: KeyboardEvent) => {
@@ -108,41 +106,42 @@ function Modal({
     if (isMaskClosable) onClose?.();
   }, [isMaskClosable, onClose]);
 
-  const display = visible || (!visible && localVisible);
-
   return (
     <Portal id={MODAL_PORTAL_ID}>
-      <div
-        id={id}
-        className={cx('modal_wrap', {
-          display,
-          active: visible && localVisible,
-        })}
-      >
-        <div className={cx('mask')} />
-        <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
-          <div
-            className={cx('content', contentClassName)}
-            ref={(el) => {
-              modalBodyRef.current = el;
-              resizeTargetRef.current = el;
-            }}
-            style={{ width }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={cx('section')}>{children}</div>
-            {hasCloseButton && (
-              <button
-                type="button"
-                className={cx('close_button', closeButtonClassName)}
-                onClick={onClose}
-              >
-                <FontAwesomeIcon icon={faXmark} title="닫기" />
-              </button>
-            )}
+      {display && (
+        <div
+          id={id}
+          data-visible={display}
+          className={cx('modal_wrap', {
+            display,
+            active: visible && localVisible,
+          })}
+        >
+          <div className={cx('mask')} />
+          <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
+            <div
+              className={cx('content', contentClassName)}
+              ref={(el) => {
+                modalBodyRef.current = el;
+                resizeTargetRef.current = el;
+              }}
+              style={{ width }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={cx('section')}>{children}</div>
+              {hasCloseButton && (
+                <button
+                  type="button"
+                  className={cx('close_button', closeButtonClassName)}
+                  onClick={onClose}
+                >
+                  <FontAwesomeIcon icon={faXmark} title="닫기" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </Portal>
   );
 }

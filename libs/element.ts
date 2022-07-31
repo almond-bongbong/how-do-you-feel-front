@@ -18,7 +18,10 @@ export const getActiveModalLength = () => {
   if (isServer()) return 0;
   const container = document.getElementById(MODAL_PORTAL_ID);
   if (!container) return 0;
-  return container.children.length;
+  const activeModalElements = Array.from(container.children).filter(
+    (child) => child instanceof HTMLElement && child.dataset.visible === 'true',
+  );
+  return activeModalElements.length;
 };
 
 export const getLastModalId = (): string | null => {
@@ -29,13 +32,18 @@ export const getLastModalId = (): string | null => {
   return lastModal?.getAttribute('id');
 };
 
-export const loadScript = (src: string): Promise<void> =>
+interface LoadScriptOptions {
+  isReload?: boolean;
+}
+
+export const loadScript = (src: string, { isReload }: LoadScriptOptions = {}): Promise<void> =>
   new Promise((resolve, reject) => {
     const existScript = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
-    if (existScript) {
+    if (existScript && !isReload) {
       if (existScript.dataset.loaded === 'true') resolve();
       return;
     }
+    if (existScript) existScript.remove();
 
     const script = document.createElement('script');
     script.src = src;

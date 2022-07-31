@@ -7,10 +7,7 @@ export const loadKakaoMapScript = (): Promise<void> =>
       `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_KEY}&libraries=services&autoload=false`,
     )
       .then(() => {
-        kakao.maps.load(() => {
-          console.log('loaded kakao');
-          resolve();
-        });
+        kakao.maps.load(resolve);
       })
       .catch(reject);
   });
@@ -22,7 +19,6 @@ export const getAddressData = async (address: string): Promise<AddressSearchResu
   return new Promise((resolve, reject) => {
     const geocoder = new kakao.maps.services.Geocoder();
     geocoder.addressSearch(address, (result, status) => {
-      console.log(result, status);
       if (status === kakao.maps.services.Status.OK) {
         resolve(result);
       } else {
