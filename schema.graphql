@@ -40,7 +40,7 @@ type EditProfileOutput {
 
 type GetPlaceListOutput {
     items: [PlaceDto!]!
-    totalCount: Int!
+    total: Int!
 }
 
 type ImageDto {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { HelloQuery } from '../generated/graphql';
+import { GetPlaceListQuery } from '../generated/graphql';
 import { getApolloClient } from '../apollo/client';
-import { HELLO_QUERY } from '../graphql/hello';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import useInitializeApolloClient from '../hooks/apollo/use-initialize-apollo-client';
 import Timeline from '../components/home/timeline';
 import Layout from '../components/layout/layout';
+import { GET_PLACE_LIST_QUERY } from '@src/graphql/place/place-list';
 
 function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useInitializeApolloClient(initialState);
@@ -19,9 +19,16 @@ function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSide
 
 export async function getServerSideProps(context: NextPageContext) {
   const client = getApolloClient();
-  const { data } = await client.query<HelloQuery>({ query: HELLO_QUERY, context });
-
-  if (!data.hello) return { notFound: true };
+  await client.query<GetPlaceListQuery>({
+    query: GET_PLACE_LIST_QUERY,
+    context,
+    variables: {
+      input: {
+        offset: 0,
+        limit: 20,
+      },
+    },
+  });
 
   return {
     props: {

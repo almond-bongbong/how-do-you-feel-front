@@ -88,7 +88,7 @@ export type GetPlaceListInput = {
 export type GetPlaceListOutput = {
   __typename?: 'GetPlaceListOutput';
   items: Array<PlaceDto>;
-  totalCount: Scalars['Int'];
+  total: Scalars['Int'];
 };
 
 export type ImageDto = {
@@ -262,6 +262,13 @@ export type CreatePlaceMutationVariables = Exact<{
 
 
 export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'PlaceDto', id: number } };
+
+export type GetPlaceListQueryVariables = Exact<{
+  input: GetPlaceListInput;
+}>;
+
+
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null }> } };
 
 
 export const AuthDocument = gql`
@@ -508,3 +515,48 @@ export function useCreatePlaceMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
 export type CreatePlaceMutationResult = Apollo.MutationResult<CreatePlaceMutation>;
 export type CreatePlaceMutationOptions = Apollo.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export const GetPlaceListDocument = gql`
+    query GetPlaceList($input: GetPlaceListInput!) {
+  getPlaceList(input: $input) {
+    items {
+      id
+      content
+      images {
+        key
+        url
+      }
+      address
+      buildingName
+    }
+    total
+  }
+}
+    `;
+
+/**
+ * __useGetPlaceListQuery__
+ *
+ * To run a query within a React component, call `useGetPlaceListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlaceListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlaceListQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPlaceListQuery(baseOptions: Apollo.QueryHookOptions<GetPlaceListQuery, GetPlaceListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPlaceListQuery, GetPlaceListQueryVariables>(GetPlaceListDocument, options);
+      }
+export function useGetPlaceListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlaceListQuery, GetPlaceListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPlaceListQuery, GetPlaceListQueryVariables>(GetPlaceListDocument, options);
+        }
+export type GetPlaceListQueryHookResult = ReturnType<typeof useGetPlaceListQuery>;
+export type GetPlaceListLazyQueryHookResult = ReturnType<typeof useGetPlaceListLazyQuery>;
+export type GetPlaceListQueryResult = Apollo.QueryResult<GetPlaceListQuery, GetPlaceListQueryVariables>;

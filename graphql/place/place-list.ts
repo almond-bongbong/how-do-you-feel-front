@@ -13,7 +13,7 @@ export const GET_PLACE_LIST_QUERY = gql`
         address
         buildingName
       }
-      totalCount
+      total
     }
   }
 `;
