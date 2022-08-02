@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 0;
+}
+
+.profile_image {
+  flex: 1 0 auto;
+}
+
+.content_wrap {
+  padding-left: 14px;
+}
+
+.username {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.content {
+  margin-top: 10px;
+  line-height: 22px;
+}

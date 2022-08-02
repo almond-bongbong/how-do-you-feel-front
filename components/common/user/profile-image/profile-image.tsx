@@ -12,9 +12,10 @@ interface Props {
   src?: string | null;
   alt?: string;
   size: number;
+  className?: string;
 }
 
-function ProfileImage({ src, alt, size }: Props) {
+function ProfileImage({ src, alt, size, className }: Props) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function ProfileImage({ src, alt, size }: Props) {
   }, [src]);
 
   return (
-    <div className={cx('photo')} style={{ width: size, height: size }}>
+    <div className={cx('photo', className)} style={{ width: size, height: size }}>
       <Image
         src={src && !hasError ? src : dummyProfilePhoto}
         width={size}

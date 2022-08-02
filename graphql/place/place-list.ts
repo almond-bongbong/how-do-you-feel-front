@@ -12,6 +12,14 @@ export const GET_PLACE_LIST_QUERY = gql`
         }
         address
         buildingName
+        account {
+          id
+          username
+          profileImage {
+            key
+            url
+          }
+        }
       }
       total
     }

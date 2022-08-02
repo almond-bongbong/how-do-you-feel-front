@@ -1,7 +1,10 @@
 .my_profile {
   display: flex;
   flex-direction: row;
-  margin-top: 100px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;

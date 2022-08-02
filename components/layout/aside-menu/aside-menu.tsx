@@ -16,41 +16,43 @@ function AsideMenu() {
 
   return (
     <header className={cx('aside')}>
-      <h1>로고</h1>
-      <nav>
-        <ul className={cx('navigation')}>
-          <li>
-            <Link href="/">
-              <a>
-                <FontAwesomeIcon icon={faHome} />
-                홈으로
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/profile">
-              <a>
-                <FontAwesomeIcon icon={faUser} />
-                프로필
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/roadmap">
-              <a>
-                <FontAwesomeIcon icon={faRoad} />
-                로드맵
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <div className={cx('content')}>
+        <h1>로고</h1>
+        <nav>
+          <ul className={cx('navigation')}>
+            <li>
+              <Link href="/">
+                <a>
+                  <FontAwesomeIcon icon={faHome} />
+                  홈으로
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/profile">
+                <a>
+                  <FontAwesomeIcon icon={faUser} />
+                  프로필
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/roadmap">
+                <a>
+                  <FontAwesomeIcon icon={faRoad} />
+                  로드맵
+                </a>
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
-      <Button theme="primary" size="lg" onClick={() => router.push('/place/write')}>
-        작성하기
-      </Button>
+        <Button theme="primary" size="lg" onClick={() => router.push('/place/write')}>
+          작성하기
+        </Button>
 
-      <MyProfile />
+        <MyProfile />
+      </div>
     </header>
   );
 }

@@ -162,6 +162,7 @@ export type PlaceCommentDto = {
 
 export type PlaceDto = {
   __typename?: 'PlaceDto';
+  account: AccountDto;
   address?: Maybe<Scalars['String']>;
   buildingName?: Maybe<Scalars['String']>;
   comments: Array<PlaceCommentDto>;
@@ -268,7 +269,7 @@ export type GetPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
 
 
 export const AuthDocument = gql`
@@ -527,6 +528,14 @@ export const GetPlaceListDocument = gql`
       }
       address
       buildingName
+      account {
+        id
+        username
+        profileImage {
+          key
+          url
+        }
+      }
     }
     total
   }

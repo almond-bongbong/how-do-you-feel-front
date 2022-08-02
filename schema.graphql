@@ -79,6 +79,7 @@ type PlaceCommentDto {
 }
 
 type PlaceDto {
+    account: AccountDto!
     address: String
     buildingName: String
     comments: [PlaceCommentDto!]!
