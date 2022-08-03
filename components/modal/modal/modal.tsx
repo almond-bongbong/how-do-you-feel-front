@@ -65,7 +65,7 @@ function Modal({
       setTimeout(() => setLocalVisible(visible), 16);
     }
     if (!visible && localVisible) {
-      setTimeout(() => setLocalVisible(visible), 200);
+      setTimeout(() => setLocalVisible(visible), 300);
     }
   }, [visible, localVisible]);
 

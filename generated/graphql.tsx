@@ -49,8 +49,8 @@ export type CreatePlaceInput = {
   buildingName?: InputMaybe<Scalars['String']>;
   content: Scalars['String'];
   images?: InputMaybe<Array<ImageInput>>;
-  latitude?: InputMaybe<Scalars['String']>;
-  longitude?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
 };
 
 export type EditProfileInput = {
@@ -170,8 +170,8 @@ export type PlaceDto = {
   createdAt: Scalars['DateTime'];
   id: Scalars['Int'];
   images?: Maybe<Array<ImageDto>>;
-  latitude?: Maybe<Scalars['String']>;
-  longitude?: Maybe<Scalars['String']>;
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -269,7 +269,7 @@ export type GetPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
 
 
 export const AuthDocument = gql`
@@ -527,6 +527,8 @@ export const GetPlaceListDocument = gql`
         url
       }
       address
+      longitude
+      latitude
       buildingName
       account {
         id

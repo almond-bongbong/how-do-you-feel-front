@@ -25,7 +25,7 @@ function WritePlaceForm() {
   const [content, setContent] = useState('');
   const [images, setImages] = useState<{ file: File; url: string }[]>([]);
   const [location, setLocation] = useState<SelectedAddress>();
-  const [locationPosition, setLocationPosition] = useState<{ x: string; y: string }>();
+  const [locationPosition, setLocationPosition] = useState<{ x: number; y: number }>();
   const [createPlaceMutation] = useCreatePlaceMutation();
   const [loading, setLoading] = useState(false);
 
@@ -53,7 +53,8 @@ function WritePlaceForm() {
     if (!addressName) return;
 
     const [addressData] = (address ? await getAddressData(addressName) : null) ?? [];
-    setLocationPosition({ x: addressData?.x, y: addressData?.y });
+    if (!addressData?.x || !addressData?.y) return;
+    setLocationPosition({ x: Number(addressData.x), y: Number(addressData.y) });
   };
 
   const handleSubmit = async () => {

@@ -26,6 +26,10 @@ function Timeline() {
           profileImage={place.account.profileImage?.url}
           username={place.account.username}
           content={place.content}
+          address={place.address && [place.address, place.buildingName].join(' ')}
+          x={place.longitude}
+          y={place.latitude}
+          images={place.images?.map((image) => image.url) || []}
         />
       ))}
     </div>

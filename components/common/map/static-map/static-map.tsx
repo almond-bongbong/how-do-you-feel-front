@@ -6,8 +6,8 @@ import { loadKakaoMapScript } from '@src/libs/map';
 const cx = classNames.bind(styles);
 
 interface Props {
-  x: string;
-  y: string;
+  x?: number | null;
+  y?: number | null;
   className?: string;
 }
 
@@ -16,14 +16,14 @@ function StaticMap({ x, y, className }: Props) {
   const mapRef = useRef<kakao.maps.Map>();
 
   const initMap = useCallback(async () => {
-    if (!mapElementRef.current || mapRef.current) return;
+    if (!mapElementRef.current || mapRef.current || !x || !y) return;
 
     await loadKakaoMapScript();
     mapRef.current = new window.kakao.maps.Map(mapElementRef.current, {
-      center: new window.kakao.maps.LatLng(Number(y), Number(x)),
+      center: new window.kakao.maps.LatLng(y, x),
     });
     const marker = new window.kakao.maps.Marker({
-      position: new window.kakao.maps.LatLng(Number(y), Number(x)),
+      position: new window.kakao.maps.LatLng(y, x),
     });
     marker.setMap(mapRef.current);
   }, [x, y]);
@@ -34,7 +34,9 @@ function StaticMap({ x, y, className }: Props) {
 
   return (
     <div className={cx('container', className)}>
-      <div ref={mapElementRef} className={cx('map')} />
+      <div ref={mapElementRef} className={cx('map')}>
+        {!x || !y ? '위치를 선택해주세요.' : ''}
+      </div>
     </div>
   );
 }

@@ -11,6 +11,8 @@ export const GET_PLACE_LIST_QUERY = gql`
           url
         }
         address
+        longitude
+        latitude
         buildingName
         account {
           id
