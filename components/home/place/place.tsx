@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './place.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
-import useIsomorphicLayoutEffect from '@src/hooks/common/use-isomorphic-layout-effect';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
@@ -22,31 +21,17 @@ interface Props {
   images: string[];
 }
 
-const CONTENT_LINE_HEIGHT = 22;
-const CONTENT_MAX_HEIGHT = CONTENT_LINE_HEIGHT * 4;
-
 function Place({ profileImage, username, content, address, x, y, images }: Props) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [isOverflowContent, setIsOverflowContent] = useState(false);
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
     false,
   );
-
-  useIsomorphicLayoutEffect(() => {
-    if (!contentRef.current) return;
-    setIsOverflowContent(contentRef.current.clientHeight > CONTENT_MAX_HEIGHT);
-  }, []);
 
   return (
     <div className={cx('container')}>
       <ProfileImage size={48} src={profileImage} className={cx('profile_image')} />
       <div className={cx('content_area')}>
         <div className={cx('username')}>{username}</div>
-        <div className={cx('content_wrap', { overflow: isOverflowContent })}>
-          <div ref={contentRef} className={cx('content')}>
-            {content}
-          </div>
-        </div>
+        <div className={cx('content')}>{content}</div>
         {address && (
           <button
             type="button"
