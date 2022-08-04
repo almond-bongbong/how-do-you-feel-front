@@ -8,6 +8,7 @@ import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
 import Modal from '@src/components/modal/modal/modal';
 import StaticMap from '@src/components/common/map/static-map';
 import { useModal } from '@src/hooks/modal/use-modal';
+import ImageViewModal from '@src/components/modal/image-view-modal';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +26,7 @@ function Place({ profileImage, username, content, address, x, y, images }: Props
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
     false,
   );
+  const [visibleImage, openImage, closeImage] = useModal();
 
   return (
     <div className={cx('container')}>
@@ -46,9 +48,9 @@ function Place({ profileImage, username, content, address, x, y, images }: Props
         {images.length > 0 && (
           <div className={cx('image_list')}>
             {images.map((image) => (
-              <div key={image} className={cx('image')}>
+              <button key={image} className={cx('image')} onClick={openImage}>
                 <Image src={image} layout="fill" objectFit="cover" alt="image" />
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -57,6 +59,8 @@ function Place({ profileImage, username, content, address, x, y, images }: Props
       <Modal visible={visibleMap} hasCloseButton isEscClosable isMaskClosable onClose={closeMap}>
         <StaticMap x={mapPosition?.x} y={mapPosition?.y} className={cx('location_map')} />
       </Modal>
+
+      <ImageViewModal visible={visibleImage} images={images} onClose={closeImage} />
     </div>
   );
 }

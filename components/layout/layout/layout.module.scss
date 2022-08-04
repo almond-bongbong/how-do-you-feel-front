@@ -1,12 +1,11 @@
 .content {
-  display: flex;
-  flex-direction: row;
+  position: relative;
   width: 1000px;
   margin: 0 auto;
+  padding-left: 280px;
 }
 
 .main {
-  width: 700px;
   min-height: 100vh;
   border-right: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
