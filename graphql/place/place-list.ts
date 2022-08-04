@@ -14,6 +14,8 @@ export const GET_PLACE_LIST_QUERY = gql`
         longitude
         latitude
         buildingName
+        isLiked
+        likeCount
         account {
           id
           username

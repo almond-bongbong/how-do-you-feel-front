@@ -66,6 +66,7 @@ type Mutation {
     editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
+    togglePlaceLike(input: TogglePlaceLikeInput!): TogglePlaceLikeOutput!
 }
 
 type PlaceCommentDto {
@@ -87,8 +88,10 @@ type PlaceDto {
     createdAt: DateTime!
     id: Int!
     images: [ImageDto!]
-    latitude: String
-    longitude: String
+    isLiked: Boolean!
+    latitude: Float
+    likeCount: Int!
+    longitude: Float
     updatedAt: DateTime!
 }
 
@@ -111,6 +114,10 @@ type SignUpOutput {
     username: String!
 }
 
+type TogglePlaceLikeOutput {
+    isLiked: Boolean!
+}
+
 "A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
 scalar DateTime
 
@@ -126,8 +133,8 @@ input CreatePlaceInput {
     buildingName: String
     content: String!
     images: [ImageInput!]
-    latitude: String
-    longitude: String
+    latitude: Float
+    longitude: Float
 }
 
 input EditProfileInput {
@@ -164,4 +171,8 @@ input SignUpInput {
     email: String!
     password: String!
     username: String!
+}
+
+input TogglePlaceLikeInput {
+    placeId: Int!
 }

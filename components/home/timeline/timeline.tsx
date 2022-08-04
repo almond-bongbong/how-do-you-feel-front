@@ -16,8 +16,6 @@ function Timeline() {
     },
   });
 
-  console.log(data?.getPlaceList);
-
   return (
     <div className={cx('timeline')}>
       {data?.getPlaceList?.items.map((place) => (

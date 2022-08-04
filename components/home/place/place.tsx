@@ -9,6 +9,8 @@ import Modal from '@src/components/modal/modal/modal';
 import StaticMap from '@src/components/common/map/static-map';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
+import { faHeart as emptyHeart } from '@fortawesome/pro-light-svg-icons';
+// import { faHeart as fullHeart } from '@fortawesome/pro-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -29,31 +31,38 @@ function Place({ profileImage, username, content, address, x, y, images }: Props
   const [visibleImage, openImage, closeImage] = useModal();
 
   return (
-    <div className={cx('container')}>
-      <ProfileImage size={48} src={profileImage} className={cx('profile_image')} />
-      <div className={cx('content_area')}>
-        <div className={cx('username')}>{username}</div>
-        <div className={cx('content')}>{content}</div>
-        {address && (
-          <button
-            type="button"
-            disabled={!x || !y}
-            className={cx('location')}
-            onClick={x && y ? () => openMap({ x, y }) : undefined}
-          >
-            <FontAwesomeIcon icon={faLocationArrow} />
-            {address}
-          </button>
-        )}
-        {images.length > 0 && (
-          <div className={cx('image_list')}>
-            {images.map((image) => (
-              <button key={image} className={cx('image')} onClick={openImage}>
-                <Image src={image} layout="fill" objectFit="cover" alt="image" />
-              </button>
-            ))}
+    <>
+      <div className={cx('container')}>
+        <ProfileImage size={48} src={profileImage} className={cx('profile_image')} />
+        <div className={cx('content_area')}>
+          <div className={cx('username')}>{username}</div>
+          <div className={cx('content')}>{content}</div>
+          {address && (
+            <button
+              type="button"
+              disabled={!x || !y}
+              className={cx('location')}
+              onClick={x && y ? () => openMap({ x, y }) : undefined}
+            >
+              <FontAwesomeIcon icon={faLocationArrow} />
+              {address}
+            </button>
+          )}
+          {images.length > 0 && (
+            <div className={cx('image_list')}>
+              {images.map((image) => (
+                <button key={image} className={cx('image')} onClick={openImage}>
+                  <Image src={image} layout="fill" objectFit="cover" alt="image" />
+                </button>
+              ))}
+            </div>
+          )}
+          <div className={cx('button_area')}>
+            <button>
+              <FontAwesomeIcon icon={emptyHeart} />
+            </button>
           </div>
-        )}
+        </div>
       </div>
 
       <Modal visible={visibleMap} hasCloseButton isEscClosable isMaskClosable onClose={closeMap}>
@@ -61,7 +70,7 @@ function Place({ profileImage, username, content, address, x, y, images }: Props
       </Modal>
 
       <ImageViewModal visible={visibleImage} images={images} onClose={closeImage} />
-    </div>
+    </>
   );
 }
 
