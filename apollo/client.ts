@@ -9,7 +9,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, context) => {
-  const token = context.token ?? (isBrowser() && Cookies.get(TOKEN_KEY));
+  const token = context?.req?.cookies?.[TOKEN_KEY] ?? (isBrowser() && Cookies.get(TOKEN_KEY));
   return {
     headers: {
       authorization: token ? `Bearer ${token}` : '',

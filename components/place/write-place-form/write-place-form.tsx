@@ -8,7 +8,6 @@ import ImageUploadButton from '@src/components/common/form/image-upload-button';
 import { faImage, faLocationPlus, faXmark } from '@fortawesome/pro-light-svg-icons';
 import Button from '@src/components/common/form/button';
 import LocationSelectButton from '@src/components/common/form/location-select-button';
-import { ConvertedImageFile, convertImageFile } from '@src/libs/file';
 import { SelectedAddress } from '@src/types/address';
 import { getAddressData } from '@src/libs/map';
 import { useCreatePlaceMutation } from '@src/generated/graphql';
@@ -32,15 +31,8 @@ function WritePlaceForm() {
   const handleChangeImage = async (files: File[]) => {
     if (!files?.length) return;
 
-    const convertImagesPromises = files.map((file) =>
-      convertImageFile(file, { maxWidth: 1200, maxHeight: 1200 }),
-    );
-    const convertedImages = (await Promise.all(convertImagesPromises)).filter(
-      (image): image is ConvertedImageFile => image != null,
-    );
-    if (!convertedImages) return;
-
-    setImages((prev) => prev.concat(...convertedImages).slice(0, MAX_IMAGES_COUNT));
+    const newImages = files.map((file) => ({ file, url: URL.createObjectURL(file) }));
+    setImages((prev) => prev.concat(...newImages).slice(0, MAX_IMAGES_COUNT));
   };
 
   const handleClickRemoveImage = (index: number) => {

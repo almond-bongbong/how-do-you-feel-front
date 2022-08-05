@@ -18,17 +18,9 @@ function Timeline() {
 
   return (
     <div className={cx('timeline')}>
+      <h2>최근 게시된 장소</h2>
       {data?.getPlaceList?.items.map((place) => (
-        <Place
-          key={place.id}
-          profileImage={place.account.profileImage?.url}
-          username={place.account.username}
-          content={place.content}
-          address={place.address && [place.address, place.buildingName].join(' ')}
-          x={place.longitude}
-          y={place.latitude}
-          images={place.images?.map((image) => image.url) || []}
-        />
+        <Place key={place.id} place={place} />
       ))}
     </div>
   );

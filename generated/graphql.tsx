@@ -122,6 +122,7 @@ export type Mutation = {
   editProfile: EditProfileOutput;
   signIn: SignInOutput;
   signUp: SignUpOutput;
+  togglePlaceLike: TogglePlaceLikeOutput;
 };
 
 
@@ -149,6 +150,11 @@ export type MutationSignUpArgs = {
   input: SignUpInput;
 };
 
+
+export type MutationTogglePlaceLikeArgs = {
+  input: TogglePlaceLikeInput;
+};
+
 export type PlaceCommentDto = {
   __typename?: 'PlaceCommentDto';
   account: AccountDto;
@@ -170,7 +176,9 @@ export type PlaceDto = {
   createdAt: Scalars['DateTime'];
   id: Scalars['Int'];
   images?: Maybe<Array<ImageDto>>;
+  isLiked: Scalars['Boolean'];
   latitude?: Maybe<Scalars['Float']>;
+  likeCount: Scalars['Int'];
   longitude?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['DateTime'];
 };
@@ -221,6 +229,15 @@ export type SignUpOutput = {
   username: Scalars['String'];
 };
 
+export type TogglePlaceLikeInput = {
+  placeId: Scalars['Int'];
+};
+
+export type TogglePlaceLikeOutput = {
+  __typename?: 'TogglePlaceLikeOutput';
+  isLiked: Scalars['Boolean'];
+};
+
 export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -269,7 +286,14 @@ export type GetPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+
+export type TogglePlaceLikeMutationVariables = Exact<{
+  input: TogglePlaceLikeInput;
+}>;
+
+
+export type TogglePlaceLikeMutation = { __typename?: 'Mutation', togglePlaceLike: { __typename?: 'TogglePlaceLikeOutput', isLiked: boolean } };
 
 
 export const AuthDocument = gql`
@@ -530,6 +554,8 @@ export const GetPlaceListDocument = gql`
       longitude
       latitude
       buildingName
+      isLiked
+      likeCount
       account {
         id
         username
@@ -571,3 +597,36 @@ export function useGetPlaceListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetPlaceListQueryHookResult = ReturnType<typeof useGetPlaceListQuery>;
 export type GetPlaceListLazyQueryHookResult = ReturnType<typeof useGetPlaceListLazyQuery>;
 export type GetPlaceListQueryResult = Apollo.QueryResult<GetPlaceListQuery, GetPlaceListQueryVariables>;
+export const TogglePlaceLikeDocument = gql`
+    mutation TogglePlaceLike($input: TogglePlaceLikeInput!) {
+  togglePlaceLike(input: $input) {
+    isLiked
+  }
+}
+    `;
+export type TogglePlaceLikeMutationFn = Apollo.MutationFunction<TogglePlaceLikeMutation, TogglePlaceLikeMutationVariables>;
+
+/**
+ * __useTogglePlaceLikeMutation__
+ *
+ * To run a mutation, you first call `useTogglePlaceLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTogglePlaceLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [togglePlaceLikeMutation, { data, loading, error }] = useTogglePlaceLikeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTogglePlaceLikeMutation(baseOptions?: Apollo.MutationHookOptions<TogglePlaceLikeMutation, TogglePlaceLikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TogglePlaceLikeMutation, TogglePlaceLikeMutationVariables>(TogglePlaceLikeDocument, options);
+      }
+export type TogglePlaceLikeMutationHookResult = ReturnType<typeof useTogglePlaceLikeMutation>;
+export type TogglePlaceLikeMutationResult = Apollo.MutationResult<TogglePlaceLikeMutation>;
+export type TogglePlaceLikeMutationOptions = Apollo.BaseMutationOptions<TogglePlaceLikeMutation, TogglePlaceLikeMutationVariables>;

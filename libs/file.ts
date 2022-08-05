@@ -22,12 +22,13 @@ export interface ConvertedImageFile {
   url: string;
 }
 
+// deprecated! 오히려 용량 증가로 서버에 위임 하는 것이 나아보임
 export const convertImageFile = async (
   file: File,
   options?: ConvertImageFileOptions,
 ): Promise<ConvertedImageFile | null> =>
   new Promise((resolve, reject) => {
-    loadImage(file, { canvas: true, orientation: true, ...options })
+    loadImage(file, { orientation: true, ...options })
       .then((data) => {
         if (data.image instanceof HTMLCanvasElement) {
           data.image.toBlob((blob) => {
@@ -39,7 +40,7 @@ export const convertImageFile = async (
             });
           });
         } else {
-          return resolve(null);
+          return resolve({ file, url: URL.createObjectURL(file) });
         }
       })
       .catch(reject);
