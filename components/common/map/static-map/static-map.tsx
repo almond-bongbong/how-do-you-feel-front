@@ -14,9 +14,12 @@ interface Props {
 function StaticMap({ x, y, className }: Props) {
   const mapElementRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<kakao.maps.Map>();
+  const loadedPositionRef = useRef<{ x: number; y: number }>();
 
   const initMap = useCallback(async () => {
-    if (!mapElementRef.current || mapRef.current || !x || !y) return;
+    const isLoaded = loadedPositionRef.current?.x === x && loadedPositionRef.current?.y === y;
+    if (!mapElementRef.current || isLoaded || !x || !y) return;
+    loadedPositionRef.current = { x, y };
 
     await loadKakaoMapScript();
     mapRef.current = new window.kakao.maps.Map(mapElementRef.current, {
