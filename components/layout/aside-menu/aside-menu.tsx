@@ -4,7 +4,7 @@ import styles from './aside-menu.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/pro-solid-svg-icons';
-import { faRoad, faUser } from '@fortawesome/pro-light-svg-icons';
+import { faGear, faRoad, faUser } from '@fortawesome/pro-light-svg-icons';
 import Button from '../../common/form/button';
 import MyProfile from '../my-profile';
 import { useRouter } from 'next/router';
@@ -41,6 +41,14 @@ function AsideMenu() {
                 <a>
                   <FontAwesomeIcon icon={faRoad} />
                   로드맵
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/setting">
+                <a>
+                  <FontAwesomeIcon icon={faGear} />
+                  설정
                 </a>
               </Link>
             </li>

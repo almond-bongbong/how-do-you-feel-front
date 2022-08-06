@@ -15,14 +15,22 @@ import * as fileApi from '@src/api/file';
 import Modal from '@src/components/modal/modal';
 import { useRouter } from 'next/router';
 import StaticMap from '@src/components/common/map/static-map';
+import { ReactSortable } from 'react-sortablejs';
+import { v4 as uuidv4 } from 'uuid';
 
 const cx = classNames.bind(styles);
 const MAX_IMAGES_COUNT = 5;
 
+interface Image {
+  id: string;
+  file: File;
+  url: string;
+}
+
 function WritePlaceForm() {
   const router = useRouter();
   const [content, setContent] = useState('');
-  const [images, setImages] = useState<{ file: File; url: string }[]>([]);
+  const [images, setImages] = useState<Image[]>([]);
   const [location, setLocation] = useState<SelectedAddress>();
   const [locationPosition, setLocationPosition] = useState<{ x: number; y: number }>();
   const [createPlaceMutation] = useCreatePlaceMutation();
@@ -31,7 +39,11 @@ function WritePlaceForm() {
   const handleChangeImage = async (files: File[]) => {
     if (!files?.length) return;
 
-    const newImages = files.map((file) => ({ file, url: URL.createObjectURL(file) }));
+    const newImages = files.map((file) => ({
+      id: uuidv4(),
+      file,
+      url: URL.createObjectURL(file),
+    }));
     setImages((prev) => prev.concat(...newImages).slice(0, MAX_IMAGES_COUNT));
   };
 
@@ -98,7 +110,7 @@ function WritePlaceForm() {
       />
 
       {hasImage && (
-        <div className={cx('image_area')}>
+        <ReactSortable<Image> className={cx('image_area')} list={images} setList={setImages}>
           {images.map((image, i) => (
             <div className={cx('image_item')} key={image.url}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -112,7 +124,7 @@ function WritePlaceForm() {
               </button>
             </div>
           ))}
-        </div>
+        </ReactSortable>
       )}
 
       {location && (
