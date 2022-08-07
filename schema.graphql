@@ -43,6 +43,16 @@ type GetPlaceListOutput {
     total: Int!
 }
 
+type GetProfileOutput {
+    bannerImage: ImageDto
+    bio: String
+    id: String!
+    location: String
+    platform: String!
+    profileImage: ImageDto
+    username: String!
+}
+
 type ImageDto {
     key: String!
     url: String!
@@ -99,6 +109,7 @@ type Query {
     auth: AuthOutput!
     getPlace(input: GetPlaceInput!): PlaceDto!
     getPlaceList(input: GetPlaceListInput!): GetPlaceListOutput!
+    getProfile(input: GetProfileInput!): GetProfileOutput!
     hello: String!
     me: MeOutput!
 }
@@ -152,6 +163,10 @@ input GetPlaceInput {
 input GetPlaceListInput {
     limit: Int = 10
     offset: Int = 0
+}
+
+input GetProfileInput {
+    id: String!
 }
 
 input ImageInput {

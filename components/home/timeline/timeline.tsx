@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './timeline.module.scss';
 import { useGetPlaceListQuery } from '@src/generated/graphql';
-import Place from '@src/components/home/place';
+import Place from '@src/components/place/place';
 
 const cx = classNames.bind(styles);
 

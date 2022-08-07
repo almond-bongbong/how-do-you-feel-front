@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -19,10 +19,14 @@ interface Props {
 }
 
 const DEFAULT_SCALE = 1;
+const IMAGE_SIZE = {
+  banner: { width: 1200, height: 400 },
+  profile: { width: 400, height: 400 },
+};
 
 function EditProfilePhotoModal({
   visible,
-  imageType,
+  imageType = 'profile',
   profilePhotoFile,
   onConfirm,
   onClose,
@@ -30,6 +34,7 @@ function EditProfilePhotoModal({
   const [scale, setScale] = useState(DEFAULT_SCALE);
   const editorRef = useRef<AvatarEditor>(null);
   const [loading, setLoading] = useState(false);
+  const isBannerType = imageType === 'banner';
 
   useEffect(() => {
     if (visible) setScale(DEFAULT_SCALE);
@@ -60,11 +65,6 @@ function EditProfilePhotoModal({
     });
   };
 
-  const { width, height, border } = useMemo(() => {
-    if (imageType === 'banner') return { width: 500, height: 500 / 3, border: [0, 100] };
-    return { width: 340, height: 340, border: 80 };
-  }, [imageType]);
-
   return (
     <Modal
       visible={visible}
@@ -78,9 +78,10 @@ function EditProfilePhotoModal({
         <AvatarEditor
           ref={editorRef}
           image={profilePhotoFile || ''}
-          width={width}
-          height={height}
-          border={border}
+          width={IMAGE_SIZE[imageType].width}
+          height={IMAGE_SIZE[imageType].height}
+          border={isBannerType ? [0, 100] : 80}
+          style={isBannerType ? { width: 500, height: 500 / 3 + 200 } : { width: 500, height: 500 }}
           color={[50, 50, 50, 0.6]}
           scale={scale}
         />

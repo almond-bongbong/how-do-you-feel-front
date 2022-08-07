@@ -25,7 +25,7 @@ function Roadmap() {
             description:
               '글 작성시 드래그앤 드랍을 이용하여 선택한 이미지들의 순서를 변경할 수 있습니다.',
             targetDate: '2022 3Q',
-            isDone: false,
+            isDone: true,
           },
         ]}
       />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetPlaceListQuery } from '../generated/graphql';
 import { getApolloClient } from '../apollo/client';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import useInitializeApolloClient from '../hooks/apollo/use-initialize-apollo-client';
 import Timeline from '../components/home/timeline';
 import Layout from '../components/layout/layout';
@@ -17,7 +17,7 @@ function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSide
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const client = getApolloClient();
   await client.query<GetPlaceListQuery>({
     query: GET_PLACE_LIST_QUERY,
@@ -35,7 +35,7 @@ export async function getServerSideProps(context: NextPageContext) {
       initialState: client.cache.extract(),
     },
   };
-}
+};
 
 Home.isPrivatePage = true;
 

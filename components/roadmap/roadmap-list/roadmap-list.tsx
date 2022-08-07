@@ -19,8 +19,9 @@ function RoadmapList({ items }: Props) {
       <h2>우리의 로드맵</h2>
       <ul className={cx('roadmap_list')}>
         {items.map((item) => (
-          <li key={item.title}>
+          <li key={item.title} className={cx({ done: item.isDone })}>
             <div className={cx('heading')}>
+              {item.isDone && <span className={cx('tag')}>done</span>}
               <h3>{item.title}</h3>
               <div className={cx('target_date')}>{item.targetDate}</div>
             </div>

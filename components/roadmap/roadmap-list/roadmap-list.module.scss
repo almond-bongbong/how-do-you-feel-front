@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .container {
   padding: 50px;
 
@@ -32,5 +34,24 @@
     margin-left: 10px;
     font-size: 0.8em;
     vertical-align: baseline;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 4px 10px;
+    background-color: rgba($primary-color, 0.8);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 15px;
+    vertical-align: bottom;
+  }
+
+  .done {
+    h3,
+    p,
+    .target_date {
+      opacity: 0.6;
+    }
   }
 }

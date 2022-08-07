@@ -12,6 +12,7 @@ import ImageViewModal from '@src/components/modal/image-view-modal';
 import { faHeart as emptyHeart } from '@fortawesome/pro-light-svg-icons';
 import { GetPlaceListQuery, useTogglePlaceLikeMutation } from '@src/generated/graphql';
 import { UnWrapArray } from '@src/types/util';
+import Link from 'next/link';
 
 const cx = classNames.bind(styles);
 
@@ -61,13 +62,19 @@ function Place({ place }: Props) {
   return (
     <>
       <div className={cx('container')}>
-        <ProfileImage
-          size={48}
-          src={place.account.profileImage?.url}
-          className={cx('profile_image')}
-        />
+        <div className={cx('profile_image')}>
+          <Link href={`/profile/${place.account.id}`}>
+            <a>
+              <ProfileImage size={48} src={place.account.profileImage?.url} />
+            </a>
+          </Link>
+        </div>
         <div className={cx('content_area')}>
-          <div className={cx('username')}>{place.account.username}</div>
+          <div className={cx('username')}>
+            <Link href={`/profile/${place.account.id}`}>
+              <a>{place.account.username}</a>
+            </Link>
+          </div>
           <div className={cx('content')}>{place.content}</div>
           {address && (
             <button

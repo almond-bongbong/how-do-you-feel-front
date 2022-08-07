@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import Input from '@src/components/common/form/input';
 import * as localApi from '@src/api/local';
 import Modal from '@src/components/modal/modal';
@@ -6,6 +6,7 @@ import { AddressByKeyword } from '@src/types/api';
 import classNames from 'classnames/bind';
 import styles from './search-address-by-keyword.module.scss';
 import { SelectedAddress } from '@src/types/address';
+import useIsomorphicLayoutEffect from '@src/hooks/common/use-isomorphic-layout-effect';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,13 @@ interface Props {
 function SearchAddressByKeyword({ onSelect }: Props) {
   const [keyword, setKeyword] = useState('');
   const [addressList, setAddressList] = useState<AddressByKeyword[]>();
+  const addressListRef = useRef<HTMLUListElement>(null);
+  const [hasScroll, setHasScroll] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!addressListRef.current) return;
+    setHasScroll(addressListRef.current.scrollHeight > addressListRef.current.clientHeight);
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,8 +44,8 @@ function SearchAddressByKeyword({ onSelect }: Props) {
       <form onSubmit={handleSubmit}>
         <Input search name="keyword" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
       </form>
-      <div className={cx('address_list_wrap')}>
-        <ul className={cx('address_list')}>
+      <div className={cx('address_list_wrap', { has_scroll: hasScroll })}>
+        <ul ref={addressListRef} className={cx('address_list')}>
           {addressList == null && (
             <li className={cx('info_text')}>가게 또는 건물명으로 검색해보세요</li>
           )}

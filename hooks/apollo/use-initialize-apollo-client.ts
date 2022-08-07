@@ -1,7 +1,7 @@
 import { NormalizedCacheObject, useApolloClient } from '@apollo/client';
 import { useMemo } from 'react';
 
-function useInitializeApolloClient(initialState: NormalizedCacheObject) {
+function useInitializeApolloClient(initialState?: NormalizedCacheObject | null) {
   const client = useApolloClient();
 
   useMemo(() => {

@@ -12,53 +12,62 @@ import Modal from '@src/components/modal/modal';
 
 const cx = classNames.bind(styles);
 
-function ProfileBanner() {
+interface Props {
+  id: string;
+  bannerImage?: string | null;
+  profileImage?: string | null;
+  username: string;
+  location?: string | null;
+  bio?: string | null;
+}
+
+function ProfileBanner({ id, bannerImage, profileImage, username, location, bio }: Props) {
   const { currentUser, refetchMe } = useCurrentUser();
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
-
-  if (!currentUser) return <div>loading</div>;
+  const isMe = id === currentUser?.id;
 
   return (
     <div className={cx('container')}>
       <div className={cx('banner')}>
-        {currentUser.bannerImage?.url && (
-          <Image
-            src={currentUser.bannerImage?.url}
-            alt="사용자 배너 이미지"
-            layout="fill"
-            objectFit="cover"
-          />
+        {bannerImage && (
+          <Image src={bannerImage} alt="사용자 배너 이미지" layout="fill" objectFit="cover" />
         )}
       </div>
 
       <div className={cx('info')}>
         <div className={cx('photo')}>
-          <ProfileImage src={currentUser.profileImage?.url} size={150} />
+          <ProfileImage src={profileImage} size={150} />
         </div>
 
         <div className={cx('user')}>
-          <span className={cx('name')}>{currentUser.username}</span>
-          {currentUser.location && (
+          <span className={cx('name')}>{username}</span>
+          {location && (
             <span className={cx('location')}>
               <FontAwesomeIcon icon={faLocationDot} />
-              {currentUser.location}
+              {location}
             </span>
           )}
         </div>
 
-        {currentUser.bio && <div className={cx('bio')}>{currentUser.bio}</div>}
+        {bio && <div className={cx('bio')}>{bio}</div>}
 
         <div className={cx('people')}>
           <span>0 팔로잉</span>
           <span>0 팔로워</span>
         </div>
-        <Button
-          className={cx('edit_button')}
-          size="sm"
-          onClick={() => setEditProfileModalVisible(true)}
-        >
-          수정하기
-        </Button>
+        {isMe ? (
+          <Button
+            className={cx('profile_button')}
+            size="sm"
+            onClick={() => setEditProfileModalVisible(true)}
+          >
+            수정하기
+          </Button>
+        ) : (
+          <Button className={cx('profile_button')} size="sm" theme="primary-line">
+            팔로우
+          </Button>
+        )}
       </div>
 
       <EditProfileModal

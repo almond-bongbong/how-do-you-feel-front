@@ -91,6 +91,21 @@ export type GetPlaceListOutput = {
   total: Scalars['Int'];
 };
 
+export type GetProfileInput = {
+  id: Scalars['String'];
+};
+
+export type GetProfileOutput = {
+  __typename?: 'GetProfileOutput';
+  bannerImage?: Maybe<ImageDto>;
+  bio?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+  platform: Scalars['String'];
+  profileImage?: Maybe<ImageDto>;
+  username: Scalars['String'];
+};
+
 export type ImageDto = {
   __typename?: 'ImageDto';
   key: Scalars['String'];
@@ -188,6 +203,7 @@ export type Query = {
   auth: AuthOutput;
   getPlace: PlaceDto;
   getPlaceList: GetPlaceListOutput;
+  getProfile: GetProfileOutput;
   hello: Scalars['String'];
   me: MeOutput;
 };
@@ -200,6 +216,11 @@ export type QueryGetPlaceArgs = {
 
 export type QueryGetPlaceListArgs = {
   input: GetPlaceListInput;
+};
+
+
+export type QueryGetProfileArgs = {
+  input: GetProfileInput;
 };
 
 export type SignInInput = {
@@ -254,6 +275,13 @@ export type EditProfileMutationVariables = Exact<{
 
 
 export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileOutput', id: string } };
+
+export type GetProfileQueryVariables = Exact<{
+  input: GetProfileInput;
+}>;
+
+
+export type GetProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'GetProfileOutput', id: string, username: string, location?: string | null, bio?: string | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
@@ -409,6 +437,52 @@ export function useEditProfileMutation(baseOptions?: Apollo.MutationHookOptions<
 export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
 export type EditProfileMutationResult = Apollo.MutationResult<EditProfileMutation>;
 export type EditProfileMutationOptions = Apollo.BaseMutationOptions<EditProfileMutation, EditProfileMutationVariables>;
+export const GetProfileDocument = gql`
+    query GetProfile($input: GetProfileInput!) {
+  getProfile(input: $input) {
+    id
+    username
+    profileImage {
+      key
+      url
+    }
+    bannerImage {
+      key
+      url
+    }
+    location
+    bio
+  }
+}
+    `;
+
+/**
+ * __useGetProfileQuery__
+ *
+ * To run a query within a React component, call `useGetProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetProfileQuery(baseOptions: Apollo.QueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+      }
+export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+        }
+export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
+export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
+export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
 export const SignInDocument = gql`
     mutation SignIn($input: SignInInput!) {
   signIn(input: $input) {
