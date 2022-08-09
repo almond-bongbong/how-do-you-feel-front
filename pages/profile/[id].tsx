@@ -31,6 +31,9 @@ function ProfileDetail({ initialState }: InferGetServerSidePropsType<typeof getS
         username={profile.username}
         location={profile.location}
         bio={profile.bio}
+        followingCount={profile.followingCount}
+        followedByCount={profile.followedByCount}
+        isFollowed={profile.isFollowed}
       />
       <ProfileTimeline />
     </Layout>

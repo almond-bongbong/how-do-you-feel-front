@@ -12,7 +12,7 @@ function ProfileTimeline() {
   const router = useRouter();
   const selectedTab = getHashString(router.asPath) || 'place';
 
-  if (!router.query.id || Array.isArray(router.query.id)) return;
+  if (!router.query.id || Array.isArray(router.query.id)) return <div>잘못된 접근입니다.</div>;
 
   return (
     <div className={cx('container')}>

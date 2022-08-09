@@ -100,7 +100,10 @@ export type GetProfileOutput = {
   __typename?: 'GetProfileOutput';
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
+  followedByCount: Scalars['Int'];
+  followingCount: Scalars['Int'];
   id: Scalars['String'];
+  isFollowed: Scalars['Boolean'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
   profileImage?: Maybe<ImageDto>;
@@ -138,6 +141,7 @@ export type Mutation = {
   editProfile: EditProfileOutput;
   signIn: SignInOutput;
   signUp: SignUpOutput;
+  toggleFollow: ToggleFollowOutput;
   togglePlaceLike: TogglePlaceLikeOutput;
 };
 
@@ -164,6 +168,11 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   input: SignUpInput;
+};
+
+
+export type MutationToggleFollowArgs = {
+  input: ToggleFollowInput;
 };
 
 
@@ -251,6 +260,15 @@ export type SignUpOutput = {
   username: Scalars['String'];
 };
 
+export type ToggleFollowInput = {
+  id: Scalars['String'];
+};
+
+export type ToggleFollowOutput = {
+  __typename?: 'ToggleFollowOutput';
+  isFollowed: Scalars['Boolean'];
+};
+
 export type TogglePlaceLikeInput = {
   placeId: Scalars['Int'];
 };
@@ -282,7 +300,7 @@ export type GetProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'GetProfileOutput', id: string, username: string, location?: string | null, bio?: string | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type GetProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'GetProfileOutput', id: string, username: string, location?: string | null, bio?: string | null, isFollowed: boolean, followedByCount: number, followingCount: number, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
@@ -453,6 +471,9 @@ export const GetProfileDocument = gql`
     }
     location
     bio
+    isFollowed
+    followedByCount
+    followingCount
   }
 }
     `;

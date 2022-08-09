@@ -19,9 +19,22 @@ interface Props {
   username: string;
   location?: string | null;
   bio?: string | null;
+  followingCount: number;
+  followedByCount: number;
+  isFollowed: boolean;
 }
 
-function ProfileBanner({ id, bannerImage, profileImage, username, location, bio }: Props) {
+function ProfileBanner({
+  id,
+  bannerImage,
+  profileImage,
+  username,
+  location,
+  bio,
+  followingCount,
+  followedByCount,
+  isFollowed,
+}: Props) {
   const { currentUser, refetchMe } = useCurrentUser();
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
   const isMe = id === currentUser?.id;
@@ -52,8 +65,8 @@ function ProfileBanner({ id, bannerImage, profileImage, username, location, bio 
         {bio && <div className={cx('bio')}>{bio}</div>}
 
         <div className={cx('people')}>
-          <span>0 팔로잉</span>
-          <span>0 팔로워</span>
+          <span>{followingCount} 팔로잉</span>
+          <span>{followedByCount} 팔로워</span>
         </div>
         {isMe ? (
           <Button
@@ -65,7 +78,7 @@ function ProfileBanner({ id, bannerImage, profileImage, username, location, bio 
           </Button>
         ) : (
           <Button className={cx('profile_button')} size="sm" theme="primary-line">
-            팔로우
+            {isFollowed ? '언팔로우' : '팔로우'}
           </Button>
         )}
       </div>
