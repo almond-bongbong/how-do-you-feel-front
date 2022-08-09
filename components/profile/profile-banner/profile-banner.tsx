@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 import EditProfileModal from '@src/components/modal/edit-profile-modal';
 import Modal from '@src/components/modal/modal';
+import { useToggleFollowMutation } from '@src/generated/graphql';
+import { GET_PROFILE_QUERY } from '@src/graphql/account/get-profile';
 
 const cx = classNames.bind(styles);
 
@@ -35,9 +37,22 @@ function ProfileBanner({
   followedByCount,
   isFollowed,
 }: Props) {
+  const [toggleFollowMutation, { loading: loadingToggleFollow }] = useToggleFollowMutation({
+    variables: { input: { id } },
+    refetchQueries: [{ query: GET_PROFILE_QUERY, variables: { input: { id } } }],
+  });
   const { currentUser, refetchMe } = useCurrentUser();
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
   const isMe = id === currentUser?.id;
+
+  const handleClickFollow = async () => {
+    try {
+      await toggleFollowMutation();
+    } catch (error) {
+      console.error(error);
+      await Modal.alert('요청에 실패했습니다.');
+    }
+  };
 
   return (
     <div className={cx('container')}>
@@ -77,7 +92,13 @@ function ProfileBanner({
             수정하기
           </Button>
         ) : (
-          <Button className={cx('profile_button')} size="sm" theme="primary-line">
+          <Button
+            className={cx('profile_button')}
+            size="sm"
+            theme={isFollowed ? 'default' : 'primary-line'}
+            loading={loadingToggleFollow}
+            onClick={handleClickFollow}
+          >
             {isFollowed ? '언팔로우' : '팔로우'}
           </Button>
         )}
