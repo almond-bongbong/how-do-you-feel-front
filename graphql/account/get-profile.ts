@@ -15,6 +15,9 @@ export const GET_PROFILE_QUERY = gql`
       }
       location
       bio
+      isFollowed
+      followedByCount
+      followingCount
     }
   }
 `;

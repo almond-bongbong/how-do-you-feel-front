@@ -16,6 +16,7 @@
 
 .content_area {
   flex: 1;
+  position: relative;
   padding-left: 14px;
 }
 
@@ -34,6 +35,7 @@ $content-line-height: 22px;
 $content-max-lines: 4;
 
 .content {
+  position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -42,6 +44,25 @@ $content-max-lines: 4;
   white-space: pre-line;
   max-height: $content-line-height * $content-max-lines;
   line-height: $content-line-height;
+
+  &.expanded {
+    text-overflow: inherit;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: inherit;
+    max-height: none;
+  }
+
+  .more_button {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+    text-indent: -9999px;
+  }
 }
 
 .location {

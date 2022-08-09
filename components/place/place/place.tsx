@@ -27,6 +27,7 @@ function Place({ place }: Props) {
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
   const [togglePlaceLikeMutation] = useTogglePlaceLikeMutation();
   const [animateButton, setAnimateButton] = useState(false);
+  const [expandedContent, setExpandedContent] = useState(false);
 
   const handleClickLike = async () => {
     await togglePlaceLikeMutation({
@@ -75,7 +76,16 @@ function Place({ place }: Props) {
               <a>{place.account.username}</a>
             </Link>
           </div>
-          <div className={cx('content')}>{place.content}</div>
+          <div className={cx('content', { expanded: expandedContent })}>
+            <p>{place.content}</p>
+            <button
+              type="button"
+              className={cx('more_button')}
+              onClick={() => setExpandedContent((prev) => !prev)}
+            >
+              {expandedContent ? '접기' : '더보기'}
+            </button>
+          </div>
           {address && (
             <button
               type="button"

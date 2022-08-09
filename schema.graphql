@@ -46,7 +46,10 @@ type GetPlaceListOutput {
 type GetProfileOutput {
     bannerImage: ImageDto
     bio: String
+    followedByCount: Int!
+    followingCount: Int!
     id: String!
+    isFollowed: Boolean
     location: String
     platform: String!
     profileImage: ImageDto
@@ -76,6 +79,7 @@ type Mutation {
     editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
+    toggleFollow(input: ToggleFollowInput!): ToggleFollowOutput!
     togglePlaceLike(input: TogglePlaceLikeInput!): TogglePlaceLikeOutput!
 }
 
@@ -125,6 +129,10 @@ type SignUpOutput {
     username: String!
 }
 
+type ToggleFollowOutput {
+    isFollowed: Boolean!
+}
+
 type TogglePlaceLikeOutput {
     isLiked: Boolean!
 }
@@ -161,6 +169,7 @@ input GetPlaceInput {
 }
 
 input GetPlaceListInput {
+    accountId: String
     limit: Int = 10
     offset: Int = 0
 }
@@ -186,6 +195,10 @@ input SignUpInput {
     email: String!
     password: String!
     username: String!
+}
+
+input ToggleFollowInput {
+    id: String!
 }
 
 input TogglePlaceLikeInput {
