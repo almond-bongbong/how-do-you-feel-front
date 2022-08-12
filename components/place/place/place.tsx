@@ -5,14 +5,15 @@ import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as fullHeart, faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
-import Modal from '@src/components/modal/modal/modal';
+import Modal from '@src/components/modal/modal';
 import StaticMap from '@src/components/common/map/static-map';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
-import { faHeart as emptyHeart } from '@fortawesome/pro-light-svg-icons';
+import { faHeart as emptyHeart, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { GetPlaceListQuery, useTogglePlaceLikeMutation } from '@src/generated/graphql';
 import { UnWrapArray } from '@src/types/util';
 import Link from 'next/link';
+import useCurrentUser from '@src/hooks/auth/use-current-user';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ interface Props {
 }
 
 function Place({ place }: Props) {
+  const { currentUser } = useCurrentUser();
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
     false,
   );
@@ -55,6 +57,11 @@ function Place({ place }: Props) {
         });
       },
     });
+  };
+
+  const handleClickDelete = async () => {
+    const isOk = await Modal.confirm('정말 삭제하시나요?');
+    if (!isOk) return;
   };
 
   const address = place.address && [place.address, place.buildingName].join(' ');
@@ -118,6 +125,14 @@ function Place({ place }: Props) {
               <FontAwesomeIcon icon={place.isLiked ? fullHeart : emptyHeart} />
               <span className={cx('count')}>{place.likeCount}</span>
             </button>
+
+            {place.account.id === currentUser?.id && (
+              <div className={cx('owner_button_area')}>
+                <button type="button" onClick={handleClickDelete}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

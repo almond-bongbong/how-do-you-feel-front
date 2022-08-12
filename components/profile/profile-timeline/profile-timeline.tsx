@@ -5,6 +5,7 @@ import Tab from '@src/components/common/form/tab';
 import { useRouter } from 'next/router';
 import { getHashString } from '@src/libs/url';
 import MyPlaceList from '@src/components/profile/my-place-list';
+import MyLikePlaceList from '@src/components/profile/my-like-place-list';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,7 @@ function ProfileTimeline() {
       />
 
       {selectedTab === 'place' && <MyPlaceList accountId={router.query.id} />}
+      {selectedTab === 'like' && <MyLikePlaceList accountId={router.query.id} />}
     </div>
   );
 }

@@ -18,6 +18,12 @@
   flex: 1;
   position: relative;
   padding-left: 14px;
+
+  &:hover {
+    .owner_button_area {
+      opacity: 1;
+    }
+  }
 }
 
 .username {
@@ -102,6 +108,8 @@ $content-max-lines: 4;
 }
 
 .button_area {
+  display: flex;
+  justify-content: space-between;
   margin-top: 16px;
 
   button {
@@ -127,6 +135,11 @@ $content-max-lines: 4;
     &.animate {
       animation: active-button 0.3s ease-in-out forwards;
     }
+  }
+
+  .owner_button_area {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
   }
 }
 
