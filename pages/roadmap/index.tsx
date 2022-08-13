@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@src/components/layout/layout';
 import RoadmapList from '@src/components/roadmap/roadmap-list';
+import PageTitle from '@src/components/common/typography/page-title';
 
 function Roadmap() {
   return (

@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './timeline.module.scss';
 import { useGetPlaceListQuery } from '@src/generated/graphql';
 import Place from '@src/components/place/place';
+import PageTitle from '@src/components/common/typography/page-title';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,7 @@ function Timeline() {
 
   return (
     <div className={cx('timeline')}>
-      <h2>최근 게시된 장소</h2>
+      <PageTitle>최근 게시된 장소</PageTitle>
       {data?.getPlaceList?.items.map((place) => (
         <Place key={place.id} place={place} />
       ))}

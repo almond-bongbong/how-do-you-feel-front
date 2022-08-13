@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './roadmap-list.module.scss';
+import PageTitle from '@src/components/common/typography/page-title';
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +17,7 @@ interface Props {
 function RoadmapList({ items }: Props) {
   return (
     <div className={cx('container')}>
-      <h2>우리의 로드맵</h2>
+      <PageTitle>우리의 로드맵</PageTitle>
       <ul className={cx('roadmap_list')}>
         {items.map((item) => (
           <li key={item.title} className={cx({ done: item.isDone })}>
