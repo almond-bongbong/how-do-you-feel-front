@@ -11,11 +11,16 @@ function SettingMenu() {
     <div className={cx('container')}>
       <PageTitle>설정</PageTitle>
 
-      <ul>
+      <ul className={cx('menu')}>
         <li>
-          <Link href="/setting/account">
-            <a>계정관리</a>
-          </Link>
+          <em>계정관리</em>
+          <ul>
+            <li>
+              <Link href="/setting/account">
+                <a>비밀번호 변경</a>
+              </Link>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
