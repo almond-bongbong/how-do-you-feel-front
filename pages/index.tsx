@@ -11,7 +11,7 @@ function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSide
   useInitializeApolloClient(initialState);
 
   return (
-    <Layout>
+    <Layout title="최근 게시된 장소">
       <Timeline />
     </Layout>
   );

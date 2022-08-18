@@ -1,17 +1,44 @@
-.container {
-  padding: 40px 30px 100px;
+@import 'styles/variables';
 
-  h2 {
-    margin-bottom: 40px;
-  }
+.container {
+  padding-top: 20px;
 }
 
 .menu {
   font-size: 0;
 
-  a {
-    display: inline-block;
-    padding: 5px 0;
+  em {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  a,
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
     font-size: 16px;
+    color: #666;
+    text-align: left;
+
+    &:hover {
+      background-color: darken(#fff, 2%);
+    }
+
+    svg {
+      width: 14px;
+    }
+  }
+
+  svg {
+    margin-right: 16px;
+    color: #888;
   }
 }

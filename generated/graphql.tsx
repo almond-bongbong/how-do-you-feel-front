@@ -13,21 +13,20 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
 };
 
 export type AccountDto = {
   __typename?: 'AccountDto';
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['Float'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
   profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['Float'];
   username: Scalars['String'];
 };
 
@@ -53,6 +52,15 @@ export type CreatePlaceInput = {
   longitude?: InputMaybe<Scalars['Float']>;
 };
 
+export type DeletePlaceInput = {
+  id: Scalars['Int'];
+};
+
+export type DeletePlaceOutput = {
+  __typename?: 'DeletePlaceOutput';
+  isDeleted: Scalars['Boolean'];
+};
+
 export type EditProfileInput = {
   bannerImage?: InputMaybe<ImageInput>;
   bio?: InputMaybe<Scalars['String']>;
@@ -65,14 +73,14 @@ export type EditProfileOutput = {
   __typename?: 'EditProfileOutput';
   bannerImage?: Maybe<ImageDto>;
   bio?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['Float'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: Scalars['String'];
   profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['Float'];
   username: Scalars['String'];
 };
 
@@ -139,6 +147,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createPlace: PlaceDto;
   createPlaceComment: PlaceCommentDto;
+  deletePlace: DeletePlaceOutput;
   editProfile: EditProfileOutput;
   signIn: SignInOutput;
   signUp: SignUpOutput;
@@ -154,6 +163,11 @@ export type MutationCreatePlaceArgs = {
 
 export type MutationCreatePlaceCommentArgs = {
   input: CreatePlaceCommentInput;
+};
+
+
+export type MutationDeletePlaceArgs = {
+  input: DeletePlaceInput;
 };
 
 
@@ -185,11 +199,11 @@ export type PlaceCommentDto = {
   __typename?: 'PlaceCommentDto';
   account: AccountDto;
   content: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['Float'];
   id: Scalars['Int'];
   images: Array<ImageDto>;
   place: PlaceDto;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['Float'];
 };
 
 export type PlaceDto = {
@@ -199,14 +213,14 @@ export type PlaceDto = {
   buildingName?: Maybe<Scalars['String']>;
   comments: Array<PlaceCommentDto>;
   content: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['Float'];
   id: Scalars['Int'];
   images?: Maybe<Array<ImageDto>>;
   isLiked: Scalars['Boolean'];
   latitude?: Maybe<Scalars['Float']>;
   likeCount: Scalars['Int'];
   longitude?: Maybe<Scalars['Float']>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['Float'];
 };
 
 export type Query = {
@@ -255,7 +269,7 @@ export type SignUpInput = {
 
 export type SignUpOutput = {
   __typename?: 'SignUpOutput';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['Float'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   username: Scalars['String'];
@@ -279,15 +293,10 @@ export type TogglePlaceLikeOutput = {
   isLiked: Scalars['Boolean'];
 };
 
-export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AuthQuery = { __typename?: 'Query', auth: { __typename?: 'AuthOutput', id: string, username: string } };
-
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: string, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
 export type EditProfileMutationVariables = Exact<{
   input: EditProfileInput;
@@ -351,41 +360,6 @@ export type TogglePlaceLikeMutationVariables = Exact<{
 export type TogglePlaceLikeMutation = { __typename?: 'Mutation', togglePlaceLike: { __typename?: 'TogglePlaceLikeOutput', isLiked: boolean } };
 
 
-export const AuthDocument = gql`
-    query Auth {
-  auth {
-    id
-    username
-  }
-}
-    `;
-
-/**
- * __useAuthQuery__
- *
- * To run a query within a React component, call `useAuthQuery` and pass it any options that fit your needs.
- * When your component renders, `useAuthQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAuthQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAuthQuery(baseOptions?: Apollo.QueryHookOptions<AuthQuery, AuthQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
-      }
-export function useAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthQuery, AuthQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
-        }
-export type AuthQueryHookResult = ReturnType<typeof useAuthQuery>;
-export type AuthLazyQueryHookResult = ReturnType<typeof useAuthLazyQuery>;
-export type AuthQueryResult = Apollo.QueryResult<AuthQuery, AuthQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -393,6 +367,7 @@ export const MeDocument = gql`
     username
     bio
     location
+    platform
     bannerImage {
       key
       url
