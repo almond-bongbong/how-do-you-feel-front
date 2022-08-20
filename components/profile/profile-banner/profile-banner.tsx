@@ -58,7 +58,13 @@ function ProfileBanner({
     <div className={cx('container')}>
       <div className={cx('banner')}>
         {bannerImage && (
-          <Image src={bannerImage} alt="사용자 배너 이미지" layout="fill" objectFit="cover" />
+          <Image
+            src={bannerImage}
+            alt="사용자 배너 이미지"
+            priority
+            layout="fill"
+            objectFit="cover"
+          />
         )}
       </div>
 

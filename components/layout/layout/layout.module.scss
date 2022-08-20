@@ -14,3 +14,26 @@
 .has_title {
   padding: 40px 30px 100px;
 }
+
+.header {
+  position: relative;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #ebebeb;
+
+  &.has_prev {
+    padding-left: 30px;
+  }
+}
+
+.prev_button {
+  position: absolute;
+  top: -2px;
+  left: -10px;
+  padding: 4px 10px;
+  font-size: 0;
+
+  svg {
+    font-size: 17px;
+  }
+}

@@ -24,17 +24,17 @@ function Profile({ initialState }: InferGetServerSidePropsType<typeof getServerS
   });
   const profile = data?.getProfile;
 
-  if (!profile) return <div>유저 정보를 찾지못했습니다.</div>;
+  if (!profile || !currentUser) return <div>정보를 불러오지 못했습니다.</div>;
 
   return (
     <Layout>
       <ProfileBanner
-        id={profile.id}
-        bannerImage={profile.bannerImage?.url}
-        profileImage={profile.profileImage?.url}
-        username={profile.username}
-        location={profile.location}
-        bio={profile.bio}
+        id={currentUser.id}
+        bannerImage={currentUser.bannerImage?.url}
+        profileImage={currentUser.profileImage?.url}
+        username={currentUser.username}
+        location={currentUser.location}
+        bio={currentUser.bio}
         followingCount={profile.followingCount}
         followedByCount={profile.followedByCount}
       />
