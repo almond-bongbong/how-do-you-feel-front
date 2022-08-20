@@ -23,12 +23,17 @@ export type AccountDto = {
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
-  platform: Scalars['String'];
+  platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
   updatedAt: Scalars['Float'];
   username: Scalars['String'];
 };
+
+export enum AccountPlatform {
+  Email = 'EMAIL',
+  Kakao = 'KAKAO'
+}
 
 export type AuthOutput = {
   __typename?: 'AuthOutput';
@@ -77,7 +82,7 @@ export type EditProfileOutput = {
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
-  platform: Scalars['String'];
+  platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
   updatedAt: Scalars['Float'];
@@ -114,7 +119,7 @@ export type GetProfileOutput = {
   id: Scalars['String'];
   isFollowed: Scalars['Boolean'];
   location?: Maybe<Scalars['String']>;
-  platform: Scalars['String'];
+  platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
   username: Scalars['String'];
 };
@@ -137,7 +142,7 @@ export type MeOutput = {
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
-  platform: Scalars['String'];
+  platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
   role: Scalars['String'];
   username: Scalars['String'];
@@ -296,7 +301,7 @@ export type TogglePlaceLikeOutput = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: string, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: AccountPlatform, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
 export type EditProfileMutationVariables = Exact<{
   input: EditProfileInput;

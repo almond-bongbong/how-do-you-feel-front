@@ -23,7 +23,7 @@ interface Props {
   bio?: string | null;
   followingCount: number;
   followedByCount: number;
-  isFollowed: boolean;
+  isFollowed?: boolean;
 }
 
 function ProfileBanner({
@@ -35,7 +35,7 @@ function ProfileBanner({
   bio,
   followingCount,
   followedByCount,
-  isFollowed,
+  isFollowed = false,
 }: Props) {
   const [toggleFollowMutation, { loading: loadingToggleFollow }] = useToggleFollowMutation({
     variables: { input: { id } },
