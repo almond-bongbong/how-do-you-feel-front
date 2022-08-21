@@ -25,7 +25,7 @@ export type AccountDto = {
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
-  role: Scalars['String'];
+  role: AccountRole;
   updatedAt: Scalars['Float'];
   username: Scalars['String'];
 };
@@ -35,10 +35,26 @@ export enum AccountPlatform {
   Kakao = 'KAKAO'
 }
 
+export enum AccountRole {
+  Admin = 'ADMIN',
+  Client = 'CLIENT'
+}
+
 export type AuthOutput = {
   __typename?: 'AuthOutput';
   id: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type ChangePasswordInput = {
+  currentPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  newPasswordConfirm: Scalars['String'];
+};
+
+export type ChangePasswordOutput = {
+  __typename?: 'ChangePasswordOutput';
+  success: Scalars['Boolean'];
 };
 
 export type CreatePlaceCommentInput = {
@@ -84,7 +100,7 @@ export type EditProfileOutput = {
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
-  role: Scalars['String'];
+  role: AccountRole;
   updatedAt: Scalars['Float'];
   username: Scalars['String'];
 };
@@ -144,12 +160,13 @@ export type MeOutput = {
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
   profileImage?: Maybe<ImageDto>;
-  role: Scalars['String'];
+  role: AccountRole;
   username: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword: ChangePasswordOutput;
   createPlace: PlaceDto;
   createPlaceComment: PlaceCommentDto;
   deletePlace: DeletePlaceOutput;
@@ -158,6 +175,11 @@ export type Mutation = {
   signUp: SignUpOutput;
   toggleFollow: ToggleFollowOutput;
   togglePlaceLike: TogglePlaceLikeOutput;
+};
+
+
+export type MutationChangePasswordArgs = {
+  input: ChangePasswordInput;
 };
 
 
@@ -303,6 +325,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: AccountPlatform, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
 
+export type ChangePasswordMutationVariables = Exact<{
+  input: ChangePasswordInput;
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ChangePasswordOutput', success: boolean } };
+
 export type EditProfileMutationVariables = Exact<{
   input: EditProfileInput;
 }>;
@@ -411,6 +440,39 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($input: ChangePasswordInput!) {
+  changePassword(input: $input) {
+    success
+  }
+}
+    `;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const EditProfileDocument = gql`
     mutation EditProfile($input: EditProfileInput!) {
   editProfile(input: $input) {

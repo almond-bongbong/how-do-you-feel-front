@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import styles from './setting-menu.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKey, faUnlock } from '@fortawesome/pro-light-svg-icons';
-import { faUser } from '@fortawesome/pro-solid-svg-icons';
 import Modal from '@src/components/modal/modal';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import { useRouter } from 'next/router';
@@ -32,10 +31,7 @@ function SettingMenu() {
     <div className={cx('container')}>
       <ul className={cx('menu')}>
         <li>
-          <em>
-            <FontAwesomeIcon icon={faUser} />
-            계정관리
-          </em>
+          <em>계정관리</em>
           <ul>
             <li>
               <button type="button" onClick={handleChangePasswordClick}>

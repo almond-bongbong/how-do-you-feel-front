@@ -8,14 +8,14 @@ schema {
 type AccountDto {
     bannerImage: ImageDto
     bio: String
-    createdAt: DateTime!
+    createdAt: Float!
     email: String
     id: String!
     location: String
-    platform: String!
+    platform: AccountPlatform!
     profileImage: ImageDto
-    role: String!
-    updatedAt: DateTime!
+    role: AccountRole!
+    updatedAt: Float!
     username: String!
 }
 
@@ -24,17 +24,25 @@ type AuthOutput {
     username: String!
 }
 
+type ChangePasswordOutput {
+    success: Boolean!
+}
+
+type DeletePlaceOutput {
+    isDeleted: Boolean!
+}
+
 type EditProfileOutput {
     bannerImage: ImageDto
     bio: String
-    createdAt: DateTime!
+    createdAt: Float!
     email: String
     id: String!
     location: String
-    platform: String!
+    platform: AccountPlatform!
     profileImage: ImageDto
-    role: String!
-    updatedAt: DateTime!
+    role: AccountRole!
+    updatedAt: Float!
     username: String!
 }
 
@@ -49,9 +57,9 @@ type GetProfileOutput {
     followedByCount: Int!
     followingCount: Int!
     id: String!
-    isFollowed: Boolean
+    isFollowed: Boolean!
     location: String
-    platform: String!
+    platform: AccountPlatform!
     profileImage: ImageDto
     username: String!
 }
@@ -67,15 +75,17 @@ type MeOutput {
     email: String
     id: String!
     location: String
-    platform: String!
+    platform: AccountPlatform!
     profileImage: ImageDto
-    role: String!
+    role: AccountRole!
     username: String!
 }
 
 type Mutation {
+    changePassword(input: ChangePasswordInput!): ChangePasswordOutput!
     createPlace(input: CreatePlaceInput!): PlaceDto!
     createPlaceComment(input: CreatePlaceCommentInput!): PlaceCommentDto!
+    deletePlace(input: DeletePlaceInput!): DeletePlaceOutput!
     editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
@@ -86,11 +96,11 @@ type Mutation {
 type PlaceCommentDto {
     account: AccountDto!
     content: String!
-    createdAt: DateTime!
+    createdAt: Float!
     id: Int!
     images: [ImageDto!]!
     place: PlaceDto!
-    updatedAt: DateTime!
+    updatedAt: Float!
 }
 
 type PlaceDto {
@@ -99,14 +109,14 @@ type PlaceDto {
     buildingName: String
     comments: [PlaceCommentDto!]!
     content: String!
-    createdAt: DateTime!
+    createdAt: Float!
     id: Int!
     images: [ImageDto!]
     isLiked: Boolean!
     latitude: Float
     likeCount: Int!
     longitude: Float
-    updatedAt: DateTime!
+    updatedAt: Float!
 }
 
 type Query {
@@ -123,7 +133,7 @@ type SignInOutput {
 }
 
 type SignUpOutput {
-    createdAt: DateTime!
+    createdAt: Float!
     email: String
     id: String!
     username: String!
@@ -137,8 +147,21 @@ type TogglePlaceLikeOutput {
     isLiked: Boolean!
 }
 
-"A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
-scalar DateTime
+enum AccountPlatform {
+    EMAIL
+    KAKAO
+}
+
+enum AccountRole {
+    ADMIN
+    CLIENT
+}
+
+input ChangePasswordInput {
+    currentPassword: String!
+    newPassword: String!
+    newPasswordConfirm: String!
+}
 
 input CreatePlaceCommentInput {
     accountId: String!
@@ -156,6 +179,10 @@ input CreatePlaceInput {
     longitude: Float
 }
 
+input DeletePlaceInput {
+    id: Int!
+}
+
 input EditProfileInput {
     bannerImage: ImageInput
     bio: String
@@ -170,6 +197,7 @@ input GetPlaceInput {
 
 input GetPlaceListInput {
     accountId: String
+    likedAccountId: String
     limit: Int = 10
     offset: Int = 0
 }
