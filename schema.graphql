@@ -90,6 +90,7 @@ type Mutation {
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
     toggleFollow(input: ToggleFollowInput!): ToggleFollowOutput!
+    togglePlaceBookmark(input: TogglePlaceBookmarkInput!): TogglePlaceBookmarkOutput!
     togglePlaceLike(input: TogglePlaceLikeInput!): TogglePlaceLikeOutput!
 }
 
@@ -106,12 +107,14 @@ type PlaceCommentDto {
 type PlaceDto {
     account: AccountDto!
     address: String
+    bookmarkCount: Int!
     buildingName: String
     comments: [PlaceCommentDto!]!
     content: String!
     createdAt: Float!
     id: Int!
     images: [ImageDto!]
+    isBookmarked: Boolean!
     isLiked: Boolean!
     latitude: Float
     likeCount: Int!
@@ -141,6 +144,10 @@ type SignUpOutput {
 
 type ToggleFollowOutput {
     isFollowed: Boolean!
+}
+
+type TogglePlaceBookmarkOutput {
+    isBookmarked: Boolean!
 }
 
 type TogglePlaceLikeOutput {
@@ -227,6 +234,10 @@ input SignUpInput {
 
 input ToggleFollowInput {
     id: String!
+}
+
+input TogglePlaceBookmarkInput {
+    placeId: Int!
 }
 
 input TogglePlaceLikeInput {

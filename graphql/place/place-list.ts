@@ -16,6 +16,8 @@ export const GET_PLACE_LIST_QUERY = gql`
         buildingName
         isLiked
         likeCount
+        isBookmarked
+        bookmarkCount
         account {
           id
           username

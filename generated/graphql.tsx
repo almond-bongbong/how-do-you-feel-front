@@ -174,6 +174,7 @@ export type Mutation = {
   signIn: SignInOutput;
   signUp: SignUpOutput;
   toggleFollow: ToggleFollowOutput;
+  togglePlaceBookmark: TogglePlaceBookmarkOutput;
   togglePlaceLike: TogglePlaceLikeOutput;
 };
 
@@ -218,6 +219,11 @@ export type MutationToggleFollowArgs = {
 };
 
 
+export type MutationTogglePlaceBookmarkArgs = {
+  input: TogglePlaceBookmarkInput;
+};
+
+
 export type MutationTogglePlaceLikeArgs = {
   input: TogglePlaceLikeInput;
 };
@@ -237,12 +243,14 @@ export type PlaceDto = {
   __typename?: 'PlaceDto';
   account: AccountDto;
   address?: Maybe<Scalars['String']>;
+  bookmarkCount: Scalars['Int'];
   buildingName?: Maybe<Scalars['String']>;
   comments: Array<PlaceCommentDto>;
   content: Scalars['String'];
   createdAt: Scalars['Float'];
   id: Scalars['Int'];
   images?: Maybe<Array<ImageDto>>;
+  isBookmarked: Scalars['Boolean'];
   isLiked: Scalars['Boolean'];
   latitude?: Maybe<Scalars['Float']>;
   likeCount: Scalars['Int'];
@@ -309,6 +317,15 @@ export type ToggleFollowInput = {
 export type ToggleFollowOutput = {
   __typename?: 'ToggleFollowOutput';
   isFollowed: Scalars['Boolean'];
+};
+
+export type TogglePlaceBookmarkInput = {
+  placeId: Scalars['Int'];
+};
+
+export type TogglePlaceBookmarkOutput = {
+  __typename?: 'TogglePlaceBookmarkOutput';
+  isBookmarked: Scalars['Boolean'];
 };
 
 export type TogglePlaceLikeInput = {
@@ -384,7 +401,14 @@ export type GetPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+
+export type TogglePlaceBookmarkMutationVariables = Exact<{
+  input: TogglePlaceBookmarkInput;
+}>;
+
+
+export type TogglePlaceBookmarkMutation = { __typename?: 'Mutation', togglePlaceBookmark: { __typename?: 'TogglePlaceBookmarkOutput', isBookmarked: boolean } };
 
 export type TogglePlaceLikeMutationVariables = Exact<{
   input: TogglePlaceLikeInput;
@@ -735,6 +759,8 @@ export const GetPlaceListDocument = gql`
       buildingName
       isLiked
       likeCount
+      isBookmarked
+      bookmarkCount
       account {
         id
         username
@@ -776,6 +802,39 @@ export function useGetPlaceListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetPlaceListQueryHookResult = ReturnType<typeof useGetPlaceListQuery>;
 export type GetPlaceListLazyQueryHookResult = ReturnType<typeof useGetPlaceListLazyQuery>;
 export type GetPlaceListQueryResult = Apollo.QueryResult<GetPlaceListQuery, GetPlaceListQueryVariables>;
+export const TogglePlaceBookmarkDocument = gql`
+    mutation TogglePlaceBookmark($input: TogglePlaceBookmarkInput!) {
+  togglePlaceBookmark(input: $input) {
+    isBookmarked
+  }
+}
+    `;
+export type TogglePlaceBookmarkMutationFn = Apollo.MutationFunction<TogglePlaceBookmarkMutation, TogglePlaceBookmarkMutationVariables>;
+
+/**
+ * __useTogglePlaceBookmarkMutation__
+ *
+ * To run a mutation, you first call `useTogglePlaceBookmarkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTogglePlaceBookmarkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [togglePlaceBookmarkMutation, { data, loading, error }] = useTogglePlaceBookmarkMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTogglePlaceBookmarkMutation(baseOptions?: Apollo.MutationHookOptions<TogglePlaceBookmarkMutation, TogglePlaceBookmarkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TogglePlaceBookmarkMutation, TogglePlaceBookmarkMutationVariables>(TogglePlaceBookmarkDocument, options);
+      }
+export type TogglePlaceBookmarkMutationHookResult = ReturnType<typeof useTogglePlaceBookmarkMutation>;
+export type TogglePlaceBookmarkMutationResult = Apollo.MutationResult<TogglePlaceBookmarkMutation>;
+export type TogglePlaceBookmarkMutationOptions = Apollo.BaseMutationOptions<TogglePlaceBookmarkMutation, TogglePlaceBookmarkMutationVariables>;
 export const TogglePlaceLikeDocument = gql`
     mutation TogglePlaceLike($input: TogglePlaceLikeInput!) {
   togglePlaceLike(input: $input) {

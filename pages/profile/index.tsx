@@ -14,6 +14,7 @@ import {
   useGetProfileQuery,
 } from '@src/generated/graphql';
 import useInitializeApolloClient from '@src/hooks/apollo/use-initialize-apollo-client';
+import ProfileTimeline from '@src/components/profile/profile-timeline';
 
 function Profile({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useInitializeApolloClient(initialState);
@@ -38,6 +39,7 @@ function Profile({ initialState }: InferGetServerSidePropsType<typeof getServerS
         followingCount={profile.followingCount}
         followedByCount={profile.followedByCount}
       />
+      <ProfileTimeline accountId={currentUser.id} />
     </Layout>
   );
 }

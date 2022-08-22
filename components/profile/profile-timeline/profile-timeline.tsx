@@ -6,29 +6,35 @@ import { useRouter } from 'next/router';
 import { getHashString } from '@src/libs/url';
 import MyPlaceList from '@src/components/profile/my-place-list';
 import MyLikePlaceList from '@src/components/profile/my-like-place-list';
+import MyBookmarkPlaceList from '@src/components/profile/my-bookmark-place-list';
 
 const cx = classNames.bind(styles);
+const TABS = [
+  { key: 'place', label: '나의 장소' },
+  { key: 'bookmark', label: '저장 장소' },
+];
 
-function ProfileTimeline() {
+interface Props {
+  accountId: string;
+}
+
+function ProfileTimeline({ accountId }: Props) {
   const router = useRouter();
-  const selectedTab = getHashString(router.asPath) || 'place';
-
-  if (!router.query.id || Array.isArray(router.query.id)) return <div>잘못된 접근입니다.</div>;
+  const [firstTab] = TABS;
+  const selectedTab = getHashString(router.asPath) || firstTab.key;
 
   return (
     <div className={cx('container')}>
       <Tab
         className={cx('profile_tab')}
-        tabs={[
-          { key: 'place', label: '장소' },
-          { key: 'like', label: '좋아요' },
-        ]}
+        tabs={TABS}
         selectedTab={selectedTab}
         onChange={(key) => router.replace({ hash: key })}
       />
 
-      {selectedTab === 'place' && <MyPlaceList accountId={router.query.id} />}
-      {selectedTab === 'like' && <MyLikePlaceList accountId={router.query.id} />}
+      {selectedTab === 'place' && <MyPlaceList accountId={accountId} />}
+      {selectedTab === 'bookmark' && <MyBookmarkPlaceList accountId={accountId} />}
+      {selectedTab === 'like' && <MyLikePlaceList accountId={accountId} />}
     </div>
   );
 }

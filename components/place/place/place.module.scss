@@ -117,6 +117,10 @@ $content-max-lines: 4;
     color: #888;
     font-size: 0;
 
+    & + button {
+      margin-left: 20px;
+    }
+
     svg {
       font-size: 18px;
       vertical-align: bottom;

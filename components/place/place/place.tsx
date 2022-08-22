@@ -4,13 +4,25 @@ import styles from './place.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as fullHeart, faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
+import {
+  faBookmark as fullBookmark,
+  faHeart as fullHeart,
+  faLocationArrow,
+} from '@fortawesome/pro-solid-svg-icons';
+import {
+  faBookmark as emptyBookmark,
+  faHeart as emptyHeart,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import Modal from '@src/components/modal/modal';
 import StaticMap from '@src/components/common/map/static-map';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
-import { faHeart as emptyHeart, faTrash } from '@fortawesome/pro-light-svg-icons';
-import { GetPlaceListQuery, useTogglePlaceLikeMutation } from '@src/generated/graphql';
+import {
+  GetPlaceListQuery,
+  useTogglePlaceBookmarkMutation,
+  useTogglePlaceLikeMutation,
+} from '@src/generated/graphql';
 import { UnWrapArray } from '@src/types/util';
 import Link from 'next/link';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
@@ -27,9 +39,11 @@ function Place({ place }: Props) {
     false,
   );
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
-  const [togglePlaceLikeMutation] = useTogglePlaceLikeMutation();
-  const [animateButton, setAnimateButton] = useState(false);
   const [expandedContent, setExpandedContent] = useState(false);
+  const [togglePlaceLikeMutation] = useTogglePlaceLikeMutation();
+  const [togglePlaceBookmarkMutation] = useTogglePlaceBookmarkMutation();
+  const [animateLikeButton, setAnimateLikeButton] = useState(false);
+  const [animateBookmarkButton, setAnimateBookmarkButton] = useState(false);
 
   const handleClickLike = async () => {
     await togglePlaceLikeMutation({
@@ -47,12 +61,40 @@ function Place({ place }: Props) {
         if (!result.data?.togglePlaceLike) return;
         const newIsLiked = result.data?.togglePlaceLike.isLiked;
 
-        setAnimateButton(newIsLiked);
+        setAnimateLikeButton(newIsLiked);
         cache.modify({
           id: cache.identify(place),
           fields: {
             isLiked: () => newIsLiked,
             likeCount: (prev) => (newIsLiked ? prev + 1 : prev - 1),
+          },
+        });
+      },
+    });
+  };
+
+  const handleClickBookmark = async () => {
+    await togglePlaceBookmarkMutation({
+      variables: {
+        input: {
+          placeId: place.id,
+        },
+      },
+      optimisticResponse: {
+        togglePlaceBookmark: {
+          isBookmarked: !place.isBookmarked,
+        },
+      },
+      update: (cache, result) => {
+        if (!result.data?.togglePlaceBookmark) return;
+        const newIsBookmarked = result.data?.togglePlaceBookmark.isBookmarked;
+
+        setAnimateBookmarkButton(newIsBookmarked);
+        cache.modify({
+          id: cache.identify(place),
+          fields: {
+            isBookmarked: () => newIsBookmarked,
+            bookmarkCount: (prev) => (newIsBookmarked ? prev + 1 : prev - 1),
           },
         });
       },
@@ -118,13 +160,25 @@ function Place({ place }: Props) {
             </div>
           )}
           <div className={cx('button_area')}>
-            <button
-              className={cx('like', { active: place.isLiked, animate: animateButton })}
-              onClick={handleClickLike}
-            >
-              <FontAwesomeIcon icon={place.isLiked ? fullHeart : emptyHeart} />
-              <span className={cx('count')}>{place.likeCount}</span>
-            </button>
+            <div className={cx('util_button_area')}>
+              <button
+                className={cx('like', { active: place.isLiked, animate: animateLikeButton })}
+                onClick={handleClickLike}
+              >
+                <FontAwesomeIcon icon={place.isLiked ? fullHeart : emptyHeart} />
+                <span className={cx('count')}>{place.likeCount}</span>
+              </button>
+              <button
+                className={cx('bookmark', {
+                  active: place.isBookmarked,
+                  animate: animateBookmarkButton,
+                })}
+                onClick={handleClickBookmark}
+              >
+                <FontAwesomeIcon icon={place.isBookmarked ? fullBookmark : emptyBookmark} />
+                <span className={cx('count')}>{place.bookmarkCount}</span>
+              </button>
+            </div>
 
             {place.account.id === currentUser?.id && (
               <div className={cx('owner_button_area')}>

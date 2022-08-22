@@ -13,14 +13,16 @@ import ProfileTimeline from '@src/components/profile/profile-timeline';
 function ProfileDetail({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useInitializeApolloClient(initialState);
   const { query } = useRouter();
+  const accountId: string = query.id as string;
   const { data } = useGetProfileQuery({
     variables: {
-      input: { id: query.id as string },
+      input: { id: accountId },
     },
   });
 
   const profile = data?.getProfile;
   if (!profile) return <div>loading</div>;
+  if (!query.id) return <div>잘못된 접근입니다.</div>;
 
   return (
     <Layout>
@@ -35,7 +37,7 @@ function ProfileDetail({ initialState }: InferGetServerSidePropsType<typeof getS
         followedByCount={profile.followedByCount}
         isFollowed={profile.isFollowed}
       />
-      <ProfileTimeline />
+      <ProfileTimeline accountId={accountId} />
     </Layout>
   );
 }
