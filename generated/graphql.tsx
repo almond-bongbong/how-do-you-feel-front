@@ -105,6 +105,17 @@ export type EditProfileOutput = {
   username: Scalars['String'];
 };
 
+export type GetMyLikePlaceListInput = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetMyLikePlaceListOutput = {
+  __typename?: 'GetMyLikePlaceListOutput';
+  items: Array<MyLikePlaceDto>;
+  total: Scalars['Int'];
+};
+
 export type GetPlaceInput = {
   id: Scalars['Int'];
 };
@@ -112,7 +123,6 @@ export type GetPlaceInput = {
 export type GetPlaceListInput = {
   accountId?: InputMaybe<Scalars['String']>;
   bookmarkedAccountId?: InputMaybe<Scalars['String']>;
-  likedAccountId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };
@@ -229,6 +239,14 @@ export type MutationTogglePlaceLikeArgs = {
   input: TogglePlaceLikeInput;
 };
 
+export type MyLikePlaceDto = {
+  __typename?: 'MyLikePlaceDto';
+  account: AccountDto;
+  address?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  likedAt: Scalars['Float'];
+};
+
 export type PlaceCommentDto = {
   __typename?: 'PlaceCommentDto';
   account: AccountDto;
@@ -262,11 +280,17 @@ export type PlaceDto = {
 export type Query = {
   __typename?: 'Query';
   auth: AuthOutput;
+  getMyLikePlaceList: GetMyLikePlaceListOutput;
   getPlace: PlaceDto;
   getPlaceList: GetPlaceListOutput;
   getProfile: GetProfileOutput;
   hello: Scalars['String'];
   me: MeOutput;
+};
+
+
+export type QueryGetMyLikePlaceListArgs = {
+  input: GetMyLikePlaceListInput;
 };
 
 
@@ -403,6 +427,13 @@ export type GetPlaceListQueryVariables = Exact<{
 
 
 export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+
+export type GetMyLikePlaceListQueryVariables = Exact<{
+  input: GetMyLikePlaceListInput;
+}>;
+
+
+export type GetMyLikePlaceListQuery = { __typename?: 'Query', getMyLikePlaceList: { __typename?: 'GetMyLikePlaceListOutput', total: number, items: Array<{ __typename?: 'MyLikePlaceDto', id: number, address?: string | null, likedAt: number, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
 
 export type TogglePlaceBookmarkMutationVariables = Exact<{
   input: TogglePlaceBookmarkInput;
@@ -803,6 +834,54 @@ export function useGetPlaceListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetPlaceListQueryHookResult = ReturnType<typeof useGetPlaceListQuery>;
 export type GetPlaceListLazyQueryHookResult = ReturnType<typeof useGetPlaceListLazyQuery>;
 export type GetPlaceListQueryResult = Apollo.QueryResult<GetPlaceListQuery, GetPlaceListQueryVariables>;
+export const GetMyLikePlaceListDocument = gql`
+    query GetMyLikePlaceList($input: GetMyLikePlaceListInput!) {
+  getMyLikePlaceList(input: $input) {
+    total
+    items {
+      id
+      address
+      account {
+        id
+        username
+        profileImage {
+          key
+          url
+        }
+      }
+      likedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyLikePlaceListQuery__
+ *
+ * To run a query within a React component, call `useGetMyLikePlaceListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyLikePlaceListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyLikePlaceListQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetMyLikePlaceListQuery(baseOptions: Apollo.QueryHookOptions<GetMyLikePlaceListQuery, GetMyLikePlaceListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyLikePlaceListQuery, GetMyLikePlaceListQueryVariables>(GetMyLikePlaceListDocument, options);
+      }
+export function useGetMyLikePlaceListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyLikePlaceListQuery, GetMyLikePlaceListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyLikePlaceListQuery, GetMyLikePlaceListQueryVariables>(GetMyLikePlaceListDocument, options);
+        }
+export type GetMyLikePlaceListQueryHookResult = ReturnType<typeof useGetMyLikePlaceListQuery>;
+export type GetMyLikePlaceListLazyQueryHookResult = ReturnType<typeof useGetMyLikePlaceListLazyQuery>;
+export type GetMyLikePlaceListQueryResult = Apollo.QueryResult<GetMyLikePlaceListQuery, GetMyLikePlaceListQueryVariables>;
 export const TogglePlaceBookmarkDocument = gql`
     mutation TogglePlaceBookmark($input: TogglePlaceBookmarkInput!) {
   togglePlaceBookmark(input: $input) {

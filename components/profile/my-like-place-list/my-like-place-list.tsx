@@ -1,8 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './my-like-place-list.module.scss';
-import Place from '@src/components/place/place';
-import { useGetPlaceListQuery } from '@src/generated/graphql';
+import { useGetMyLikePlaceListQuery } from '@src/generated/graphql';
 
 const cx = classNames.bind(styles);
 
@@ -11,20 +10,18 @@ interface Props {
 }
 
 function MyLikePlaceList({ accountId }: Props) {
-  const { data, loading } = useGetPlaceListQuery({
+  const { data, loading } = useGetMyLikePlaceListQuery({
     skip: !accountId,
     variables: {
-      input: {
-        likedAccountId: accountId,
-      },
+      input: {},
     },
   });
 
   return (
     <div className={cx('container')}>
       {loading && <div className={cx('loading')}>불러오는중</div>}
-      {data?.getPlaceList.items.map((place) => (
-        <Place key={place.id} place={place} />
+      {data?.getMyLikePlaceList.items.map((place) => (
+        <div key={place.id}>{place.id}</div>
       ))}
     </div>
   );

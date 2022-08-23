@@ -7,11 +7,12 @@ import { getHashString } from '@src/libs/url';
 import MyPlaceList from '@src/components/profile/my-place-list';
 import MyLikePlaceList from '@src/components/profile/my-like-place-list';
 import MyBookmarkPlaceList from '@src/components/profile/my-bookmark-place-list';
+import useCurrentUser from '@src/hooks/auth/use-current-user';
 
 const cx = classNames.bind(styles);
 const TABS = [
   { key: 'place', label: '나의 장소' },
-  { key: 'bookmark', label: '저장된' },
+  { key: 'bookmark', label: '저장소' },
   { key: 'like', label: '좋아요' },
 ];
 
@@ -20,6 +21,8 @@ interface Props {
 }
 
 function ProfileTimeline({ accountId }: Props) {
+  const { currentUser } = useCurrentUser();
+  const isMe = currentUser?.id === accountId;
   const router = useRouter();
   const [firstTab] = TABS;
   const selectedTab = getHashString(router.asPath) || firstTab.key;
@@ -35,7 +38,7 @@ function ProfileTimeline({ accountId }: Props) {
 
       {selectedTab === 'place' && <MyPlaceList accountId={accountId} />}
       {selectedTab === 'bookmark' && <MyBookmarkPlaceList accountId={accountId} />}
-      {selectedTab === 'like' && <MyLikePlaceList accountId={accountId} />}
+      {selectedTab === 'like' && isMe && <MyLikePlaceList accountId={accountId} />}
     </div>
   );
 }

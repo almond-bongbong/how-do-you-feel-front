@@ -31,3 +31,25 @@ export const GET_PLACE_LIST_QUERY = gql`
     }
   }
 `;
+
+export const GET_MY_LIKE_PLACE_LIST_QUERY = gql`
+  query GetMyLikePlaceList($input: GetMyLikePlaceListInput!) {
+    getMyLikePlaceList(input: $input) {
+      total
+      items {
+        id
+        content
+        address
+        account {
+          id
+          username
+          profileImage {
+            key
+            url
+          }
+        }
+        likedAt
+      }
+    }
+  }
+`;
