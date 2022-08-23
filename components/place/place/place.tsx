@@ -15,7 +15,6 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import Modal from '@src/components/modal/modal';
-import StaticMap from '@src/components/common/map/static-map';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
 import {
@@ -26,6 +25,7 @@ import {
 import { UnWrapArray } from '@src/types/util';
 import Link from 'next/link';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
+import MapViewModal from '@src/components/modal/map-view-modal';
 
 const cx = classNames.bind(styles);
 
@@ -191,9 +191,13 @@ function Place({ place }: Props) {
         </div>
       </div>
 
-      <Modal visible={visibleMap} hasCloseButton isEscClosable isMaskClosable onClose={closeMap}>
-        <StaticMap x={mapPosition?.x} y={mapPosition?.y} className={cx('location_map')} />
-      </Modal>
+      <MapViewModal
+        visible={visibleMap}
+        x={mapPosition?.x}
+        y={mapPosition?.y}
+        address={address}
+        onClose={closeMap}
+      />
 
       <ImageViewModal
         visible={visibleImage}
