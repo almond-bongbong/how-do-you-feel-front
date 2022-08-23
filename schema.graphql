@@ -204,6 +204,7 @@ input GetPlaceInput {
 
 input GetPlaceListInput {
     accountId: String
+    bookmarkedAccountId: String
     likedAccountId: String
     limit: Int = 10
     offset: Int = 0

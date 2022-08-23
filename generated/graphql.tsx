@@ -111,6 +111,7 @@ export type GetPlaceInput = {
 
 export type GetPlaceListInput = {
   accountId?: InputMaybe<Scalars['String']>;
+  bookmarkedAccountId?: InputMaybe<Scalars['String']>;
   likedAccountId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;

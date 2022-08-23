@@ -11,7 +11,8 @@ import MyBookmarkPlaceList from '@src/components/profile/my-bookmark-place-list'
 const cx = classNames.bind(styles);
 const TABS = [
   { key: 'place', label: '나의 장소' },
-  { key: 'bookmark', label: '저장 장소' },
+  { key: 'bookmark', label: '저장된' },
+  { key: 'like', label: '좋아요' },
 ];
 
 interface Props {
