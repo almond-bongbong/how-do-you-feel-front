@@ -8,18 +8,11 @@ import { TOKEN_KEY } from '@src/constants/keys';
 import jwt from '@src/libs/jwt';
 import { getApolloClient } from '@src/apollo/client';
 import { GET_PROFILE_QUERY } from '@src/graphql/account/get-profile';
-import { GetProfileQuery, GetProfileQueryVariables, useGetProfileQuery } from '@src/generated/graphql';
-import useInitializeApolloClient from '@src/hooks/apollo/use-initialize-apollo-client';
+import { GetProfileQuery, GetProfileQueryVariables } from '@src/generated/graphql';
 import ProfileTimeline from '@src/components/profile/profile-timeline';
 
-function Profile({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  useInitializeApolloClient(initialState);
+function Profile({ profile }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { currentUser } = useCurrentUser();
-  const { data } = useGetProfileQuery({
-    skip: !currentUser,
-    variables: { input: { id: currentUser?.id ?? '' } },
-  });
-  const profile = data?.getProfile;
 
   if (!profile || !currentUser) return <div>정보를 불러오지 못했습니다.</div>;
 
@@ -47,12 +40,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   if (!payload.id) {
     return {
-      props: { initialState: null },
+      props: { profile: null },
     };
   }
 
   const apollo = getApolloClient();
-  await apollo.query<GetProfileQuery, GetProfileQueryVariables>({
+  const { data } = await apollo.query<GetProfileQuery, GetProfileQueryVariables>({
     query: GET_PROFILE_QUERY,
     variables: {
       input: {
@@ -63,7 +56,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   return {
     props: {
-      initialState: apollo.cache.extract(),
+      profile: data.getProfile,
     },
   };
 };

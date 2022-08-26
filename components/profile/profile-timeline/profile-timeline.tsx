@@ -38,7 +38,7 @@ function ProfileTimeline({ accountId }: Props) {
 
       {selectedTab === 'place' && <MyPlaceList accountId={accountId} />}
       {selectedTab === 'bookmark' && <MyBookmarkPlaceList accountId={accountId} />}
-      {selectedTab === 'like' && isMe && <MyLikePlaceList accountId={accountId} />}
+      {selectedTab === 'like' && isMe && <MyLikePlaceList />}
     </div>
   );
 }

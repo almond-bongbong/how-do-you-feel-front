@@ -18,7 +18,6 @@ const authLink = setContext((_, context) => {
 });
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
-const cache = new InMemoryCache();
 
 export const getApolloClient = () => {
   if (isBrowser() && apolloClient) return apolloClient;
@@ -26,7 +25,7 @@ export const getApolloClient = () => {
   apolloClient = new ApolloClient({
     ssrMode: isServer(),
     link: authLink.concat(httpLink),
-    cache,
+    cache: new InMemoryCache(),
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'cache-and-network',

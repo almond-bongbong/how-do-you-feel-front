@@ -12,7 +12,6 @@ interface Props {
 
 function MyPlaceList({ accountId }: Props) {
   const { data, loading } = useGetPlaceListQuery({
-    skip: !accountId,
     variables: {
       input: {
         accountId,

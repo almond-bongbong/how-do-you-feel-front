@@ -5,22 +5,13 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getApolloClient } from '@src/apollo/client';
 import { GET_PROFILE_QUERY } from '@src/graphql/account/get-profile';
 import type { GetProfileQuery, GetProfileQueryVariables } from '@src/generated/graphql';
-import { useGetProfileQuery } from '@src/generated/graphql';
-import useInitializeApolloClient from '@src/hooks/apollo/use-initialize-apollo-client';
 import { useRouter } from 'next/router';
 import ProfileTimeline from '@src/components/profile/profile-timeline';
 
-function ProfileDetail({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  useInitializeApolloClient(initialState);
+function ProfileDetail({ profile }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { query } = useRouter();
   const accountId: string = query.id as string;
-  const { data } = useGetProfileQuery({
-    variables: {
-      input: { id: accountId },
-    },
-  });
 
-  const profile = data?.getProfile;
   if (!profile) return <div>loading</div>;
   if (!query.id) return <div>잘못된 접근입니다.</div>;
 
@@ -48,13 +39,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return {
       notFound: true,
       props: {
-        initialState: null,
+        profile: null,
       },
     };
   }
 
   const apollo = getApolloClient();
-  await apollo.query<GetProfileQuery, GetProfileQueryVariables>({
+  const { data } = await apollo.query<GetProfileQuery, GetProfileQueryVariables>({
     query: GET_PROFILE_QUERY,
     context,
     variables: {
@@ -66,7 +57,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   return {
     props: {
-      initialState: apollo.cache.extract(),
+      profile: data.getProfile,
     },
   };
 };
