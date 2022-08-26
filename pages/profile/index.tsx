@@ -8,11 +8,7 @@ import { TOKEN_KEY } from '@src/constants/keys';
 import jwt from '@src/libs/jwt';
 import { getApolloClient } from '@src/apollo/client';
 import { GET_PROFILE_QUERY } from '@src/graphql/account/get-profile';
-import {
-  GetProfileQuery,
-  GetProfileQueryVariables,
-  useGetProfileQuery,
-} from '@src/generated/graphql';
+import { GetProfileQuery, GetProfileQueryVariables, useGetProfileQuery } from '@src/generated/graphql';
 import useInitializeApolloClient from '@src/hooks/apollo/use-initialize-apollo-client';
 import ProfileTimeline from '@src/components/profile/profile-timeline';
 
@@ -47,11 +43,10 @@ function Profile({ initialState }: InferGetServerSidePropsType<typeof getServerS
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const parsedCookie = cookie.parse(context.req.headers.cookie || '');
   const token = parsedCookie[TOKEN_KEY];
-  const payload = jwt.getPayload(token);
+  const payload = token ? jwt.getPayload(token) : {};
 
   if (!payload.id) {
     return {
-      notFound: true,
       props: { initialState: null },
     };
   }

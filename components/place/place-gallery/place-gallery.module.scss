@@ -4,16 +4,19 @@
 
 .list {
   overflow: hidden;
-  margin: -1px;
+  margin: -0.5px;
+}
+
+.item_wrap {
+  float: left;
+  width: 33.33333333%;
+  padding: 0.5px;
 }
 
 .item {
   overflow: hidden;
-  float: left;
   position: relative;
-  width: 33.33333333%;
-  padding-top: 33.33333333%;
-  margin: 1px;
+  padding-top: 100%;
 }
 
 .default_image {

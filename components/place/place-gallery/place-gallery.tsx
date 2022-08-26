@@ -20,16 +20,18 @@ function PlaceGallery({ placeList }: Props) {
     <div className={cx('container')}>
       <div className={cx('list')}>
         {placeList.map((place) => (
-          <div key={place.id} className={cx('item')}>
-            {place.thumbnailUrl ? (
-              <Image src={place.thumbnailUrl} alt="썸네일" layout="fill" objectFit="cover" />
-            ) : (
-              <div className={cx('default_image')}>
-                <FontAwesomeIcon icon={faImageSlash} />
-              </div>
-            )}
+          <div key={place.id} className={cx('item_wrap')}>
+            <div className={cx('item')}>
+              {place.thumbnailUrl ? (
+                <Image src={place.thumbnailUrl} alt="썸네일" layout="fill" objectFit="cover" />
+              ) : (
+                <div className={cx('default_image')}>
+                  <FontAwesomeIcon icon={faImageSlash} />
+                </div>
+              )}
 
-            {place.city && <div className={cx('city')}>{place.city}</div>}
+              {place.city && <div className={cx('city')}>{place.city}</div>}
+            </div>
           </div>
         ))}
       </div>

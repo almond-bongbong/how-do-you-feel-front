@@ -243,6 +243,7 @@ export type MyLikePlaceDto = {
   __typename?: 'MyLikePlaceDto';
   account: AccountDto;
   address?: Maybe<Scalars['String']>;
+  content: Scalars['String'];
   id: Scalars['Int'];
   likedAt: Scalars['Float'];
 };
@@ -433,7 +434,7 @@ export type GetMyLikePlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetMyLikePlaceListQuery = { __typename?: 'Query', getMyLikePlaceList: { __typename?: 'GetMyLikePlaceListOutput', total: number, items: Array<{ __typename?: 'MyLikePlaceDto', id: number, address?: string | null, likedAt: number, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetMyLikePlaceListQuery = { __typename?: 'Query', getMyLikePlaceList: { __typename?: 'GetMyLikePlaceListOutput', total: number, items: Array<{ __typename?: 'MyLikePlaceDto', id: number, content: string, address?: string | null, likedAt: number, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
 
 export type TogglePlaceBookmarkMutationVariables = Exact<{
   input: TogglePlaceBookmarkInput;
@@ -840,6 +841,7 @@ export const GetMyLikePlaceListDocument = gql`
     total
     items {
       id
+      content
       address
       account {
         id
