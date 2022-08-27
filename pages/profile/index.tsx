@@ -10,9 +10,12 @@ import { getApolloClient } from '@src/apollo/client';
 import { GET_PROFILE_QUERY } from '@src/graphql/account/get-profile';
 import { GetProfileQuery, GetProfileQueryVariables } from '@src/generated/graphql';
 import ProfileTimeline from '@src/components/profile/profile-timeline';
+import { useRouter } from 'next/router';
 
 function Profile({ profile }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { currentUser } = useCurrentUser();
+  const router = useRouter();
+  const selectedTab = router.query.tab as string;
 
   if (!profile || !currentUser) return <div>정보를 불러오지 못했습니다.</div>;
 
@@ -28,7 +31,7 @@ function Profile({ profile }: InferGetServerSidePropsType<typeof getServerSidePr
         followingCount={profile.followingCount}
         followedByCount={profile.followedByCount}
       />
-      <ProfileTimeline accountId={currentUser.id} />
+      <ProfileTimeline accountId={currentUser.id} selectedTab={selectedTab} />
     </Layout>
   );
 }

@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import styles from './profile-timeline.module.scss';
 import Tab from '@src/components/common/form/tab';
 import { useRouter } from 'next/router';
-import { getHashString } from '@src/libs/url';
 import MyPlaceList from '@src/components/profile/my-place-list';
 import MyLikePlaceList from '@src/components/profile/my-like-place-list';
 import MyBookmarkPlaceList from '@src/components/profile/my-bookmark-place-list';
@@ -18,14 +17,14 @@ const TABS = [
 
 interface Props {
   accountId: string;
+  selectedTab?: typeof TABS[number]['key'];
 }
 
-function ProfileTimeline({ accountId }: Props) {
+function ProfileTimeline({ accountId, selectedTab = 'place' }: Props) {
   const { currentUser } = useCurrentUser();
   const isMe = currentUser?.id === accountId;
   const router = useRouter();
-  const [firstTab] = TABS;
-  const selectedTab = getHashString(router.asPath) || firstTab.key;
+  const hasIdParam = router.query.id !== undefined;
 
   return (
     <div className={cx('container')}>
@@ -33,7 +32,18 @@ function ProfileTimeline({ accountId }: Props) {
         className={cx('profile_tab')}
         tabs={TABS}
         selectedTab={selectedTab}
-        onChange={(key) => router.replace({ hash: key })}
+        onChange={(key) =>
+          router.replace(
+            {
+              query: {
+                ...(hasIdParam && { id: accountId }),
+                tab: key,
+              },
+            },
+            undefined,
+            { shallow: true },
+          )
+        }
       />
 
       {selectedTab === 'place' && <MyPlaceList accountId={accountId} />}

@@ -26,6 +26,7 @@ import { UnWrapArray } from '@src/types/util';
 import Link from 'next/link';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import MapViewModal from '@src/components/modal/map-view-modal';
+import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 
 const cx = classNames.bind(styles);
 
@@ -39,7 +40,7 @@ function Place({ place }: Props) {
     false,
   );
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
-  const [expandedContent, setExpandedContent] = useState(false);
+  const [visibleDetail, openDetail, closeDetail] = useModal(place.id === 61);
   const [togglePlaceLikeMutation] = useTogglePlaceLikeMutation();
   const [togglePlaceBookmarkMutation] = useTogglePlaceBookmarkMutation();
   const [animateLikeButton, setAnimateLikeButton] = useState(false);
@@ -125,14 +126,10 @@ function Place({ place }: Props) {
               <a>{place.account.username}</a>
             </Link>
           </div>
-          <div className={cx('content', { expanded: expandedContent })}>
+          <div className={cx('content')}>
             <p>{place.content}</p>
-            <button
-              type="button"
-              className={cx('more_button')}
-              onClick={() => setExpandedContent((prev) => !prev)}
-            >
-              {expandedContent ? '접기' : '더보기'}
+            <button type="button" className={cx('more_button')} onClick={openDetail}>
+              더보기
             </button>
           </div>
           {address && (
@@ -205,6 +202,8 @@ function Place({ place }: Props) {
         initialIndex={initialImageIndex}
         onClose={closeImage}
       />
+
+      <PlaceDetailModal visible={visibleDetail} placeId={place.id} onClose={closeDetail} />
     </>
   );
 }

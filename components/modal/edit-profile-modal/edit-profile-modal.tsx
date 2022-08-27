@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '@src/components/modal/modal';
 import FormField from '@src/components/common/form/form-field';
 import Input from '@src/components/common/form/input/input';
@@ -42,6 +42,10 @@ function EditProfileModal({ visible, onClose, onSuccess }: Props) {
   const [location, setLocation] = useState(currentUser?.location ?? '');
   const [bio, setBio] = useState(currentUser?.bio ?? '');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+  }, [currentUser]);
 
   const handleSubmitProfile = async () => {
     const inputData: EditProfileMutationVariables['input'] = {

@@ -32,6 +32,22 @@ export const GET_PLACE_LIST_QUERY = gql`
   }
 `;
 
+export const GET_BOOKMARK_PLACE_LIST_QUERY = gql`
+  query GetBookmarkPlaceList($input: GetBookmarkPlaceListInput!) {
+    getBookmarkPlaceList(input: $input) {
+      total
+      items {
+        id
+        address
+        images {
+          key
+          url
+        }
+      }
+    }
+  }
+`;
+
 export const GET_MY_LIKE_PLACE_LIST_QUERY = gql`
   query GetMyLikePlaceList($input: GetMyLikePlaceListInput!) {
     getMyLikePlaceList(input: $input) {

@@ -46,6 +46,11 @@ type EditProfileOutput {
     username: String!
 }
 
+type GetBookmarkPlaceListOutput {
+    items: [PlaceDto!]!
+    total: Int!
+}
+
 type GetMyLikePlaceListOutput {
     items: [MyLikePlaceDto!]!
     total: Int!
@@ -54,6 +59,24 @@ type GetMyLikePlaceListOutput {
 type GetPlaceListOutput {
     items: [PlaceDto!]!
     total: Int!
+}
+
+type GetPlaceOutput {
+    account: AccountDto!
+    address: String
+    bookmarkCount: Int!
+    buildingName: String
+    comments: [PlaceCommentDto!]!
+    content: String!
+    createdAt: Float!
+    id: Int!
+    images: [ImageDto!]
+    isBookmarked: Boolean!
+    isLiked: Boolean!
+    latitude: Float
+    likeCount: Int!
+    longitude: Float
+    updatedAt: Float!
 }
 
 type GetProfileOutput {
@@ -137,8 +160,9 @@ type PlaceDto {
 
 type Query {
     auth: AuthOutput!
+    getBookmarkPlaceList(input: GetBookmarkPlaceListInput!): GetBookmarkPlaceListOutput!
     getMyLikePlaceList(input: GetMyLikePlaceListInput!): GetMyLikePlaceListOutput!
-    getPlace(input: GetPlaceInput!): PlaceDto!
+    getPlace(input: GetPlaceInput!): GetPlaceOutput!
     getPlaceList(input: GetPlaceListInput!): GetPlaceListOutput!
     getProfile(input: GetProfileInput!): GetProfileOutput!
     hello: String!
@@ -210,6 +234,12 @@ input EditProfileInput {
     location: String
     profileImage: ImageInput
     username: String!
+}
+
+input GetBookmarkPlaceListInput {
+    accountId: String!
+    limit: Int = 10
+    offset: Int = 0
 }
 
 input GetMyLikePlaceListInput {

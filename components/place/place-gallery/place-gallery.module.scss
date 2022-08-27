@@ -17,6 +17,12 @@
   overflow: hidden;
   position: relative;
   padding-top: 100%;
+
+  &.dummy {
+    overflow: hidden;
+    background-color: #eee;
+    text-indent: -9999px;
+  }
 }
 
 .default_image {

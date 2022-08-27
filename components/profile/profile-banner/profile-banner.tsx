@@ -110,15 +110,17 @@ function ProfileBanner({
         )}
       </div>
 
-      <EditProfileModal
-        visible={editProfileModalVisible}
-        onClose={() => setEditProfileModalVisible(false)}
-        onSuccess={async () => {
-          refetchMe?.();
-          await Modal.alert('수정되었습니다.');
-          setEditProfileModalVisible(false);
-        }}
-      />
+      {isMe && (
+        <EditProfileModal
+          visible={editProfileModalVisible}
+          onClose={() => setEditProfileModalVisible(false)}
+          onSuccess={async () => {
+            refetchMe?.();
+            await Modal.alert('수정되었습니다.');
+            setEditProfileModalVisible(false);
+          }}
+        />
+      )}
     </div>
   );
 }

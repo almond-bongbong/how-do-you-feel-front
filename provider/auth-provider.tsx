@@ -51,7 +51,7 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
     }
   }, [token, error]);
 
-  if (isPrivatePage && !isLoggedIn) return <div>loading...</div>;
+  if (isPrivatePage && !isLoggedIn) return <div>Auth loading...</div>;
   return <>{children}</>;
 }
 

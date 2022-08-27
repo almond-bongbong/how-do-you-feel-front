@@ -7,13 +7,14 @@ const cx = classNames.bind(styles);
 
 interface Props {
   visible: boolean;
+  placeId: number;
   onClose: () => void;
 }
 
-function PlaceDetailModal({ visible, onClose }: Props) {
+function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   return (
-    <Modal visible={visible} onClose={onClose}>
-      <div className={cx('container')}>hello</div>
+    <Modal visible={visible} isMaskClosable isEscClosable onClose={onClose}>
+      <div className={cx('container')}>hello {placeId}</div>
     </Modal>
   );
 }
