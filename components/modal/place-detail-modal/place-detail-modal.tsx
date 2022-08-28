@@ -28,7 +28,6 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
     <Modal
       visible={visible}
       width={800}
-      isMaskClosable
       isEscClosable
       closeButtonClassName={cx('modal_close_button')}
       contentClassName={cx('place_modal')}

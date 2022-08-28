@@ -20,7 +20,7 @@ function ImageViewModal({ visible, images, initialIndex, onClose }: Props) {
   return (
     <Modal
       visible={visible}
-      contentClassName={cx('image_view_modal')}
+      contentClassName={cx('image_view_content')}
       closeButtonClassName={cx('close_button')}
       isEscClosable
       onClose={onClose}

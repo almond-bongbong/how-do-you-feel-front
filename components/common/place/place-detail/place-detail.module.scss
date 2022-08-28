@@ -43,6 +43,10 @@
   &:disabled {
     cursor: text;
   }
+
+  svg {
+    margin-right: 6px;
+  }
 }
 
 .image_list {

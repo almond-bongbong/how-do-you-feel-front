@@ -9,6 +9,8 @@ import MapViewModal from '@src/components/modal/map-view-modal';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const cx = classNames.bind(styles);
 
@@ -49,6 +51,7 @@ function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrl
               disabled={!hasPosition}
               onClick={openMapModal}
             >
+              <FontAwesomeIcon icon={faLocationArrow} />
               {location}
             </button>
           )}

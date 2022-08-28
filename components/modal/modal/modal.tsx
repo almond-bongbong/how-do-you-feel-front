@@ -19,6 +19,7 @@ interface Props {
   isEscClosable?: boolean;
   isMaskClosable?: boolean;
   hasCloseButton?: boolean;
+  className?: string;
   contentClassName?: string;
   closeButtonClassName?: string;
   center?: boolean;
@@ -32,6 +33,7 @@ function Modal({
   isEscClosable = false,
   isMaskClosable = false,
   hasCloseButton = true,
+  className,
   contentClassName,
   closeButtonClassName,
   center = false,
@@ -113,32 +115,34 @@ function Modal({
         <div
           id={id}
           data-visible={display}
-          className={cx('modal_wrap', {
+          className={cx('modal_wrap', className, {
             active: visible && localVisible,
           })}
         >
           <div className={cx('mask')} />
           <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
-            <div
-              className={cx('content', contentClassName)}
-              ref={(el) => {
-                modalBodyRef.current = el;
-                resizeTargetRef.current = el;
-              }}
-              style={{ width }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={cx('section')}>{children}</div>
-              {hasCloseButton && (
-                <button
-                  type="button"
-                  className={cx('close_button', closeButtonClassName)}
-                  onClick={onClose}
-                >
-                  <FontAwesomeIcon icon={faXmark} title="닫기" />
-                </button>
-              )}
+            <div className={cx('inner')}>
+              <div
+                className={cx('content', contentClassName)}
+                ref={(el) => {
+                  modalBodyRef.current = el;
+                  resizeTargetRef.current = el;
+                }}
+                style={{ width }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={cx('section')}>{children}</div>
+              </div>
             </div>
+            {hasCloseButton && (
+              <button
+                type="button"
+                className={cx('close_button', closeButtonClassName)}
+                onClick={onClose}
+              >
+                <FontAwesomeIcon icon={faXmark} title="닫기" />
+              </button>
+            )}
           </div>
         </div>
       )}
