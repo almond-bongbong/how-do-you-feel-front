@@ -51,23 +51,16 @@ $content-max-lines: 4;
   max-height: $content-line-height * $content-max-lines;
   line-height: $content-line-height;
 
+  a {
+    display: block;
+  }
+
   &.expanded {
     text-overflow: inherit;
     display: block;
     -webkit-line-clamp: none;
     -webkit-box-orient: inherit;
     max-height: none;
-  }
-
-  .more_button {
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    text-align: left;
-    text-indent: -9999px;
   }
 }
 

@@ -72,15 +72,16 @@ function Modal({
   useEffect(() => {
     if (isServer()) return;
 
-    const isFirstModal = getActiveModalLength() === 1;
-    if (isFirstModal) {
-      lockBodyScroll();
-    }
+    setTimeout(() => {
+      const isFirstModal = getActiveModalLength() === 1;
+      if (isFirstModal) lockBodyScroll();
+    }, 16);
 
     return () => {
-      if (getActiveModalLength() === 0) {
-        unlockBodyScroll();
-      }
+      setTimeout(() => {
+        const noExistModal = getActiveModalLength() === 0;
+        if (noExistModal) unlockBodyScroll();
+      }, 16);
     };
   }, [display]);
 
@@ -113,7 +114,6 @@ function Modal({
           id={id}
           data-visible={display}
           className={cx('modal_wrap', {
-            display,
             active: visible && localVisible,
           })}
         >

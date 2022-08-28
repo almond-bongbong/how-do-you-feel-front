@@ -76,14 +76,6 @@
   }
 }
 
-.modal_wrap {
-  display: none;
-
-  &.display {
-    display: block;
-  }
-}
-
 .active {
   .mask,
   .content {

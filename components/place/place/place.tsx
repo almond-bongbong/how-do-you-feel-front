@@ -27,6 +27,7 @@ import Link from 'next/link';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import MapViewModal from '@src/components/modal/map-view-modal';
 import PlaceDetailModal from '@src/components/modal/place-detail-modal';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
@@ -35,12 +36,12 @@ interface Props {
 }
 
 function Place({ place }: Props) {
+  const router = useRouter();
   const { currentUser } = useCurrentUser();
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
     false,
   );
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
-  const [visibleDetail, openDetail, closeDetail] = useModal(place.id === 61);
   const [togglePlaceLikeMutation] = useTogglePlaceLikeMutation();
   const [togglePlaceBookmarkMutation] = useTogglePlaceBookmarkMutation();
   const [animateLikeButton, setAnimateLikeButton] = useState(false);
@@ -127,10 +128,21 @@ function Place({ place }: Props) {
             </Link>
           </div>
           <div className={cx('content')}>
-            <p>{place.content}</p>
-            <button type="button" className={cx('more_button')} onClick={openDetail}>
-              더보기
-            </button>
+            <p>
+              <Link
+                href={{
+                  query: {
+                    id: router.query.id,
+                    placeId: place.id,
+                  },
+                }}
+                as={`/place/${place.id}`}
+                shallow
+                scroll={false}
+              >
+                <a>{place.content}</a>
+              </Link>
+            </p>
           </div>
           {address && (
             <button
@@ -203,7 +215,19 @@ function Place({ place }: Props) {
         onClose={closeImage}
       />
 
-      <PlaceDetailModal visible={visibleDetail} placeId={place.id} onClose={closeDetail} />
+      <PlaceDetailModal
+        visible={Number(router.query.placeId) === place.id}
+        placeId={Number(router.query.placeId)}
+        onClose={() => {
+          router.push(
+            {
+              pathname: router.pathname,
+            },
+            undefined,
+            { scroll: false },
+          );
+        }}
+      />
     </>
   );
 }
