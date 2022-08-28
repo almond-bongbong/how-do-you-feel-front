@@ -20,6 +20,12 @@ function Roadmap() {
             isDone: false,
           },
           {
+            title: '게시물 비공개',
+            description: '게시물을 비공개로 설정할 수 있습니다.',
+            targetDate: '2022 3Q',
+            isDone: false,
+          },
+          {
             title: '북마크 기능 추가',
             description: '마음에 드는 게시물을 저장할 수 있습니다.',
             targetDate: '2022 3Q',
