@@ -4,6 +4,8 @@ import classNames from 'classnames/bind';
 import styles from './image-view-modal.module.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +26,12 @@ function ImageViewModal({ visible, images, initialIndex, onClose }: Props) {
       onClose={onClose}
     >
       <div className={cx('container')}>
-        <Swiper className={cx('images')} initialSlide={initialIndex}>
+        <Swiper
+          pagination
+          modules={[Pagination]}
+          className={cx('images')}
+          initialSlide={initialIndex}
+        >
           {images.map((image) => (
             <SwiperSlide key={image}>
               {/* eslint-disable-next-line @next/next/no-img-element */}

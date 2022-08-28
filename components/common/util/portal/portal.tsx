@@ -1,7 +1,7 @@
-import React, { ReactNode, ReactPortal, useEffect, useState } from 'react';
-import { isBrowser } from '../../../../libs/environment';
-import { addRootElementOrCreate } from '../../../../libs/element';
+import { ReactNode, ReactPortal, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { isBrowser } from '@src/libs/environment';
+import { addRootElementOrCreate } from '@src/libs/element';
 
 interface Props {
   id: string;

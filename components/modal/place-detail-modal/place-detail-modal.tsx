@@ -30,6 +30,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       width={800}
       isMaskClosable
       isEscClosable
+      closeButtonClassName={cx('modal_close_button')}
       contentClassName={cx('place_modal')}
       onClose={onClose}
     >
@@ -38,7 +39,11 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
         <PlaceDetail
           content={place.content}
           createdAt={place.createdAt}
-          account={place.account}
+          account={{
+            id: place.account.id,
+            username: place.account.username,
+            profileUrl: place.account.profileImage?.url,
+          }}
           location={place.address}
           lng={place.longitude}
           lat={place.latitude}
