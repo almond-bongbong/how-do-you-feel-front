@@ -28,6 +28,7 @@ import useCurrentUser from '@src/hooks/auth/use-current-user';
 import MapViewModal from '@src/components/modal/map-view-modal';
 import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 import { useRouter } from 'next/router';
+import { omit } from '@src/libs/util';
 
 const cx = classNames.bind(styles);
 
@@ -111,6 +112,8 @@ function Place({ place }: Props) {
   const address = place.address && [place.address, place.buildingName].join(' ');
   const imageUrls = place.images?.map((image) => image.url) || [];
 
+  console.log(router);
+
   return (
     <>
       <div className={cx('container')}>
@@ -132,7 +135,7 @@ function Place({ place }: Props) {
               <Link
                 href={{
                   query: {
-                    id: router.query.id,
+                    ...router.query,
                     placeId: place.id,
                   },
                 }}
@@ -218,15 +221,16 @@ function Place({ place }: Props) {
       <PlaceDetailModal
         visible={Number(router.query.placeId) === place.id}
         placeId={Number(router.query.placeId)}
-        onClose={() => {
+        onClose={() =>
           router.push(
             {
+              query: omit(router.query, ['placeId']),
               pathname: router.pathname,
             },
             undefined,
             { scroll: false },
-          );
-        }}
+          )
+        }
       />
     </>
   );
