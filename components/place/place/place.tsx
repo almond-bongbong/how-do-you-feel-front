@@ -5,8 +5,6 @@ import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import Modal from '@src/components/modal/modal';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
 import { GetPlaceListQuery } from '@src/generated/graphql';
@@ -19,6 +17,7 @@ import { useRouter } from 'next/router';
 import { omit } from '@src/libs/util';
 import PlaceLikeButton from '@src/components/place/place-like-button';
 import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
+import PlaceDeleteButton from '@src/components/place/place-delete-button';
 
 const cx = classNames.bind(styles);
 
@@ -33,12 +32,6 @@ function Place({ place }: Props) {
     false,
   );
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
-
-  const handleClickDelete = async () => {
-    const isOk = await Modal.confirm('정말 삭제하시나요?');
-    if (!isOk) return;
-  };
-
   const address = place.address && [place.address, place.buildingName].join(' ');
   const imageUrls = place.images?.map((image) => image.url) || [];
 
@@ -115,9 +108,7 @@ function Place({ place }: Props) {
 
             {place.account.id === currentUser?.id && (
               <div className={cx('owner_button_area')}>
-                <button type="button" onClick={handleClickDelete}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                <PlaceDeleteButton placeId={place.id} />
               </div>
             )}
           </div>

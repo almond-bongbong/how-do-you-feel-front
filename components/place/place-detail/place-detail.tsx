@@ -11,40 +11,34 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PlaceLikeButton from '@src/components/place/place-like-button';
+import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
+import { GetPlaceQuery } from '@src/generated/graphql';
+import PlaceDeleteButton from '@src/components/place/place-delete-button';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-  content: string;
-  createdAt: number;
-  account: {
-    id: string;
-    username: string;
-    profileUrl?: string;
-  };
-  location?: string | null;
-  lng?: number | null;
-  lat?: number | null;
-  imageUrls?: string[];
+  place: GetPlaceQuery['getPlace'];
 }
 
-function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrls }: Props) {
+function PlaceDetail({ place }: Props) {
   const [visibleMapModal, openMapModal, closeMapModal] = useModal();
-  const isThisYear = dayjs().year() === dayjs(createdAt).year();
+  const isThisYear = dayjs().year() === dayjs(place.createdAt).year();
   const dateText = isThisYear
-    ? dayjs(createdAt).format('M월 D일 HH:mm')
-    : dayjs(createdAt).format('YYYY년 M월 D일 HH:mm');
-  const hasPosition = lng && lat;
+    ? dayjs(place.createdAt).format('M월 D일 HH:mm')
+    : dayjs(place.createdAt).format('YYYY년 M월 D일 HH:mm');
+  const hasPosition = place.longitude && place.latitude;
 
   return (
     <div className={cx('container')}>
       <div className={cx('info')}>
         <div className={cx('main')}>
           <div className={cx('user')}>
-            <ProfileImage size={44} src={account.profileUrl} className={cx('photo')} />
-            <span className={cx('username')}>{account.username}</span>
+            <ProfileImage size={44} src={place.account.profileImage?.url} className={cx('photo')} />
+            <span className={cx('username')}>{place.account.username}</span>
           </div>
-          {location && (
+          {place.address && (
             <button
               type="button"
               className={cx('location')}
@@ -52,7 +46,7 @@ function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrl
               onClick={openMapModal}
             >
               <FontAwesomeIcon icon={faLocationArrow} />
-              {location}
+              {place.address}
             </button>
           )}
         </div>
@@ -63,7 +57,7 @@ function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrl
 
       <div className={cx('image_list')}>
         <Swiper pagination modules={[Pagination]}>
-          {imageUrls?.map((url) => (
+          {place.images?.map(({ url }) => (
             <SwiperSlide key={url}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="image" />
@@ -72,13 +66,27 @@ function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrl
         </Swiper>
       </div>
 
-      <div className={cx('content')}>{content}</div>
+      <div className={cx('content')}>{place.content}</div>
+
+      <div className={cx('button_area')}>
+        <div className={cx('interaction_area')}>
+          <PlaceLikeButton placeId={place.id} isLiked={place.isLiked} likeCount={place.likeCount} />
+          <PlaceBookmarkButton
+            placeId={place.id}
+            isBookmarked={place.isBookmarked}
+            bookmarkCount={place.bookmarkCount}
+          />
+        </div>
+        <div className={cx('owner_area')}>
+          <PlaceDeleteButton placeId={place.id} />
+        </div>
+      </div>
 
       <MapViewModal
         visible={visibleMapModal}
-        x={lng}
-        y={lat}
-        address={location}
+        x={place.longitude}
+        y={place.latitude}
+        address={place.address}
         onClose={closeMapModal}
       />
     </div>

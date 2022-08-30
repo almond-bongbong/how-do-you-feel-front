@@ -79,6 +79,7 @@ function Modal({
 
     setTimeout(() => {
       const isFirstModal = getActiveModalLength() === 1;
+      console.log(getActiveModalLength());
       if (isFirstModal) lockBodyScroll();
     }, 16);
 

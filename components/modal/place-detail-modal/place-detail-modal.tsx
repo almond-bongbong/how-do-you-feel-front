@@ -34,21 +34,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       loading={loading}
       onClose={onClose}
     >
-      {place && (
-        <PlaceDetail
-          content={place.content}
-          createdAt={place.createdAt}
-          account={{
-            id: place.account.id,
-            username: place.account.username,
-            profileUrl: place.account.profileImage?.url,
-          }}
-          location={place.address}
-          lng={place.longitude}
-          lat={place.latitude}
-          imageUrls={place.images?.map((image) => image.url)}
-        />
-      )}
+      {place && <PlaceDetail place={place} />}
     </Modal>
   );
 }

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import classNames from 'classnames/bind';
 import styles from './alert-modal.module.scss';
-import { addRootElementOrCreate } from '@src/libs/element';
+import { addRootElementOrCreate, getActiveModalLength } from '@src/libs/element';
 import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
 import Button from '@src/components/common/form/button';
 
@@ -29,8 +29,8 @@ function showModal(
     const handleClose = (result: boolean) => {
       if (container) {
         root.unmount();
-        unlockBodyScroll();
         resolve(result);
+        if (getActiveModalLength() === 0) unlockBodyScroll();
       }
     };
 
