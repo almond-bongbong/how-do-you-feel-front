@@ -20,9 +20,10 @@ const cx = classNames.bind(styles);
 
 interface Props {
   place: GetPlaceQuery['getPlace'];
+  onDelete?: () => void;
 }
 
-function PlaceDetail({ place }: Props) {
+function PlaceDetail({ place, onDelete }: Props) {
   const [visibleMapModal, openMapModal, closeMapModal] = useModal();
   const isThisYear = dayjs().year() === dayjs(place.createdAt).year();
   const dateText = isThisYear
@@ -78,7 +79,7 @@ function PlaceDetail({ place }: Props) {
           />
         </div>
         <div className={cx('owner_area')}>
-          <PlaceDeleteButton placeId={place.id} />
+          <PlaceDeleteButton placeId={place.id} onDelete={onDelete} />
         </div>
       </div>
 

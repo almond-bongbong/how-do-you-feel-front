@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImageSlash } from '@fortawesome/pro-light-svg-icons';
 import { range } from '@src/libs/util';
+import { useModal } from '@src/hooks/modal/use-modal';
+import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +20,8 @@ interface Props {
 }
 
 function PlaceGallery({ loading, placeList }: Props) {
+  const [visibleDetail, openDetail, closeDetail, detailPlaceId] = useModal<number>(false);
+
   return (
     <div className={cx('container')}>
       <div className={cx('list')}>
@@ -40,10 +44,22 @@ function PlaceGallery({ loading, placeList }: Props) {
                 )}
 
                 {place.city && <div className={cx('city')}>{place.city}</div>}
+
+                <button
+                  type="button"
+                  className={cx('view_detail')}
+                  onClick={() => openDetail(place.id)}
+                >
+                  자세히보기
+                </button>
               </div>
             </div>
           ))}
       </div>
+
+      {detailPlaceId && (
+        <PlaceDetailModal visible={visibleDetail} placeId={detailPlaceId} onClose={closeDetail} />
+      )}
     </div>
   );
 }

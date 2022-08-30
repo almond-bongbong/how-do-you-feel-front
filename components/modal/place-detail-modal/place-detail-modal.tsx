@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
 import { useGetPlaceLazyQuery } from '@src/generated/graphql';
 import PlaceDetail from '@src/components/place/place-detail';
+import { useApolloClient } from '@apollo/client';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +15,7 @@ interface Props {
 }
 
 function PlaceDetailModal({ visible, placeId, onClose }: Props) {
+  const apollo = useApolloClient();
   const [getPlaceQuery, { data, loading }] = useGetPlaceLazyQuery();
   const place = data?.getPlace;
 
@@ -23,6 +25,16 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       variables: { input: { id: placeId } },
     });
   }, [placeId, getPlaceQuery]);
+
+  const handleDeletePlace = () => {
+    const normalizedPlaceId = apollo.cache.identify({
+      __typename: 'PlaceDto',
+      id: placeId,
+    });
+    apollo.cache.evict({ id: normalizedPlaceId });
+    apollo.cache.gc();
+    onClose();
+  };
 
   return (
     <Modal
@@ -34,7 +46,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       loading={loading}
       onClose={onClose}
     >
-      {place && <PlaceDetail place={place} />}
+      {place && <PlaceDetail place={place} onDelete={handleDeletePlace} />}
     </Modal>
   );
 }

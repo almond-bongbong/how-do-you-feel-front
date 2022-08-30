@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './my-like-place-list.module.scss';
 import PlaceLikeInfo from '@src/components/place/place-like-info';
 import { useGetMyLikePlaceListQuery } from '@src/generated/graphql';
+import LoadingBlock from '@src/components/common/loading/loading-block';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +16,7 @@ function MyLikePlaceList() {
 
   return (
     <div className={cx('container')}>
-      {loading && <div className={cx('loading')}>불러오는중</div>}
+      {loading && <LoadingBlock />}
       {data?.getMyLikePlaceList.items.map((place) => (
         <PlaceLikeInfo
           key={place.id}

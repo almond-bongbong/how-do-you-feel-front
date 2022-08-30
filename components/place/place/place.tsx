@@ -23,9 +23,10 @@ const cx = classNames.bind(styles);
 
 interface Props {
   place: UnWrapArray<GetPlaceListQuery['getPlaceList']['items']>;
+  onDelete?: () => void;
 }
 
-function Place({ place }: Props) {
+function Place({ place, onDelete }: Props) {
   const router = useRouter();
   const { currentUser } = useCurrentUser();
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
@@ -108,7 +109,7 @@ function Place({ place }: Props) {
 
             {place.account.id === currentUser?.id && (
               <div className={cx('owner_button_area')}>
-                <PlaceDeleteButton placeId={place.id} />
+                <PlaceDeleteButton placeId={place.id} onDelete={onDelete} />
               </div>
             )}
           </div>

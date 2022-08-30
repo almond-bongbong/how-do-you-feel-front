@@ -3,6 +3,7 @@ import { useGetPlaceListQuery } from '@src/generated/graphql';
 import Place from '@src/components/place/place';
 import classNames from 'classnames/bind';
 import styles from './my-place-list.module.scss';
+import LoadingBlock from '@src/components/common/loading/loading-block';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,7 @@ function MyPlaceList({ accountId }: Props) {
 
   return (
     <div className={cx('container')}>
-      {loading && <div className={cx('loading')}>불러오는중</div>}
+      {loading && <LoadingBlock />}
       {data?.getPlaceList.items.map((place) => (
         <Place key={place.id} place={place} />
       ))}

@@ -9,7 +9,7 @@ import { getActiveModalLength, getLastModalId } from '@src/libs/element';
 import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
 import { MODAL_PORTAL_ID } from '@src/constants/element';
 import Portal from '@src/components/common/util/portal';
-import ScreenLoading from '@src/components/common/loading/screen-loading';
+import LoadingScreen from '@src/components/common/loading/loading-screen';
 
 const cx = classNames.bind(styles);
 
@@ -79,7 +79,6 @@ function Modal({
 
     setTimeout(() => {
       const isFirstModal = getActiveModalLength() === 1;
-      console.log(getActiveModalLength());
       if (isFirstModal) lockBodyScroll();
     }, 16);
 
@@ -125,7 +124,7 @@ function Modal({
         >
           <div className={cx('mask')} />
           {loading ? (
-            <ScreenLoading />
+            <LoadingScreen />
           ) : (
             <div
               className={cx('modal', { has_scroll: hasScroll, center })}

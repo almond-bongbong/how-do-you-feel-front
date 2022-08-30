@@ -1,0 +1,17 @@
+@import 'styles/variables';
+
+.loading {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  font-size: 0;
+  text-indent: -9999px;
+
+  svg {
+    display: block;
+    color: $primary-color;
+    font-size: 30px;
+  }
+}

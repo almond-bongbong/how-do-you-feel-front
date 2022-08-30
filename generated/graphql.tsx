@@ -440,6 +440,13 @@ export type CreatePlaceMutationVariables = Exact<{
 
 export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'PlaceDto', id: number } };
 
+export type DeletePlaceMutationVariables = Exact<{
+  input: DeletePlaceInput;
+}>;
+
+
+export type DeletePlaceMutation = { __typename?: 'Mutation', deletePlace: { __typename?: 'DeletePlaceOutput', isDeleted: boolean } };
+
 export type GetPlaceListQueryVariables = Exact<{
   input: GetPlaceListInput;
 }>;
@@ -808,6 +815,39 @@ export function useCreatePlaceMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
 export type CreatePlaceMutationResult = Apollo.MutationResult<CreatePlaceMutation>;
 export type CreatePlaceMutationOptions = Apollo.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export const DeletePlaceDocument = gql`
+    mutation DeletePlace($input: DeletePlaceInput!) {
+  deletePlace(input: $input) {
+    isDeleted
+  }
+}
+    `;
+export type DeletePlaceMutationFn = Apollo.MutationFunction<DeletePlaceMutation, DeletePlaceMutationVariables>;
+
+/**
+ * __useDeletePlaceMutation__
+ *
+ * To run a mutation, you first call `useDeletePlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePlaceMutation, { data, loading, error }] = useDeletePlaceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeletePlaceMutation(baseOptions?: Apollo.MutationHookOptions<DeletePlaceMutation, DeletePlaceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePlaceMutation, DeletePlaceMutationVariables>(DeletePlaceDocument, options);
+      }
+export type DeletePlaceMutationHookResult = ReturnType<typeof useDeletePlaceMutation>;
+export type DeletePlaceMutationResult = Apollo.MutationResult<DeletePlaceMutation>;
+export type DeletePlaceMutationOptions = Apollo.BaseMutationOptions<DeletePlaceMutation, DeletePlaceMutationVariables>;
 export const GetPlaceListDocument = gql`
     query GetPlaceList($input: GetPlaceListInput!) {
   getPlaceList(input: $input) {
