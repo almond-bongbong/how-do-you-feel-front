@@ -1,0 +1,18 @@
+@import 'styles/variables';
+
+.loading {
+  overflow: hidden;
+  position: fixed;
+  z-index: 10000;
+  top: 50%;
+  left: 50%;
+  font-size: 0;
+  text-indent: -9999px;
+  transform: translate(-50%, -50%);
+
+  svg {
+    display: block;
+    color: $primary-color;
+    font-size: 40px;
+  }
+}

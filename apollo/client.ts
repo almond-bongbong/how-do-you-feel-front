@@ -26,7 +26,7 @@ const createApolloClient = () =>
     cache: new InMemoryCache(),
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'cache-and-network',
       },
     },
   });

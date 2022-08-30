@@ -3,7 +3,7 @@ import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
 import { useGetPlaceLazyQuery } from '@src/generated/graphql';
-import PlaceDetail from '@src/components/common/place/place-detail';
+import PlaceDetail from '@src/components/place/place-detail';
 
 const cx = classNames.bind(styles);
 
@@ -31,9 +31,9 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       isEscClosable
       closeButtonClassName={cx('modal_close_button')}
       contentClassName={cx('place_modal')}
+      loading={loading}
       onClose={onClose}
     >
-      {loading && <div>불러오는중</div>}
       {place && (
         <PlaceDetail
           content={place.content}

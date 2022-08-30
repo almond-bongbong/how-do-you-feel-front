@@ -32,8 +32,8 @@ function PlaceDetail({ content, createdAt, account, location, lng, lat, imageUrl
   const [visibleMapModal, openMapModal, closeMapModal] = useModal();
   const isThisYear = dayjs().year() === dayjs(createdAt).year();
   const dateText = isThisYear
-    ? dayjs(createdAt).format('MM월 DD일')
-    : dayjs(createdAt).format('YYYY년 MM월 DD일');
+    ? dayjs(createdAt).format('M월 D일 HH:mm')
+    : dayjs(createdAt).format('YYYY년 M월 D일 HH:mm');
   const hasPosition = lng && lat;
 
   return (
