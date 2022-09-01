@@ -15,16 +15,16 @@ export type Scalars = {
   Float: number;
 };
 
-export type AccountDto = {
-  __typename?: 'AccountDto';
-  bannerImage?: Maybe<ImageDto>;
+export type Account = {
+  __typename?: 'Account';
+  bannerImage?: Maybe<Image>;
   bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['Float'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
-  profileImage?: Maybe<ImageDto>;
+  profileImage?: Maybe<Image>;
   role: AccountRole;
   updatedAt: Scalars['Float'];
   username: Scalars['String'];
@@ -92,14 +92,14 @@ export type EditProfileInput = {
 
 export type EditProfileOutput = {
   __typename?: 'EditProfileOutput';
-  bannerImage?: Maybe<ImageDto>;
+  bannerImage?: Maybe<Image>;
   bio?: Maybe<Scalars['String']>;
   createdAt: Scalars['Float'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
-  profileImage?: Maybe<ImageDto>;
+  profileImage?: Maybe<Image>;
   role: AccountRole;
   updatedAt: Scalars['Float'];
   username: Scalars['String'];
@@ -113,7 +113,7 @@ export type GetBookmarkPlaceListInput = {
 
 export type GetBookmarkPlaceListOutput = {
   __typename?: 'GetBookmarkPlaceListOutput';
-  items: Array<PlaceDto>;
+  items: Array<Place>;
   total: Scalars['Int'];
 };
 
@@ -124,7 +124,7 @@ export type GetMyLikePlaceListInput = {
 
 export type GetMyLikePlaceListOutput = {
   __typename?: 'GetMyLikePlaceListOutput';
-  items: Array<MyLikePlaceDto>;
+  items: Array<MyLikePlace>;
   total: Scalars['Int'];
 };
 
@@ -141,7 +141,7 @@ export type GetPlaceListInput = {
 
 export type GetPlaceListOutput = {
   __typename?: 'GetPlaceListOutput';
-  items: Array<PlaceDto>;
+  items: Array<Place>;
   total: Scalars['Int'];
 };
 
@@ -151,7 +151,7 @@ export type GetProfileInput = {
 
 export type GetProfileOutput = {
   __typename?: 'GetProfileOutput';
-  bannerImage?: Maybe<ImageDto>;
+  bannerImage?: Maybe<Image>;
   bio?: Maybe<Scalars['String']>;
   followedByCount: Scalars['Int'];
   followingCount: Scalars['Int'];
@@ -159,12 +159,12 @@ export type GetProfileOutput = {
   isFollowed: Scalars['Boolean'];
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
-  profileImage?: Maybe<ImageDto>;
+  profileImage?: Maybe<Image>;
   username: Scalars['String'];
 };
 
-export type ImageDto = {
-  __typename?: 'ImageDto';
+export type Image = {
+  __typename?: 'Image';
   key: Scalars['String'];
   url: Scalars['String'];
 };
@@ -176,13 +176,13 @@ export type ImageInput = {
 
 export type MeOutput = {
   __typename?: 'MeOutput';
-  bannerImage?: Maybe<ImageDto>;
+  bannerImage?: Maybe<Image>;
   bio?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   location?: Maybe<Scalars['String']>;
   platform: AccountPlatform;
-  profileImage?: Maybe<ImageDto>;
+  profileImage?: Maybe<Image>;
   role: AccountRole;
   username: Scalars['String'];
 };
@@ -190,8 +190,8 @@ export type MeOutput = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: ChangePasswordOutput;
-  createPlace: PlaceDto;
-  createPlaceComment: PlaceCommentDto;
+  createPlace: Place;
+  createPlaceComment: PlaceComment;
   deletePlace: DeletePlaceOutput;
   editProfile: EditProfileOutput;
   signIn: SignInOutput;
@@ -251,37 +251,26 @@ export type MutationTogglePlaceLikeArgs = {
   input: TogglePlaceLikeInput;
 };
 
-export type MyLikePlaceDto = {
-  __typename?: 'MyLikePlaceDto';
-  account: AccountDto;
+export type MyLikePlace = {
+  __typename?: 'MyLikePlace';
+  account: Account;
   address?: Maybe<Scalars['String']>;
   content: Scalars['String'];
   id: Scalars['Int'];
   likedAt: Scalars['Float'];
 };
 
-export type PlaceCommentDto = {
-  __typename?: 'PlaceCommentDto';
-  account: AccountDto;
-  content: Scalars['String'];
-  createdAt: Scalars['Float'];
-  id: Scalars['Int'];
-  images: Array<ImageDto>;
-  place: PlaceDto;
-  updatedAt: Scalars['Float'];
-};
-
-export type PlaceDto = {
-  __typename?: 'PlaceDto';
-  account: AccountDto;
+export type Place = {
+  __typename?: 'Place';
+  account: Account;
   address?: Maybe<Scalars['String']>;
   bookmarkCount: Scalars['Int'];
   buildingName?: Maybe<Scalars['String']>;
-  comments: Array<PlaceCommentDto>;
+  comments: Array<PlaceComment>;
   content: Scalars['String'];
   createdAt: Scalars['Float'];
   id: Scalars['Int'];
-  images?: Maybe<Array<ImageDto>>;
+  images?: Maybe<Array<Image>>;
   isBookmarked: Scalars['Boolean'];
   isLiked: Scalars['Boolean'];
   latitude?: Maybe<Scalars['Float']>;
@@ -290,12 +279,23 @@ export type PlaceDto = {
   updatedAt: Scalars['Float'];
 };
 
+export type PlaceComment = {
+  __typename?: 'PlaceComment';
+  account: Account;
+  content: Scalars['String'];
+  createdAt: Scalars['Float'];
+  id: Scalars['Int'];
+  images: Array<Image>;
+  place: Place;
+  updatedAt: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   auth: AuthOutput;
   getBookmarkPlaceList: GetBookmarkPlaceListOutput;
   getMyLikePlaceList: GetMyLikePlaceListOutput;
-  getPlace: PlaceDto;
+  getPlace: Place;
   getPlaceList: GetPlaceListOutput;
   getProfile: GetProfileOutput;
   hello: Scalars['String'];
@@ -384,7 +384,7 @@ export type TogglePlaceLikeOutput = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: AccountPlatform, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'MeOutput', id: string, username: string, bio?: string | null, location?: string | null, platform: AccountPlatform, bannerImage?: { __typename?: 'Image', key: string, url: string } | null, profileImage?: { __typename?: 'Image', key: string, url: string } | null } };
 
 export type ChangePasswordMutationVariables = Exact<{
   input: ChangePasswordInput;
@@ -405,7 +405,7 @@ export type GetProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'GetProfileOutput', id: string, username: string, location?: string | null, bio?: string | null, isFollowed: boolean, followedByCount: number, followingCount: number, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null, bannerImage?: { __typename?: 'ImageDto', key: string, url: string } | null } };
+export type GetProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'GetProfileOutput', id: string, username: string, location?: string | null, bio?: string | null, isFollowed: boolean, followedByCount: number, followingCount: number, profileImage?: { __typename?: 'Image', key: string, url: string } | null, bannerImage?: { __typename?: 'Image', key: string, url: string } | null } };
 
 export type SignInMutationVariables = Exact<{
   input: SignInInput;
@@ -438,7 +438,7 @@ export type CreatePlaceMutationVariables = Exact<{
 }>;
 
 
-export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'PlaceDto', id: number } };
+export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'Place', id: number } };
 
 export type DeletePlaceMutationVariables = Exact<{
   input: DeletePlaceInput;
@@ -452,28 +452,28 @@ export type GetPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
 
 export type GetBookmarkPlaceListQueryVariables = Exact<{
   input: GetBookmarkPlaceListInput;
 }>;
 
 
-export type GetBookmarkPlaceListQuery = { __typename?: 'Query', getBookmarkPlaceList: { __typename?: 'GetBookmarkPlaceListOutput', total: number, items: Array<{ __typename?: 'PlaceDto', id: number, address?: string | null, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null }> } };
+export type GetBookmarkPlaceListQuery = { __typename?: 'Query', getBookmarkPlaceList: { __typename?: 'GetBookmarkPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, address?: string | null, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null }> } };
 
 export type GetMyLikePlaceListQueryVariables = Exact<{
   input: GetMyLikePlaceListInput;
 }>;
 
 
-export type GetMyLikePlaceListQuery = { __typename?: 'Query', getMyLikePlaceList: { __typename?: 'GetMyLikePlaceListOutput', total: number, items: Array<{ __typename?: 'MyLikePlaceDto', id: number, content: string, address?: string | null, likedAt: number, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } }> } };
+export type GetMyLikePlaceListQuery = { __typename?: 'Query', getMyLikePlaceList: { __typename?: 'GetMyLikePlaceListOutput', total: number, items: Array<{ __typename?: 'MyLikePlace', id: number, content: string, address?: string | null, likedAt: number, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
 
 export type GetPlaceQueryVariables = Exact<{
   input: GetPlaceInput;
 }>;
 
 
-export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'PlaceDto', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, createdAt: number, images?: Array<{ __typename?: 'ImageDto', key: string, url: string }> | null, account: { __typename?: 'AccountDto', id: string, username: string, profileImage?: { __typename?: 'ImageDto', key: string, url: string } | null } } };
+export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, createdAt: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } } };
 
 export type TogglePlaceBookmarkMutationVariables = Exact<{
   input: TogglePlaceBookmarkInput;

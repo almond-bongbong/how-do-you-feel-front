@@ -16,7 +16,7 @@ function Timeline({ placeList }: Props) {
 
   const handleDeletePlace = (placeId: number) => {
     const normalizedPlaceId = apollo.cache.identify({
-      __typename: 'PlaceDto',
+      __typename: 'Place',
       id: placeId,
     });
     console.log(normalizedPlaceId);

@@ -37,7 +37,7 @@ function PlaceBookmarkButton({ placeId, isBookmarked, bookmarkCount }: Props) {
         setAnimateBookmarkButton(newIsBookmarked);
         cache.modify({
           id: cache.identify({
-            __typename: 'PlaceDto',
+            __typename: 'Place',
             id: placeId,
           }),
           fields: {

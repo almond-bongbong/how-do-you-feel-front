@@ -39,7 +39,7 @@ function PlaceLikeButton({ placeId, isLiked, likeCount }: Props) {
         setAnimateLikeButton(newIsLiked);
         apollo.cache.modify({
           id: cache.identify({
-            __typename: 'PlaceDto',
+            __typename: 'Place',
             id: placeId,
           }),
           fields: {

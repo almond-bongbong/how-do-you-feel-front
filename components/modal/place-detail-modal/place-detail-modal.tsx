@@ -28,7 +28,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
 
   const handleDeletePlace = () => {
     const normalizedPlaceId = apollo.cache.identify({
-      __typename: 'PlaceDto',
+      __typename: 'Place',
       id: placeId,
     });
     apollo.cache.evict({ id: normalizedPlaceId });

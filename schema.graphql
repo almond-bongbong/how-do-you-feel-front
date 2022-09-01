@@ -5,15 +5,15 @@ schema {
     mutation: Mutation
 }
 
-type AccountDto {
-    bannerImage: ImageDto
+type Account {
+    bannerImage: Image
     bio: String
     createdAt: Float!
     email: String
     id: String!
     location: String
     platform: AccountPlatform!
-    profileImage: ImageDto
+    profileImage: Image
     role: AccountRole!
     updatedAt: Float!
     username: String!
@@ -33,54 +33,36 @@ type DeletePlaceOutput {
 }
 
 type EditProfileOutput {
-    bannerImage: ImageDto
+    bannerImage: Image
     bio: String
     createdAt: Float!
     email: String
     id: String!
     location: String
     platform: AccountPlatform!
-    profileImage: ImageDto
+    profileImage: Image
     role: AccountRole!
     updatedAt: Float!
     username: String!
 }
 
 type GetBookmarkPlaceListOutput {
-    items: [PlaceDto!]!
+    items: [Place!]!
     total: Int!
 }
 
 type GetMyLikePlaceListOutput {
-    items: [MyLikePlaceDto!]!
+    items: [MyLikePlace!]!
     total: Int!
 }
 
 type GetPlaceListOutput {
-    items: [PlaceDto!]!
+    items: [Place!]!
     total: Int!
 }
 
-type GetPlaceOutput {
-    account: AccountDto!
-    address: String
-    bookmarkCount: Int!
-    buildingName: String
-    comments: [PlaceCommentDto!]!
-    content: String!
-    createdAt: Float!
-    id: Int!
-    images: [ImageDto!]
-    isBookmarked: Boolean!
-    isLiked: Boolean!
-    latitude: Float
-    likeCount: Int!
-    longitude: Float
-    updatedAt: Float!
-}
-
 type GetProfileOutput {
-    bannerImage: ImageDto
+    bannerImage: Image
     bio: String
     followedByCount: Int!
     followingCount: Int!
@@ -88,31 +70,31 @@ type GetProfileOutput {
     isFollowed: Boolean!
     location: String
     platform: AccountPlatform!
-    profileImage: ImageDto
+    profileImage: Image
     username: String!
 }
 
-type ImageDto {
+type Image {
     key: String!
     url: String!
 }
 
 type MeOutput {
-    bannerImage: ImageDto
+    bannerImage: Image
     bio: String
     email: String
     id: String!
     location: String
     platform: AccountPlatform!
-    profileImage: ImageDto
+    profileImage: Image
     role: AccountRole!
     username: String!
 }
 
 type Mutation {
     changePassword(input: ChangePasswordInput!): ChangePasswordOutput!
-    createPlace(input: CreatePlaceInput!): PlaceDto!
-    createPlaceComment(input: CreatePlaceCommentInput!): PlaceCommentDto!
+    createPlace(input: CreatePlaceInput!): Place!
+    createPlaceComment(input: CreatePlaceCommentInput!): PlaceComment!
     deletePlace(input: DeletePlaceInput!): DeletePlaceOutput!
     editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
@@ -122,34 +104,24 @@ type Mutation {
     togglePlaceLike(input: TogglePlaceLikeInput!): TogglePlaceLikeOutput!
 }
 
-type MyLikePlaceDto {
-    account: AccountDto!
+type MyLikePlace {
+    account: Account!
     address: String
     content: String!
     id: Int!
     likedAt: Float!
 }
 
-type PlaceCommentDto {
-    account: AccountDto!
-    content: String!
-    createdAt: Float!
-    id: Int!
-    images: [ImageDto!]!
-    place: PlaceDto!
-    updatedAt: Float!
-}
-
-type PlaceDto {
-    account: AccountDto!
+type Place {
+    account: Account!
     address: String
     bookmarkCount: Int!
     buildingName: String
-    comments: [PlaceCommentDto!]!
+    comments: [PlaceComment!]!
     content: String!
     createdAt: Float!
     id: Int!
-    images: [ImageDto!]
+    images: [Image!]
     isBookmarked: Boolean!
     isLiked: Boolean!
     latitude: Float
@@ -158,11 +130,21 @@ type PlaceDto {
     updatedAt: Float!
 }
 
+type PlaceComment {
+    account: Account!
+    content: String!
+    createdAt: Float!
+    id: Int!
+    images: [Image!]!
+    place: Place!
+    updatedAt: Float!
+}
+
 type Query {
     auth: AuthOutput!
     getBookmarkPlaceList(input: GetBookmarkPlaceListInput!): GetBookmarkPlaceListOutput!
     getMyLikePlaceList(input: GetMyLikePlaceListInput!): GetMyLikePlaceListOutput!
-    getPlace(input: GetPlaceInput!): GetPlaceOutput!
+    getPlace(input: GetPlaceInput!): Place!
     getPlaceList(input: GetPlaceListInput!): GetPlaceListOutput!
     getProfile(input: GetProfileInput!): GetProfileOutput!
     hello: String!
