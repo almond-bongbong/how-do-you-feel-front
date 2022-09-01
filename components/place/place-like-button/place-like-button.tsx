@@ -53,6 +53,7 @@ function PlaceLikeButton({ placeId, isLiked, likeCount }: Props) {
 
   return (
     <button
+      type="button"
       className={cx('like', { active: isLiked, animate: animateLikeButton })}
       onClick={handleClickLike}
     >

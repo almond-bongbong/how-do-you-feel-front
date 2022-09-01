@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
-import { useGetPlaceLazyQuery } from '@src/generated/graphql';
+import { useGetPlaceCommentListLazyQuery, useGetPlaceLazyQuery } from '@src/generated/graphql';
 import PlaceDetail from '@src/components/place/place-detail';
 import { useApolloClient } from '@apollo/client';
+import PlaceComment from '@src/components/place/place-comment';
 
 const cx = classNames.bind(styles);
 
@@ -17,14 +18,21 @@ interface Props {
 function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   const apollo = useApolloClient();
   const [getPlaceQuery, { data, loading }] = useGetPlaceLazyQuery();
+  const [getPlaceCommentListQuery, { data: commentData }] = useGetPlaceCommentListLazyQuery();
+  const commentInputRef = useRef<HTMLInputElement>(null);
   const place = data?.getPlace;
+  const comments = commentData?.getPlaceCommentList;
 
   useEffect(() => {
     if (!placeId) return;
+
     getPlaceQuery({
       variables: { input: { id: placeId } },
     });
-  }, [placeId, getPlaceQuery]);
+    getPlaceCommentListQuery({
+      variables: { input: { placeId } },
+    });
+  }, [placeId, getPlaceQuery, getPlaceCommentListQuery]);
 
   const handleDeletePlace = () => {
     const normalizedPlaceId = apollo.cache.identify({
@@ -46,7 +54,21 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       loading={loading}
       onClose={onClose}
     >
-      {place && <PlaceDetail place={place} onDelete={handleDeletePlace} />}
+      {place && (
+        <PlaceDetail
+          place={place}
+          onDelete={handleDeletePlace}
+          onClickComment={() => commentInputRef.current?.focus()}
+        />
+      )}
+      {place && comments && (
+        <PlaceComment
+          placeId={placeId}
+          total={comments.total}
+          comments={comments.items}
+          commentInputRef={commentInputRef}
+        />
+      )}
     </Modal>
   );
 }

@@ -1,0 +1,53 @@
+.container {
+  padding: 30px;
+  border-top: 1px dashed #eee;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+
+.my_photo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-right: 10px;
+}
+
+.input_wrap {
+  flex: 1 1 auto;
+}
+
+.button_wrap {
+  flex: 0 0 90px;
+  margin-left: 8px;
+}
+
+.comment {
+  display: flex;
+  flex-direction: row;
+
+  & + & {
+    margin-top: 20px;
+  }
+}
+
+.photo {
+  flex: 0 0 auto;
+  padding: 0 2px;
+}
+
+.info {
+  margin-left: 14px;
+  font-size: 14px;
+}
+
+.username {
+  margin-bottom: 5px;
+}
+
+.content {
+  color: #666;
+}

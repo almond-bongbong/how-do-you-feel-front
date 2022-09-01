@@ -17,6 +17,7 @@ export const GET_PLACE_QUERY = gql`
       likeCount
       isBookmarked
       bookmarkCount
+      commentCount
       account {
         id
         username

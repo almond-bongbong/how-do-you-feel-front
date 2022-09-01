@@ -58,9 +58,8 @@ export type ChangePasswordOutput = {
 };
 
 export type CreatePlaceCommentInput = {
-  accountId: Scalars['String'];
   content: Scalars['String'];
-  images: Array<ImageInput>;
+  images?: InputMaybe<Array<ImageInput>>;
   placeId: Scalars['Int'];
 };
 
@@ -125,6 +124,18 @@ export type GetMyLikePlaceListInput = {
 export type GetMyLikePlaceListOutput = {
   __typename?: 'GetMyLikePlaceListOutput';
   items: Array<MyLikePlace>;
+  total: Scalars['Int'];
+};
+
+export type GetPlaceCommentListInput = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  placeId: Scalars['Int'];
+};
+
+export type GetPlaceCommentListOutput = {
+  __typename?: 'GetPlaceCommentListOutput';
+  items: Array<PlaceComment>;
   total: Scalars['Int'];
 };
 
@@ -266,7 +277,7 @@ export type Place = {
   address?: Maybe<Scalars['String']>;
   bookmarkCount: Scalars['Int'];
   buildingName?: Maybe<Scalars['String']>;
-  comments: Array<PlaceComment>;
+  commentCount: Scalars['Int'];
   content: Scalars['String'];
   createdAt: Scalars['Float'];
   id: Scalars['Int'];
@@ -285,7 +296,7 @@ export type PlaceComment = {
   content: Scalars['String'];
   createdAt: Scalars['Float'];
   id: Scalars['Int'];
-  images: Array<Image>;
+  images?: Maybe<Array<Image>>;
   place: Place;
   updatedAt: Scalars['Float'];
 };
@@ -296,6 +307,7 @@ export type Query = {
   getBookmarkPlaceList: GetBookmarkPlaceListOutput;
   getMyLikePlaceList: GetMyLikePlaceListOutput;
   getPlace: Place;
+  getPlaceCommentList: GetPlaceCommentListOutput;
   getPlaceList: GetPlaceListOutput;
   getProfile: GetProfileOutput;
   hello: Scalars['String'];
@@ -315,6 +327,11 @@ export type QueryGetMyLikePlaceListArgs = {
 
 export type QueryGetPlaceArgs = {
   input: GetPlaceInput;
+};
+
+
+export type QueryGetPlaceCommentListArgs = {
+  input: GetPlaceCommentListInput;
 };
 
 
@@ -433,6 +450,13 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
+export type CreatePlaceCommentMutationVariables = Exact<{
+  input: CreatePlaceCommentInput;
+}>;
+
+
+export type CreatePlaceCommentMutation = { __typename?: 'Mutation', createPlaceComment: { __typename?: 'PlaceComment', id: number } };
+
 export type CreatePlaceMutationVariables = Exact<{
   input: CreatePlaceInput;
 }>;
@@ -447,12 +471,19 @@ export type DeletePlaceMutationVariables = Exact<{
 
 export type DeletePlaceMutation = { __typename?: 'Mutation', deletePlace: { __typename?: 'DeletePlaceOutput', isDeleted: boolean } };
 
+export type GetPlaceCommentListQueryVariables = Exact<{
+  input: GetPlaceCommentListInput;
+}>;
+
+
+export type GetPlaceCommentListQuery = { __typename?: 'Query', getPlaceCommentList: { __typename?: 'GetPlaceCommentListOutput', total: number, items: Array<{ __typename?: 'PlaceComment', id: number, content: string, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
+
 export type GetPlaceListQueryVariables = Exact<{
   input: GetPlaceListInput;
 }>;
 
 
-export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
+export type GetPlaceListQuery = { __typename?: 'Query', getPlaceList: { __typename?: 'GetPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, commentCount: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
 
 export type GetBookmarkPlaceListQueryVariables = Exact<{
   input: GetBookmarkPlaceListInput;
@@ -473,7 +504,7 @@ export type GetPlaceQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, createdAt: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } } };
+export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, commentCount: number, createdAt: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } } };
 
 export type TogglePlaceBookmarkMutationVariables = Exact<{
   input: TogglePlaceBookmarkInput;
@@ -782,6 +813,39 @@ export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Hell
 export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
 export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
 export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;
+export const CreatePlaceCommentDocument = gql`
+    mutation CreatePlaceComment($input: CreatePlaceCommentInput!) {
+  createPlaceComment(input: $input) {
+    id
+  }
+}
+    `;
+export type CreatePlaceCommentMutationFn = Apollo.MutationFunction<CreatePlaceCommentMutation, CreatePlaceCommentMutationVariables>;
+
+/**
+ * __useCreatePlaceCommentMutation__
+ *
+ * To run a mutation, you first call `useCreatePlaceCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePlaceCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPlaceCommentMutation, { data, loading, error }] = useCreatePlaceCommentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePlaceCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreatePlaceCommentMutation, CreatePlaceCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePlaceCommentMutation, CreatePlaceCommentMutationVariables>(CreatePlaceCommentDocument, options);
+      }
+export type CreatePlaceCommentMutationHookResult = ReturnType<typeof useCreatePlaceCommentMutation>;
+export type CreatePlaceCommentMutationResult = Apollo.MutationResult<CreatePlaceCommentMutation>;
+export type CreatePlaceCommentMutationOptions = Apollo.BaseMutationOptions<CreatePlaceCommentMutation, CreatePlaceCommentMutationVariables>;
 export const CreatePlaceDocument = gql`
     mutation CreatePlace($input: CreatePlaceInput!) {
   createPlace(input: $input) {
@@ -848,6 +912,53 @@ export function useDeletePlaceMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeletePlaceMutationHookResult = ReturnType<typeof useDeletePlaceMutation>;
 export type DeletePlaceMutationResult = Apollo.MutationResult<DeletePlaceMutation>;
 export type DeletePlaceMutationOptions = Apollo.BaseMutationOptions<DeletePlaceMutation, DeletePlaceMutationVariables>;
+export const GetPlaceCommentListDocument = gql`
+    query GetPlaceCommentList($input: GetPlaceCommentListInput!) {
+  getPlaceCommentList(input: $input) {
+    total
+    items {
+      id
+      content
+      account {
+        id
+        username
+        profileImage {
+          key
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPlaceCommentListQuery__
+ *
+ * To run a query within a React component, call `useGetPlaceCommentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlaceCommentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlaceCommentListQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPlaceCommentListQuery(baseOptions: Apollo.QueryHookOptions<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>(GetPlaceCommentListDocument, options);
+      }
+export function useGetPlaceCommentListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>(GetPlaceCommentListDocument, options);
+        }
+export type GetPlaceCommentListQueryHookResult = ReturnType<typeof useGetPlaceCommentListQuery>;
+export type GetPlaceCommentListLazyQueryHookResult = ReturnType<typeof useGetPlaceCommentListLazyQuery>;
+export type GetPlaceCommentListQueryResult = Apollo.QueryResult<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>;
 export const GetPlaceListDocument = gql`
     query GetPlaceList($input: GetPlaceListInput!) {
   getPlaceList(input: $input) {
@@ -866,6 +977,7 @@ export const GetPlaceListDocument = gql`
       likeCount
       isBookmarked
       bookmarkCount
+      commentCount
       account {
         id
         username
@@ -1016,6 +1128,7 @@ export const GetPlaceDocument = gql`
     likeCount
     isBookmarked
     bookmarkCount
+    commentCount
     account {
       id
       username

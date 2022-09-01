@@ -56,6 +56,11 @@ type GetMyLikePlaceListOutput {
     total: Int!
 }
 
+type GetPlaceCommentListOutput {
+    items: [PlaceComment!]!
+    total: Int!
+}
+
 type GetPlaceListOutput {
     items: [Place!]!
     total: Int!
@@ -117,7 +122,7 @@ type Place {
     address: String
     bookmarkCount: Int!
     buildingName: String
-    comments: [PlaceComment!]!
+    commentCount: Int!
     content: String!
     createdAt: Float!
     id: Int!
@@ -135,7 +140,7 @@ type PlaceComment {
     content: String!
     createdAt: Float!
     id: Int!
-    images: [Image!]!
+    images: [Image!]
     place: Place!
     updatedAt: Float!
 }
@@ -145,6 +150,7 @@ type Query {
     getBookmarkPlaceList(input: GetBookmarkPlaceListInput!): GetBookmarkPlaceListOutput!
     getMyLikePlaceList(input: GetMyLikePlaceListInput!): GetMyLikePlaceListOutput!
     getPlace(input: GetPlaceInput!): Place!
+    getPlaceCommentList(input: GetPlaceCommentListInput!): GetPlaceCommentListOutput!
     getPlaceList(input: GetPlaceListInput!): GetPlaceListOutput!
     getProfile(input: GetProfileInput!): GetProfileOutput!
     hello: String!
@@ -191,9 +197,8 @@ input ChangePasswordInput {
 }
 
 input CreatePlaceCommentInput {
-    accountId: String!
     content: String!
-    images: [ImageInput!]!
+    images: [ImageInput!]
     placeId: Int!
 }
 
@@ -227,6 +232,12 @@ input GetBookmarkPlaceListInput {
 input GetMyLikePlaceListInput {
     limit: Int = 10
     offset: Int = 0
+}
+
+input GetPlaceCommentListInput {
+    limit: Int = 10
+    offset: Int = 0
+    placeId: Int!
 }
 
 input GetPlaceInput {

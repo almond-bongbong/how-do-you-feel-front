@@ -18,6 +18,7 @@ import { omit } from '@src/libs/util';
 import PlaceLikeButton from '@src/components/place/place-like-button';
 import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
+import PlaceCommentButton from '@src/components/place/place-comment-button';
 
 const cx = classNames.bind(styles);
 
@@ -105,6 +106,7 @@ function Place({ place, onDelete }: Props) {
                 isBookmarked={place.isBookmarked}
                 bookmarkCount={place.bookmarkCount}
               />
+              <PlaceCommentButton commentCount={place.commentCount} />
             </div>
 
             {place.account.id === currentUser?.id && (

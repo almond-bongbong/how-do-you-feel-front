@@ -15,15 +15,17 @@ import PlaceLikeButton from '@src/components/place/place-like-button';
 import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
 import { GetPlaceQuery } from '@src/generated/graphql';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
+import PlaceCommentButton from '@src/components/place/place-comment-button';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   place: GetPlaceQuery['getPlace'];
   onDelete?: () => void;
+  onClickComment?: () => void;
 }
 
-function PlaceDetail({ place, onDelete }: Props) {
+function PlaceDetail({ place, onDelete, onClickComment }: Props) {
   const [visibleMapModal, openMapModal, closeMapModal] = useModal();
   const isThisYear = dayjs().year() === dayjs(place.createdAt).year();
   const dateText = isThisYear
@@ -77,6 +79,7 @@ function PlaceDetail({ place, onDelete }: Props) {
             isBookmarked={place.isBookmarked}
             bookmarkCount={place.bookmarkCount}
           />
+          <PlaceCommentButton commentCount={place.commentCount} onClick={onClickComment} />
         </div>
         <div className={cx('owner_area')}>
           <PlaceDeleteButton placeId={place.id} onDelete={onDelete} />

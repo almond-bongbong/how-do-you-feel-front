@@ -51,6 +51,7 @@ function PlaceBookmarkButton({ placeId, isBookmarked, bookmarkCount }: Props) {
 
   return (
     <button
+      type="button"
       className={cx('bookmark', {
         active: isBookmarked,
         animate: animateBookmarkButton,
