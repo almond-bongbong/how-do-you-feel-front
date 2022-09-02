@@ -8,6 +8,9 @@ import Button from '@src/components/common/form/button';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import Modal from '@src/components/modal/modal';
 import { GET_PLACE_COMMENT_LIST_QUERY } from '@src/graphql/place/get-place-comment-list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisVertical } from '@fortawesome/pro-light-svg-icons';
+import Dropdown from '@src/components/common/form/dropdown';
 
 const cx = classNames.bind(styles);
 
@@ -94,6 +97,13 @@ function PlaceComment({ placeId, total, comments, commentInputRef }: Props) {
           <div className={cx('info')}>
             <div className={cx('username')}>{comment.account.username}</div>
             <div className={cx('content')}>{comment.content}</div>
+          </div>
+          <div className={cx('util')}>
+            <Dropdown menu={[]}>
+              <button type="button">
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </button>
+            </Dropdown>
           </div>
         </div>
       ))}

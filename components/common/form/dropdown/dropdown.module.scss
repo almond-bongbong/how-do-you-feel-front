@@ -1,0 +1,14 @@
+.dropdown_wrap {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  z-index: 1000;
+  padding: 10px 15px;
+  background-color: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%);
+}
