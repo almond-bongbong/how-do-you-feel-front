@@ -1,0 +1,74 @@
+@import 'styles/variables';
+
+.container {
+  padding: 25px 0 30px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  padding: 0 30px;
+}
+
+.user {
+  font-size: 0;
+
+  .photo {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .username {
+    display: inline-block;
+    margin-left: 12px;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+}
+
+.extra {
+  .date {
+    color: #666;
+  }
+}
+
+.location {
+  margin-top: 20px;
+  font-size: 14px;
+  color: $primary-color;
+
+  &:disabled {
+    cursor: text;
+  }
+
+  svg {
+    margin-right: 6px;
+  }
+}
+
+.image_list {
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+.content {
+  padding: 30px;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.button_area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px;
+
+  button + button {
+    margin-left: 20px;
+  }
+}

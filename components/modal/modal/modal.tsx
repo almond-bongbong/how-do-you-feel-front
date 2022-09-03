@@ -9,7 +9,6 @@ import { getActiveModalLength, getLastModalId } from '@src/libs/element';
 import { lockBodyScroll, unlockBodyScroll } from '@src/libs/lock-body-scroll';
 import { MODAL_PORTAL_ID } from '@src/constants/element';
 import Portal from '@src/components/common/util/portal';
-import LoadingScreen from '@src/components/common/loading/loading-screen';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +23,6 @@ interface Props {
   contentClassName?: string;
   closeButtonClassName?: string;
   center?: boolean;
-  loading?: boolean;
   onClose?: () => void;
 }
 
@@ -39,7 +37,6 @@ function Modal({
   contentClassName,
   closeButtonClassName,
   center = false,
-  loading = false,
   onClose,
 }: Props) {
   const id = useId();
@@ -123,37 +120,30 @@ function Modal({
           })}
         >
           <div className={cx('mask')} />
-          {loading ? (
-            <LoadingScreen />
-          ) : (
-            <div
-              className={cx('modal', { has_scroll: hasScroll, center })}
-              onClick={handleClickMask}
-            >
-              <div className={cx('inner')}>
-                <div
-                  className={cx('content', contentClassName)}
-                  ref={(el) => {
-                    modalBodyRef.current = el;
-                    resizeTargetRef.current = el;
-                  }}
-                  style={{ width }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className={cx('section')}>{children}</div>
-                </div>
+          <div className={cx('modal', { has_scroll: hasScroll, center })} onClick={handleClickMask}>
+            <div className={cx('inner')}>
+              <div
+                className={cx('content', contentClassName)}
+                ref={(el) => {
+                  modalBodyRef.current = el;
+                  resizeTargetRef.current = el;
+                }}
+                style={{ width }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={cx('section')}>{children}</div>
               </div>
-              {hasCloseButton && (
-                <button
-                  type="button"
-                  className={cx('close_button', closeButtonClassName)}
-                  onClick={onClose}
-                >
-                  <FontAwesomeIcon icon={faXmark} title="닫기" />
-                </button>
-              )}
             </div>
-          )}
+            {hasCloseButton && (
+              <button
+                type="button"
+                className={cx('close_button', closeButtonClassName)}
+                onClick={onClose}
+              >
+                <FontAwesomeIcon icon={faXmark} title="닫기" />
+              </button>
+            )}
+          </div>
         </div>
       )}
     </Portal>

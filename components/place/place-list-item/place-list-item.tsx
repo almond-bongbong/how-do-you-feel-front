@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-import styles from './place.module.scss';
+import styles from './place-list-item.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,7 +27,7 @@ interface Props {
   onDelete?: () => void;
 }
 
-function Place({ place, onDelete }: Props) {
+function PlaceListItem({ place, onDelete }: Props) {
   const router = useRouter();
   const { currentUser } = useCurrentUser();
   const [visibleMap, openMap, closeMap, mapPosition] = useModal<{ x: number; y: number } | null>(
@@ -151,4 +151,4 @@ function Place({ place, onDelete }: Props) {
   );
 }
 
-export default Place;
+export default PlaceListItem;

@@ -1,3 +1,5 @@
+$opacity-transition: opacity 0.3s ease-in-out;
+
 .mask {
   opacity: 0;
   overflow: hidden;
@@ -8,7 +10,7 @@
   left: 0;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.3);
-  transition: opacity 0.3s ease-out;
+  transition: $opacity-transition;
 }
 
 .modal {
@@ -38,7 +40,7 @@
   border-radius: 2px;
   background-color: #fff;
   box-shadow: 0 2px 6px 1px rgba(0, 0, 0, 0.23);
-  transition: opacity 0.3s ease-out;
+  transition: $opacity-transition;
 }
 
 .overflow_body .content,
@@ -74,7 +76,7 @@
   font-size: 0;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.2);
-  transition: opacity 0.3s ease-out;
+  transition: $opacity-transition;
 
   svg {
     width: 24px;

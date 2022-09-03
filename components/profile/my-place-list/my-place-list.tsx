@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGetPlaceListQuery } from '@src/generated/graphql';
-import Place from '@src/components/place/place';
+import PlaceListItem from '@src/components/place/place-list-item';
 import classNames from 'classnames/bind';
 import styles from './my-place-list.module.scss';
 import LoadingBlock from '@src/components/common/loading/loading-block';
@@ -24,7 +24,7 @@ function MyPlaceList({ accountId }: Props) {
     <div className={cx('container')}>
       {loading && <LoadingBlock />}
       {data?.getPlaceList.items.map((place) => (
-        <Place key={place.id} place={place} />
+        <PlaceListItem key={place.id} place={place} />
       ))}
     </div>
   );

@@ -117,6 +117,7 @@ export type GetBookmarkPlaceListInput = {
   accountId: Scalars['String'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sinceId?: InputMaybe<Scalars['Int']>;
 };
 
 export type GetBookmarkPlaceListOutput = {
@@ -128,6 +129,7 @@ export type GetBookmarkPlaceListOutput = {
 export type GetMyLikePlaceListInput = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sinceId?: InputMaybe<Scalars['Int']>;
 };
 
 export type GetMyLikePlaceListOutput = {
@@ -140,6 +142,7 @@ export type GetPlaceCommentListInput = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   placeId: Scalars['Int'];
+  sinceId?: InputMaybe<Scalars['Int']>;
 };
 
 export type GetPlaceCommentListOutput = {
@@ -157,6 +160,7 @@ export type GetPlaceListInput = {
   bookmarkedAccountId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sinceId?: InputMaybe<Scalars['Int']>;
 };
 
 export type GetPlaceListOutput = {

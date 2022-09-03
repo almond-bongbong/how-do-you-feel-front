@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './timeline.module.scss';
 import { GetPlaceListQuery } from '@src/generated/graphql';
-import Place from '@src/components/place/place';
+import PlaceListItem from '@src/components/place/place-list-item';
 import { useApolloClient } from '@apollo/client';
 
 const cx = classNames.bind(styles);
@@ -26,7 +26,7 @@ function Timeline({ placeList }: Props) {
   return (
     <div className={cx('timeline')}>
       {placeList.map((place) => (
-        <Place key={place.id} place={place} onDelete={() => handleDeletePlace(place.id)} />
+        <PlaceListItem key={place.id} place={place} onDelete={() => handleDeletePlace(place.id)} />
       ))}
     </div>
   );

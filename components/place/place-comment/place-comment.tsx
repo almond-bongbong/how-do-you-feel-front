@@ -25,15 +25,14 @@ interface Props {
   comments: GetPlaceCommentListQuery['getPlaceCommentList']['items'];
   commentInputRef?: RefObject<HTMLInputElement>;
   onDelete?: (commentId: number) => void;
+  onClickMore?: () => void;
 }
 
-function PlaceComment({ placeId, total, comments, commentInputRef, onDelete }: Props) {
+function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onClickMore }: Props) {
   const { currentUser } = useCurrentUser();
   const [createCommentMutation, { loading }] = useCreatePlaceCommentMutation();
   const [deleteCommentMutation, { loading: deleteLoading }] = useDeletePlaceCommentMutation();
   const [content, setContent] = useState('');
-
-  console.log('comment total', total);
 
   const handleDeleteComment = async (commentId: number) => {
     const isOk = await Modal.confirm('댓글을 삭제하시겠습니까?');
@@ -156,6 +155,12 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete }: P
           )}
         </div>
       ))}
+
+      {total > comments.length && (
+        <button type="button" onClick={onClickMore}>
+          더보기
+        </button>
+      )}
 
       {deleteLoading && <LoadingScreen />}
     </div>

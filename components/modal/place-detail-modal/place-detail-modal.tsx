@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
-import { useGetPlaceCommentListLazyQuery, useGetPlaceLazyQuery } from '@src/generated/graphql';
-import PlaceDetail from '@src/components/place/place-detail';
+import {
+  GetPlaceCommentListQuery,
+  useGetPlaceCommentListLazyQuery,
+  useGetPlaceLazyQuery,
+} from '@src/generated/graphql';
+import PlaceCard from '@src/components/place/place-card';
 import { useApolloClient } from '@apollo/client';
 import PlaceComment from '@src/components/place/place-comment';
-import LoadingScreen from '@src/components/common/loading/loading-screen';
+import LoadingBlock from '@src/components/common/loading/loading-block';
 
 const cx = classNames.bind(styles);
 
@@ -16,13 +20,19 @@ interface Props {
   onClose: () => void;
 }
 
+const COMMENT_LIMIT = 2;
+
 function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   const apollo = useApolloClient();
   const [getPlaceQuery, { data, loading }] = useGetPlaceLazyQuery();
-  const [getPlaceCommentListQuery, { data: commentData }] = useGetPlaceCommentListLazyQuery();
+  const [getPlaceCommentListQuery, { data: commentData, fetchMore }] =
+    useGetPlaceCommentListLazyQuery();
   const commentInputRef = useRef<HTMLInputElement>(null);
+  const [moreComments, setMoreComments] = useState<
+    GetPlaceCommentListQuery['getPlaceCommentList']['items']
+  >([]);
   const place = data?.getPlace;
-  const comments = commentData?.getPlaceCommentList;
+  const comments = commentData?.getPlaceCommentList.items.concat(moreComments) || [];
 
   useEffect(() => {
     if (!placeId) return;
@@ -31,7 +41,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       variables: { input: { id: placeId } },
     });
     getPlaceCommentListQuery({
-      variables: { input: { placeId } },
+      variables: { input: { placeId, limit: COMMENT_LIMIT } },
     });
   }, [placeId, getPlaceQuery, getPlaceCommentListQuery]);
 
@@ -45,6 +55,20 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
     onClose();
   };
 
+  const handleClickMore = async () => {
+    const { data } = await fetchMore({
+      variables: {
+        input: {
+          placeId,
+          sinceId: comments[comments.length - 1].id,
+          offset: 1,
+          limit: COMMENT_LIMIT,
+        },
+      },
+    });
+    setMoreComments((prev) => [...prev, ...data.getPlaceCommentList.items]);
+  };
+
   return (
     <Modal
       visible={visible}
@@ -52,11 +76,11 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       isEscClosable
       closeButtonClassName={cx('modal_close_button')}
       contentClassName={cx('place_modal')}
-      loading={loading}
       onClose={onClose}
     >
+      {loading && <LoadingBlock />}
       {place && (
-        <PlaceDetail
+        <PlaceCard
           place={place}
           onDelete={onDeletePlace}
           onClickComment={() => commentInputRef.current?.focus()}
@@ -65,9 +89,10 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       {place && comments && (
         <PlaceComment
           placeId={placeId}
-          total={comments.total}
-          comments={comments.items}
+          total={commentData?.getPlaceCommentList?.total ?? 0}
+          comments={comments}
           commentInputRef={commentInputRef}
+          onClickMore={handleClickMore}
         />
       )}
     </Modal>
