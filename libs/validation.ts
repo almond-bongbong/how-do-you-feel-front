@@ -51,7 +51,7 @@ export const checkUsernameValidation = (username: string): ValidationResult => {
   if (!USERNAME_REGEXP.test(username)) {
     return {
       isValid: false,
-      message: '사용자명은 한글, 영문, 숫자만 사용할 수 있습니다.',
+      message: '사용자명은 한글, 영문, 숫자, -, _만 사용할 수 있습니다.',
     };
   }
 

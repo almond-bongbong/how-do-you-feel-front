@@ -28,6 +28,10 @@ type ChangePasswordOutput {
     success: Boolean!
 }
 
+type DeletePlaceCommentOutput {
+    isDeleted: Boolean!
+}
+
 type DeletePlaceOutput {
     isDeleted: Boolean!
 }
@@ -101,6 +105,7 @@ type Mutation {
     createPlace(input: CreatePlaceInput!): Place!
     createPlaceComment(input: CreatePlaceCommentInput!): PlaceComment!
     deletePlace(input: DeletePlaceInput!): DeletePlaceOutput!
+    deletePlaceComment(input: DeletePlaceCommentInput!): DeletePlaceCommentOutput!
     editProfile(input: EditProfileInput!): EditProfileOutput!
     signIn(input: SignInInput!): SignInOutput!
     signUp(input: SignUpInput!): SignUpOutput!
@@ -209,6 +214,10 @@ input CreatePlaceInput {
     images: [ImageInput!]
     latitude: Float
     longitude: Float
+}
+
+input DeletePlaceCommentInput {
+    id: Int!
 }
 
 input DeletePlaceInput {

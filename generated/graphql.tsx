@@ -72,6 +72,15 @@ export type CreatePlaceInput = {
   longitude?: InputMaybe<Scalars['Float']>;
 };
 
+export type DeletePlaceCommentInput = {
+  id: Scalars['Int'];
+};
+
+export type DeletePlaceCommentOutput = {
+  __typename?: 'DeletePlaceCommentOutput';
+  isDeleted: Scalars['Boolean'];
+};
+
 export type DeletePlaceInput = {
   id: Scalars['Int'];
 };
@@ -204,6 +213,7 @@ export type Mutation = {
   createPlace: Place;
   createPlaceComment: PlaceComment;
   deletePlace: DeletePlaceOutput;
+  deletePlaceComment: DeletePlaceCommentOutput;
   editProfile: EditProfileOutput;
   signIn: SignInOutput;
   signUp: SignUpOutput;
@@ -230,6 +240,11 @@ export type MutationCreatePlaceCommentArgs = {
 
 export type MutationDeletePlaceArgs = {
   input: DeletePlaceInput;
+};
+
+
+export type MutationDeletePlaceCommentArgs = {
+  input: DeletePlaceCommentInput;
 };
 
 
@@ -463,6 +478,13 @@ export type CreatePlaceMutationVariables = Exact<{
 
 
 export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'Place', id: number } };
+
+export type DeletePlaceCommentMutationVariables = Exact<{
+  input: DeletePlaceCommentInput;
+}>;
+
+
+export type DeletePlaceCommentMutation = { __typename?: 'Mutation', deletePlaceComment: { __typename?: 'DeletePlaceCommentOutput', isDeleted: boolean } };
 
 export type DeletePlaceMutationVariables = Exact<{
   input: DeletePlaceInput;
@@ -879,6 +901,39 @@ export function useCreatePlaceMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
 export type CreatePlaceMutationResult = Apollo.MutationResult<CreatePlaceMutation>;
 export type CreatePlaceMutationOptions = Apollo.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export const DeletePlaceCommentDocument = gql`
+    mutation DeletePlaceComment($input: DeletePlaceCommentInput!) {
+  deletePlaceComment(input: $input) {
+    isDeleted
+  }
+}
+    `;
+export type DeletePlaceCommentMutationFn = Apollo.MutationFunction<DeletePlaceCommentMutation, DeletePlaceCommentMutationVariables>;
+
+/**
+ * __useDeletePlaceCommentMutation__
+ *
+ * To run a mutation, you first call `useDeletePlaceCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePlaceCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePlaceCommentMutation, { data, loading, error }] = useDeletePlaceCommentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeletePlaceCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeletePlaceCommentMutation, DeletePlaceCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePlaceCommentMutation, DeletePlaceCommentMutationVariables>(DeletePlaceCommentDocument, options);
+      }
+export type DeletePlaceCommentMutationHookResult = ReturnType<typeof useDeletePlaceCommentMutation>;
+export type DeletePlaceCommentMutationResult = Apollo.MutationResult<DeletePlaceCommentMutation>;
+export type DeletePlaceCommentMutationOptions = Apollo.BaseMutationOptions<DeletePlaceCommentMutation, DeletePlaceCommentMutationVariables>;
 export const DeletePlaceDocument = gql`
     mutation DeletePlace($input: DeletePlaceInput!) {
   deletePlace(input: $input) {

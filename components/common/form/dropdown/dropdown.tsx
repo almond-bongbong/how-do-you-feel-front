@@ -16,12 +16,15 @@ const cx = classNames.bind(styles);
 interface Props {
   children: ReactNode;
   menu: {
+    key: string;
     label: string;
-    onClick: () => void;
+    onClick?: (key: string) => void;
   }[];
+  closeOnSelect?: boolean;
+  onSelect?: (key: string) => void;
 }
 
-function Dropdown({ children }: Props) {
+function Dropdown({ children, menu, closeOnSelect = true, onSelect }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -34,14 +37,16 @@ function Dropdown({ children }: Props) {
   );
 
   const handleClose: EventListener = useCallback((e) => {
-    if (dropdownRef.current?.contains(e.target as Node)) {
+    const targetElement = e.target as HTMLElement;
+    const isClickInside = dropdownRef.current?.contains(targetElement as Node);
+    const isClickDropdownItem = targetElement?.closest(`.${cx('dropdown_item')}`);
+
+    if (isClickInside && !isClickDropdownItem) {
       e.stopPropagation();
     }
 
-    if (e.target instanceof HTMLElement) {
-      if (e.target.closest(`.${cx('dropdown')}`)) {
-        return;
-      }
+    if (targetElement?.closest(`.${cx('dropdown')}`)) {
+      return;
     }
 
     setOpen((prev) => (prev ? false : prev));
@@ -76,7 +81,24 @@ function Dropdown({ children }: Props) {
   return (
     <span ref={dropdownRef} className={cx('dropdown_wrap')}>
       {wrappedChildren}
-      {open && <div className={cx('dropdown')}>dropdown</div>}
+      {open && (
+        <div className={cx('dropdown')}>
+          {menu.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={cx('dropdown_item')}
+              onClick={() => {
+                if (closeOnSelect) setOpen(false);
+                onSelect?.(item.key);
+                item.onClick?.(item.key);
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
     </span>
   );
 }

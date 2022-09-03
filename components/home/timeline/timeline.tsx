@@ -19,7 +19,6 @@ function Timeline({ placeList }: Props) {
       __typename: 'Place',
       id: placeId,
     });
-    console.log(normalizedPlaceId);
     apollo.cache.evict({ id: normalizedPlaceId });
     apollo.cache.gc();
   };

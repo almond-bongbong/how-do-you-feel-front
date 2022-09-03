@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .dropdown_wrap {
   position: relative;
 }
@@ -7,8 +9,21 @@
   top: calc(100% + 5px);
   left: 50%;
   z-index: 1000;
-  padding: 10px 15px;
   background-color: #fff;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   transform: translateX(-50%);
+}
+
+.dropdown_item {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  white-space: nowrap;
+  font-size: 12px;
+  text-align: center;
+
+  &:hover {
+    color: $primary-color;
+    background-color: rgba($primary-color, 0.1);
+  }
 }

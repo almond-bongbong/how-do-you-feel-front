@@ -6,6 +6,7 @@ import { useGetPlaceCommentListLazyQuery, useGetPlaceLazyQuery } from '@src/gene
 import PlaceDetail from '@src/components/place/place-detail';
 import { useApolloClient } from '@apollo/client';
 import PlaceComment from '@src/components/place/place-comment';
+import LoadingScreen from '@src/components/common/loading/loading-screen';
 
 const cx = classNames.bind(styles);
 
@@ -34,7 +35,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
     });
   }, [placeId, getPlaceQuery, getPlaceCommentListQuery]);
 
-  const handleDeletePlace = () => {
+  const onDeletePlace = () => {
     const normalizedPlaceId = apollo.cache.identify({
       __typename: 'Place',
       id: placeId,
@@ -57,7 +58,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       {place && (
         <PlaceDetail
           place={place}
-          onDelete={handleDeletePlace}
+          onDelete={onDeletePlace}
           onClickComment={() => commentInputRef.current?.focus()}
         />
       )}

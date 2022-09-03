@@ -2,7 +2,7 @@ import React, { CSSProperties, MouseEventHandler } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/pro-light-svg-icons';
+import { faSpinner } from '@fortawesome/pro-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 

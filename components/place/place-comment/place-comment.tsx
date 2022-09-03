@@ -1,7 +1,11 @@
 import React, { RefObject, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './place-comment.module.scss';
-import { GetPlaceCommentListQuery, useCreatePlaceCommentMutation } from '@src/generated/graphql';
+import {
+  GetPlaceCommentListQuery,
+  useCreatePlaceCommentMutation,
+  useDeletePlaceCommentMutation,
+} from '@src/generated/graphql';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Input from '@src/components/common/form/input';
 import Button from '@src/components/common/form/button';
@@ -9,8 +13,9 @@ import useCurrentUser from '@src/hooks/auth/use-current-user';
 import Modal from '@src/components/modal/modal';
 import { GET_PLACE_COMMENT_LIST_QUERY } from '@src/graphql/place/get-place-comment-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/pro-light-svg-icons';
+import { faEllipsis } from '@fortawesome/pro-light-svg-icons';
 import Dropdown from '@src/components/common/form/dropdown';
+import LoadingScreen from '@src/components/common/loading/loading-screen';
 
 const cx = classNames.bind(styles);
 
@@ -19,12 +24,48 @@ interface Props {
   total: number;
   comments: GetPlaceCommentListQuery['getPlaceCommentList']['items'];
   commentInputRef?: RefObject<HTMLInputElement>;
+  onDelete?: (commentId: number) => void;
 }
 
-function PlaceComment({ placeId, total, comments, commentInputRef }: Props) {
+function PlaceComment({ placeId, total, comments, commentInputRef, onDelete }: Props) {
   const { currentUser } = useCurrentUser();
   const [createCommentMutation, { loading }] = useCreatePlaceCommentMutation();
+  const [deleteCommentMutation, { loading: deleteLoading }] = useDeletePlaceCommentMutation();
   const [content, setContent] = useState('');
+
+  console.log('comment total', total);
+
+  const handleDeleteComment = async (commentId: number) => {
+    const isOk = await Modal.confirm('댓글을 삭제하시겠습니까?');
+    if (!isOk) return;
+
+    try {
+      await deleteCommentMutation({
+        variables: { input: { id: commentId } },
+        update: (cache, { data }) => {
+          if (!data?.deletePlaceComment.isDeleted) return;
+
+          const normalizedCommentId = cache.identify({ __typename: 'PlaceComment', id: commentId });
+          cache.evict({ id: normalizedCommentId });
+          cache.gc();
+
+          const normalizedPlaceId = cache.identify({ __typename: 'Place', id: placeId });
+          cache.modify({
+            id: normalizedPlaceId,
+            fields: {
+              commentCount: (prev: number) => prev - 1,
+            },
+          });
+        },
+      });
+
+      await Modal.alert('댓글이 삭제되었습니다.');
+      onDelete?.(commentId);
+    } catch (error) {
+      console.log(error);
+      await Modal.alert('댓글 삭제에 실패했습니다.');
+    }
+  };
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,6 +119,7 @@ function PlaceComment({ placeId, total, comments, commentInputRef }: Props) {
           <Input
             ref={commentInputRef}
             placeholder="댓글을 입력하세요"
+            max={300}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
@@ -98,15 +140,24 @@ function PlaceComment({ placeId, total, comments, commentInputRef }: Props) {
             <div className={cx('username')}>{comment.account.username}</div>
             <div className={cx('content')}>{comment.content}</div>
           </div>
-          <div className={cx('util')}>
-            <Dropdown menu={[]}>
-              <button type="button">
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </button>
-            </Dropdown>
-          </div>
+
+          {comment.account.id === currentUser?.id && (
+            <div className={cx('util')}>
+              <Dropdown
+                menu={[
+                  { key: 'DELETE', label: '삭제', onClick: () => handleDeleteComment(comment.id) },
+                ]}
+              >
+                <button type="button" className={cx('util_button')}>
+                  <FontAwesomeIcon icon={faEllipsis} />
+                </button>
+              </Dropdown>
+            </div>
+          )}
         </div>
       ))}
+
+      {deleteLoading && <LoadingScreen />}
     </div>
   );
 }
