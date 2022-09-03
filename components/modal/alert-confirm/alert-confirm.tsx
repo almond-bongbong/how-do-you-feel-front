@@ -34,6 +34,17 @@ function showModal(
       }
     };
 
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape') {
+          e.stopPropagation();
+          handleClose(false);
+        }
+      },
+      { once: true, capture: true },
+    );
+
     lockBodyScroll();
     root.render(
       <div className={cx('container')}>
