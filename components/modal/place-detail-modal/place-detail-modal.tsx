@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
 import {
   GetPlaceCommentListQuery,
+  GetPlaceCommentListQueryVariables,
   useGetPlaceCommentListLazyQuery,
   useGetPlaceLazyQuery,
 } from '@src/generated/graphql';
@@ -11,6 +12,8 @@ import PlaceCard from '@src/components/place/place-card';
 import { useApolloClient } from '@apollo/client';
 import PlaceComment from '@src/components/place/place-comment';
 import LoadingBlock from '@src/components/common/loading/loading-block';
+import { COMMENT_LIMIT } from '@src/constants/place';
+import { GET_PLACE_COMMENT_LIST_QUERY } from '@src/graphql/place/get-place-comment-list';
 
 const cx = classNames.bind(styles);
 
@@ -20,19 +23,14 @@ interface Props {
   onClose: () => void;
 }
 
-const COMMENT_LIMIT = 2;
-
 function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   const apollo = useApolloClient();
   const [getPlaceQuery, { data, loading }] = useGetPlaceLazyQuery();
-  const [getPlaceCommentListQuery, { data: commentData, fetchMore }] =
+  const [getPlaceCommentListQuery, { data: commentData, fetchMore: fetchMoreComments }] =
     useGetPlaceCommentListLazyQuery();
   const commentInputRef = useRef<HTMLInputElement>(null);
-  const [moreComments, setMoreComments] = useState<
-    GetPlaceCommentListQuery['getPlaceCommentList']['items']
-  >([]);
   const place = data?.getPlace;
-  const comments = commentData?.getPlaceCommentList.items.concat(moreComments) || [];
+  const comments = commentData?.getPlaceCommentList;
 
   useEffect(() => {
     if (!placeId) return;
@@ -56,17 +54,29 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   };
 
   const handleClickMore = async () => {
-    const { data } = await fetchMore({
+    if (!comments) return;
+
+    const { data } = await fetchMoreComments({
       variables: {
         input: {
           placeId,
-          sinceId: comments[comments.length - 1].id,
+          sinceId: comments.items[comments.items.length - 1].id,
           offset: 1,
           limit: COMMENT_LIMIT,
         },
       },
     });
-    setMoreComments((prev) => [...prev, ...data.getPlaceCommentList.items]);
+
+    apollo.writeQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>({
+      query: GET_PLACE_COMMENT_LIST_QUERY,
+      variables: { input: { placeId, limit: COMMENT_LIMIT } },
+      data: {
+        getPlaceCommentList: {
+          ...data.getPlaceCommentList,
+          items: [...comments.items, ...data.getPlaceCommentList.items],
+        },
+      },
+    });
   };
 
   return (
@@ -89,8 +99,8 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       {place && comments && (
         <PlaceComment
           placeId={placeId}
-          total={commentData?.getPlaceCommentList?.total ?? 0}
-          comments={comments}
+          total={comments.total}
+          comments={comments.items}
           commentInputRef={commentInputRef}
           onClickMore={handleClickMore}
         />

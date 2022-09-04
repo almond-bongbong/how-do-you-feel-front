@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/pro-light-svg-icons';
 import Dropdown from '@src/components/common/form/dropdown';
 import LoadingScreen from '@src/components/common/loading/loading-screen';
+import { COMMENT_LIMIT } from '@src/constants/place';
 
 const cx = classNames.bind(styles);
 
@@ -95,6 +96,7 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onC
             variables: {
               input: {
                 placeId,
+                limit: COMMENT_LIMIT,
               },
             },
           },
