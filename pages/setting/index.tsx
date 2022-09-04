@@ -4,7 +4,7 @@ import SettingMenu from '@src/components/setting/setting-menu';
 
 function Setting() {
   return (
-    <Layout title="설정">
+    <Layout title="설정" hasContentType>
       <SettingMenu />
     </Layout>
   );

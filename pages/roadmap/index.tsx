@@ -4,7 +4,7 @@ import RoadmapList from '@src/components/roadmap/roadmap-list';
 
 function Roadmap() {
   return (
-    <Layout title="우리의 로드맵">
+    <Layout title="우리의 로드맵" hasContentType>
       <RoadmapList
         items={[
           {

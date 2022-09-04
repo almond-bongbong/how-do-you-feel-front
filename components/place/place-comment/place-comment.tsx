@@ -34,8 +34,10 @@ function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
   const apollo = useApolloClient();
   const { currentUser } = useCurrentUser();
   const { data, loading, fetchMore } = useGetPlaceCommentListQuery({
+    skip: !placeId,
     variables: { input: { placeId, limit: COMMENT_LIMIT } },
   });
+  // const [comments, setComments] = useState<GetPlaceCommentListQuery['getPlaceCommentList']>(null);
   const [createCommentMutation, { loading: loadingCreate }] = useCreatePlaceCommentMutation();
   const [deleteCommentMutation, { loading: loadingDelete }] = useDeletePlaceCommentMutation();
   const [content, setContent] = useState('');

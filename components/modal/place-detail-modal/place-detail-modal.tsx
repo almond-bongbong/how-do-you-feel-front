@@ -57,7 +57,7 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
           onClickComment={() => commentInputRef.current?.focus()}
         />
       )}
-      {place && <PlaceComment placeId={placeId} commentInputRef={commentInputRef} />}
+      {place && <PlaceComment placeId={place.id} commentInputRef={commentInputRef} />}
     </Modal>
   );
 }

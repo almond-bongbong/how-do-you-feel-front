@@ -106,7 +106,21 @@ function PlaceListItem({ place, onDelete }: Props) {
                 isBookmarked={place.isBookmarked}
                 bookmarkCount={place.bookmarkCount}
               />
-              <PlaceCommentButton commentCount={place.commentCount} />
+              <PlaceCommentButton
+                commentCount={place.commentCount}
+                onClick={() => {
+                  router.push(
+                    {
+                      query: {
+                        ...router.query,
+                        placeId: place.id,
+                      },
+                    },
+                    `/place/${place.id}`,
+                    { shallow: true, scroll: false },
+                  );
+                }}
+              />
             </div>
 
             {place.account.id === currentUser?.id && (

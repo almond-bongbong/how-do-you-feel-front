@@ -17,7 +17,13 @@ function PlaceDetail() {
 
   return (
     <div className={cx('container')}>
-      {place && <PlaceCard place={place} onClickComment={() => commentInputRef.current?.focus()} />}
+      {place && (
+        <PlaceCard
+          place={place}
+          onClickComment={() => commentInputRef.current?.focus()}
+          onDelete={() => router.push('/')}
+        />
+      )}
       {place && <PlaceComment placeId={id} commentInputRef={commentInputRef} />}
     </div>
   );

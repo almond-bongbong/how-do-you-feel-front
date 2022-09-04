@@ -8,7 +8,7 @@ import PlaceDetail from '@src/components/place/place-detail';
 
 function Place() {
   return (
-    <Layout>
+    <Layout hasPrevButton>
       <PlaceDetail />
     </Layout>
   );
