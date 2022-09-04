@@ -3,8 +3,10 @@ import classNames from 'classnames/bind';
 import styles from './place-comment.module.scss';
 import {
   GetPlaceCommentListQuery,
+  GetPlaceCommentListQueryVariables,
   useCreatePlaceCommentMutation,
   useDeletePlaceCommentMutation,
+  useGetPlaceCommentListQuery,
 } from '@src/generated/graphql';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Input from '@src/components/common/form/input';
@@ -17,23 +19,54 @@ import { faEllipsis } from '@fortawesome/pro-light-svg-icons';
 import Dropdown from '@src/components/common/form/dropdown';
 import LoadingScreen from '@src/components/common/loading/loading-screen';
 import { COMMENT_LIMIT } from '@src/constants/place';
+import { useApolloClient } from '@apollo/client';
+import LoadingBlock from '@src/components/common/loading/loading-block';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   placeId: number;
-  total: number;
-  comments: GetPlaceCommentListQuery['getPlaceCommentList']['items'];
   commentInputRef?: RefObject<HTMLInputElement>;
   onDelete?: (commentId: number) => void;
-  onClickMore?: () => void;
 }
 
-function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onClickMore }: Props) {
+function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
+  const apollo = useApolloClient();
   const { currentUser } = useCurrentUser();
-  const [createCommentMutation, { loading }] = useCreatePlaceCommentMutation();
-  const [deleteCommentMutation, { loading: deleteLoading }] = useDeletePlaceCommentMutation();
+  const { data, loading, fetchMore } = useGetPlaceCommentListQuery({
+    variables: { input: { placeId, limit: COMMENT_LIMIT } },
+  });
+  const [createCommentMutation, { loading: loadingCreate }] = useCreatePlaceCommentMutation();
+  const [deleteCommentMutation, { loading: loadingDelete }] = useDeletePlaceCommentMutation();
   const [content, setContent] = useState('');
+  const total = data?.getPlaceCommentList.total ?? 0;
+  const comments = data?.getPlaceCommentList.items ?? [];
+
+  const handleClickMore = async () => {
+    if (!comments) return;
+
+    const { data } = await fetchMore({
+      variables: {
+        input: {
+          placeId,
+          sinceId: comments[comments.length - 1].id,
+          offset: 1,
+          limit: COMMENT_LIMIT,
+        },
+      },
+    });
+
+    apollo.writeQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>({
+      query: GET_PLACE_COMMENT_LIST_QUERY,
+      variables: { input: { placeId, limit: COMMENT_LIMIT } },
+      data: {
+        getPlaceCommentList: {
+          ...data.getPlaceCommentList,
+          items: [...comments, ...data.getPlaceCommentList.items],
+        },
+      },
+    });
+  };
 
   const handleDeleteComment = async (commentId: number) => {
     const isOk = await Modal.confirm('댓글을 삭제하시겠습니까?');
@@ -42,12 +75,20 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onC
     try {
       await deleteCommentMutation({
         variables: { input: { id: commentId } },
-        update: (cache, { data }) => {
-          if (!data?.deletePlaceComment.isDeleted) return;
+        update: (cache, { data: deleteData }) => {
+          if (!deleteData?.deletePlaceComment.isDeleted) return;
 
-          const normalizedCommentId = cache.identify({ __typename: 'PlaceComment', id: commentId });
-          cache.evict({ id: normalizedCommentId });
-          cache.gc();
+          apollo.writeQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>({
+            query: GET_PLACE_COMMENT_LIST_QUERY,
+            variables: { input: { placeId, limit: COMMENT_LIMIT } },
+            data: {
+              getPlaceCommentList: {
+                ...(data?.getPlaceCommentList || {}),
+                total: total - 1,
+                items: comments.filter((comment) => comment.id !== commentId),
+              },
+            },
+          });
 
           const normalizedPlaceId = cache.identify({ __typename: 'Place', id: placeId });
           cache.modify({
@@ -110,6 +151,8 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onC
     }
   };
 
+  if (loading) return <LoadingBlock />;
+
   return (
     <div className={cx('container')}>
       <form className={cx('form')} onSubmit={handleSubmitComment}>
@@ -126,7 +169,7 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onC
           />
         </div>
         <div className={cx('button_wrap')}>
-          <Button type="submit" theme="primary-line" loading={loading}>
+          <Button type="submit" theme="primary-line" loading={loadingCreate}>
             등록
           </Button>
         </div>
@@ -159,12 +202,12 @@ function PlaceComment({ placeId, total, comments, commentInputRef, onDelete, onC
       ))}
 
       {total > comments.length && (
-        <button type="button" onClick={onClickMore}>
+        <button type="button" onClick={handleClickMore}>
           더보기
         </button>
       )}
 
-      {deleteLoading && <LoadingScreen />}
+      {loadingDelete && <LoadingScreen />}
     </div>
   );
 }
