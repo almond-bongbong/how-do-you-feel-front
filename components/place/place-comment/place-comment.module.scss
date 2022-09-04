@@ -79,3 +79,28 @@
     }
   }
 }
+
+.more_button {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px 0;
+  border-top: 1px dashed #eee;
+  color: #666;
+  font-size: 0;
+
+  svg {
+    font-size: 20px;
+    transform: rotate(0deg);
+    transition: all 0.3s ease-in-out;
+  }
+
+  &:hover,
+  &:focus {
+    color: $primary-color;
+
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}

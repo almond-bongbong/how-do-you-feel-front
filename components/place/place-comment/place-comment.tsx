@@ -15,7 +15,7 @@ import useCurrentUser from '@src/hooks/auth/use-current-user';
 import Modal from '@src/components/modal/modal';
 import { GET_PLACE_COMMENT_LIST_QUERY } from '@src/graphql/place/get-place-comment-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis } from '@fortawesome/pro-light-svg-icons';
+import { faEllipsis, faPlus } from '@fortawesome/pro-light-svg-icons';
 import Dropdown from '@src/components/common/form/dropdown';
 import LoadingScreen from '@src/components/common/loading/loading-screen';
 import { COMMENT_LIMIT } from '@src/constants/place';
@@ -110,7 +110,7 @@ function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!content) return;
+    if (!content || !currentUser) return;
 
     try {
       await createCommentMutation({
@@ -120,7 +120,9 @@ function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
             content,
           },
         },
-        update: (cache) => {
+        update: (cache, result) => {
+          if (!result.data?.createPlaceComment) return;
+
           cache.modify({
             id: cache.identify({
               __typename: 'Place',
@@ -130,18 +132,32 @@ function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
               commentCount: (prev) => prev + 1,
             },
           });
-        },
-        refetchQueries: [
-          {
+
+          apollo.writeQuery<GetPlaceCommentListQuery, GetPlaceCommentListQueryVariables>({
             query: GET_PLACE_COMMENT_LIST_QUERY,
-            variables: {
-              input: {
-                placeId,
-                limit: COMMENT_LIMIT,
+            variables: { input: { placeId, limit: COMMENT_LIMIT } },
+            data: {
+              getPlaceCommentList: {
+                ...(data?.getPlaceCommentList || {}),
+                total: total + 1,
+                items: [
+                  {
+                    __typename: 'PlaceComment',
+                    id: result.data.createPlaceComment.id,
+                    content,
+                    account: {
+                      __typename: 'Account',
+                      id: currentUser.id,
+                      username: currentUser.username,
+                      profileImage: currentUser.profileImage,
+                    },
+                  },
+                  ...(comments || []),
+                ],
               },
             },
-          },
-        ],
+          });
+        },
       });
     } catch (error) {
       console.log(error);
@@ -202,8 +218,8 @@ function PlaceComment({ placeId, commentInputRef, onDelete }: Props) {
       ))}
 
       {total > comments.length && (
-        <button type="button" onClick={handleClickMore}>
-          더보기
+        <button type="button" className={cx('more_button')} onClick={handleClickMore}>
+          <FontAwesomeIcon icon={faPlus} title="더보기" />
         </button>
       )}
 
