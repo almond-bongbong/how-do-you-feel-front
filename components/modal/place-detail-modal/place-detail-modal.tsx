@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Modal from '@src/components/modal/modal';
 import classNames from 'classnames/bind';
 import styles from './place-detail-modal.module.scss';
-import { GetPlaceQuery, useGetPlaceLazyQuery } from '@src/generated/graphql';
+import { useGetPlaceLazyQuery } from '@src/generated/graphql';
 import PlaceCard from '@src/components/place/place-card';
 import { useApolloClient } from '@apollo/client';
 import PlaceComment from '@src/components/place/place-comment';
@@ -18,17 +18,16 @@ interface Props {
 
 function PlaceDetailModal({ visible, placeId, onClose }: Props) {
   const apollo = useApolloClient();
-  const [getPlaceQuery, { loading }] = useGetPlaceLazyQuery();
-  const [place, setPlace] = useState<GetPlaceQuery['getPlace'] | null>(null);
+  const [getPlaceQuery, { data, loading }] = useGetPlaceLazyQuery();
+  // const [place, setPlace] = useState<GetPlaceQuery['getPlace'] | null>(null);
   const commentInputRef = useRef<HTMLInputElement>(null);
+  const place = data?.getPlace;
 
   useEffect(() => {
     if (!placeId) return;
 
     getPlaceQuery({
       variables: { input: { id: placeId } },
-    }).then(({ data }) => {
-      setPlace(data?.getPlace || null);
     });
   }, [placeId, getPlaceQuery]);
 
@@ -50,7 +49,6 @@ function PlaceDetailModal({ visible, placeId, onClose }: Props) {
       closeButtonClassName={cx('modal_close_button')}
       contentClassName={cx('place_modal')}
       onClose={onClose}
-      // onAfterClose={() => setPlace(null)}
     >
       {loading && <LoadingBlock />}
       {place && (
