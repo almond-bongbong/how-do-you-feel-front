@@ -24,6 +24,7 @@ interface Props {
   closeButtonClassName?: string;
   center?: boolean;
   onClose?: () => void;
+  onAfterClose?: () => void;
 }
 
 function Modal({
@@ -38,6 +39,7 @@ function Modal({
   closeButtonClassName,
   center = false,
   onClose,
+  onAfterClose,
 }: Props) {
   const id = useId();
   const modalBodyRef = useRef<HTMLDivElement | null>(null);
@@ -66,10 +68,7 @@ function Modal({
     if (visible) {
       setTimeout(() => setLocalVisible(visible), 16);
     }
-    if (!visible && localVisible) {
-      setTimeout(() => setLocalVisible(visible), 300);
-    }
-  }, [visible, localVisible]);
+  }, [visible]);
 
   useEffect(() => {
     if (isServer()) return;
@@ -87,13 +86,22 @@ function Modal({
     };
   }, [display]);
 
+  const handleClose = useCallback(() => {
+    onClose?.();
+
+    setTimeout(() => {
+      setLocalVisible(false);
+      onAfterClose?.();
+    }, 300);
+  }, [onClose, onAfterClose]);
+
   const keydownHandler = useCallback(
     (e: KeyboardEvent) => {
       if (isEscClosable && getLastModalId() === id && e.code === 'Escape') {
-        onClose?.();
+        handleClose();
       }
     },
-    [isEscClosable, id, onClose],
+    [isEscClosable, id, handleClose],
   );
 
   useEffect(() => {
@@ -106,8 +114,8 @@ function Modal({
   }, [visible, keydownHandler]);
 
   const handleClickMask = useCallback(() => {
-    if (isMaskClosable) onClose?.();
-  }, [isMaskClosable, onClose]);
+    if (isMaskClosable) handleClose();
+  }, [isMaskClosable, handleClose]);
 
   return (
     <Portal id={MODAL_PORTAL_ID}>
@@ -138,7 +146,7 @@ function Modal({
               <button
                 type="button"
                 className={cx('close_button', closeButtonClassName)}
-                onClick={onClose}
+                onClick={handleClose}
               >
                 <FontAwesomeIcon icon={faXmark} title="닫기" />
               </button>

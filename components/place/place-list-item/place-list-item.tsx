@@ -36,6 +36,7 @@ function PlaceListItem({ place, onDelete }: Props) {
   const [visibleImage, openImage, closeImage, initialImageIndex] = useModal<number>();
   const address = place.address && [place.address, place.buildingName].join(' ');
   const imageUrls = place.images?.map((image) => image.url) || [];
+  const visibleDetailModal = Number(router.query.placeId) === place.id;
 
   return (
     <>
@@ -148,8 +149,8 @@ function PlaceListItem({ place, onDelete }: Props) {
       />
 
       <PlaceDetailModal
-        visible={Number(router.query.placeId) === place.id}
-        placeId={Number(router.query.placeId)}
+        visible={visibleDetailModal}
+        placeId={visibleDetailModal ? Number(router.query.placeId) : undefined}
         onClose={() =>
           router.push(
             {
