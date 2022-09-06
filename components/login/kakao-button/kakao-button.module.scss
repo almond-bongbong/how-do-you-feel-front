@@ -2,9 +2,23 @@
   display: block;
   width: 100%;
   height: 40px;
-  padding: 0 24px 0 52px;
   border-radius: 4px;
-  background: url(../../../images/login/kakao-logo.png) no-repeat 20px center #fee500;
+  background-color: #fee500;
   background-size: 20px;
+  text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: darken(#fee500, 1%);
+  }
+}
+
+.logo {
+  width: 20px;
+  vertical-align: bottom;
+}
+
+.text {
+  margin-left: 10px;
+  vertical-align: middle;
 }

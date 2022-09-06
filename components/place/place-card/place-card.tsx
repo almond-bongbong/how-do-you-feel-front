@@ -16,6 +16,7 @@ import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
 import { GetPlaceQuery } from '@src/generated/graphql';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
 import PlaceCommentButton from '@src/components/place/place-comment-button';
+import ImageViewModal from '@src/components/modal/image-view-modal';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,8 @@ interface Props {
 
 function PlaceCard({ place, onDelete, onClickComment }: Props) {
   const [visibleMapModal, openMapModal, closeMapModal] = useModal();
+  const [visibleImageViewModal, openImageViewModal, closeImageViewModal, initialImageIndex] =
+    useModal<number>();
   const isThisYear = dayjs().year() === dayjs(place.createdAt).year();
   const dateText = isThisYear
     ? dayjs(place.createdAt).format('M월 D일 HH:mm')
@@ -60,10 +63,12 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
 
       <div className={cx('image_list')}>
         <Swiper pagination modules={[Pagination]}>
-          {place.images?.map(({ url }) => (
+          {place.images?.map(({ url }, i) => (
             <SwiperSlide key={url}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt="image" />
+              <button type="button" onClick={() => openImageViewModal(i)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt="image" />
+              </button>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -92,6 +97,13 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
         y={place.latitude}
         address={place.address}
         onClose={closeMapModal}
+      />
+
+      <ImageViewModal
+        visible={visibleImageViewModal}
+        initialIndex={initialImageIndex}
+        images={place.images?.map((image) => image.url) ?? []}
+        onClose={closeImageViewModal}
       />
     </div>
   );

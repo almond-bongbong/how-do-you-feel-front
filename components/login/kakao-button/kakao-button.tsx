@@ -2,8 +2,9 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './kakao-button.module.scss';
 import { v4 as uuidv4 } from 'uuid';
-import { AUTH_STATE_KEY } from '../../../constants/keys';
 import qs from 'query-string';
+import { AUTH_STATE_KEY } from '@src/constants/keys';
+import kakaoLogo from '@src/images/login/kakao-logo.png';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +30,9 @@ function KakaoButton({ text }: Props) {
 
   return (
     <button type="button" className={cx('btn_kakao')} onClick={handleClick}>
-      {text}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={kakaoLogo.src} alt="카카오 로고" className={cx('logo')} />
+      <span className={cx('text')}>{text}</span>
     </button>
   );
 }
