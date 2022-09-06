@@ -1,3 +1,9 @@
+@import 'styles/mixin';
+
+.portable_item {
+  display: none;
+}
+
 .aside {
   position: fixed;
   top: 0;
@@ -6,7 +12,7 @@
   width: 280px;
   padding: 30px 30px 20px 30px;
 
-  h1 {
+  .logo {
     margin-bottom: 50px;
   }
 }
@@ -17,12 +23,8 @@
 }
 
 .navigation {
-  margin-bottom: 40px;
-
-  li {
-    + li {
-      margin-top: 26px;
-    }
+  li + li {
+    margin-top: 26px;
   }
 
   a {
@@ -38,5 +40,64 @@
       width: 24px;
       margin-right: 18px;
     }
+  }
+}
+
+.write_button {
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 1200px) {
+  .aside {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    .pc_item {
+      display: none;
+    }
+
+    .portable_item {
+      display: block;
+    }
+  }
+
+  .logo {
+    @include hidden;
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction: row;
+
+    li {
+      flex: 1;
+      text-align: center;
+    }
+
+    li + li {
+      margin-top: 0;
+    }
+
+    a {
+      padding: 8px 0;
+      font-size: 12px;
+
+      svg {
+        display: block;
+        margin: 0 auto 8px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .write_button {
+    display: none;
   }
 }

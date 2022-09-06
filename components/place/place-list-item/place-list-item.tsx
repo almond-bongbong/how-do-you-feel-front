@@ -44,7 +44,11 @@ function PlaceListItem({ place, onDelete }: Props) {
         <div className={cx('profile_image')}>
           <Link href={`/profile/${place.account.id}`}>
             <a>
-              <ProfileImage size={48} src={place.account.profileImage?.url} />
+              <ProfileImage
+                size={48}
+                src={place.account.profileImage?.url}
+                className={cx('photo')}
+              />
             </a>
           </Link>
         </div>

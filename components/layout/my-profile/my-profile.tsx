@@ -9,7 +9,11 @@ import Modal from '@src/components/modal/modal';
 
 const cx = classNames.bind(styles);
 
-function MyProfile() {
+interface Props {
+  className?: string;
+}
+
+function MyProfile({ className }: Props) {
   const { currentUser, logout } = useCurrentUser();
 
   const handleClickLogout = async () => {
@@ -20,7 +24,7 @@ function MyProfile() {
   if (!currentUser) return null;
 
   return (
-    <div className={cx('my_profile')}>
+    <div className={cx('my_profile', className)}>
       <div className={cx('photo')}>
         <ProfileImage
           src={currentUser.profileImage?.url}
