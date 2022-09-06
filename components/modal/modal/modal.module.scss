@@ -91,3 +91,13 @@ $opacity-transition: opacity 0.3s ease-in-out;
     opacity: 1;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .content {
+    margin: 50px auto;
+  }
+
+  .close_button {
+    padding: 6px;
+  }
+}

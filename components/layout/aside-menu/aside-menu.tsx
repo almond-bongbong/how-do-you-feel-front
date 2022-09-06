@@ -64,7 +64,7 @@ function AsideMenu() {
         </nav>
 
         <Button
-          className={cx('write_button')}
+          className={cx('write_button', 'pc_item')}
           theme="primary"
           size="lg"
           onClick={() => router.push('/place/write')}
