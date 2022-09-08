@@ -130,4 +130,10 @@ $content-max-lines: 4;
       max-height: 100%;
     }
   }
+
+  .content_area {
+    .owner_button_area {
+      opacity: 1;
+    }
+  }
 }

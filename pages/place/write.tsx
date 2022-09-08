@@ -4,7 +4,7 @@ import WritePlaceForm from '@src/components/place/write-place-form';
 
 function Write() {
   return (
-    <Layout>
+    <Layout title="작성하기">
       <WritePlaceForm />
     </Layout>
   );
