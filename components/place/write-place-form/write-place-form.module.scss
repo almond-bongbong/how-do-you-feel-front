@@ -104,3 +104,15 @@
 .submit_button {
   width: 80px;
 }
+
+@media screen and (max-width: 768px) {
+  .image_area {
+    .remove_button {
+      top: 5px;
+      right: 5px;
+      width: 26px;
+      height: 26px;
+      font-size: 16px;
+    }
+  }
+}
