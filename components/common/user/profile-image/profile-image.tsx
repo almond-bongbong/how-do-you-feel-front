@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import dummyProfilePhoto from '@src/images/user/dummy-profile-photo.png';
 import classNames from 'classnames/bind';
 import styles from './profile-image.module.scss';
@@ -30,7 +30,7 @@ function ProfileImage({ src, alt, size, className }: Props) {
         src={src && !hasError ? src : dummyProfilePhoto}
         width={size}
         height={size}
-        alt={alt}
+        alt={alt ?? '프로필 이미지'}
       />
     </div>
   );

@@ -17,6 +17,7 @@ import { GetPlaceQuery } from '@src/generated/graphql';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
 import PlaceCommentButton from '@src/components/place/place-comment-button';
 import ImageViewModal from '@src/components/modal/image-view-modal';
+import { faClock } from '@fortawesome/pro-light-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -44,10 +45,12 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
             <ProfileImage size={44} src={place.account.profileImage?.url} className={cx('photo')} />
             <span className={cx('username')}>{place.account.username}</span>
           </div>
+        </div>
+        <div className={cx('extra')}>
           {place.address && (
             <button
               type="button"
-              className={cx('location')}
+              className={cx('address')}
               disabled={!hasPosition}
               onClick={openMapModal}
             >
@@ -55,9 +58,10 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
               {place.address}
             </button>
           )}
-        </div>
-        <div className={cx('extra')}>
-          <div className={cx('date')}>{dateText}</div>
+          <div className={cx('date')}>
+            <FontAwesomeIcon icon={faClock} />
+            {dateText}
+          </div>
         </div>
       </div>
 
