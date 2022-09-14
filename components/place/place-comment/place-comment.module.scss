@@ -68,7 +68,8 @@
     text-align: center;
     transition: all 0.3s ease-in-out;
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: $primary-color;
       background-color: rgb($primary-color, 0.1);
     }
@@ -102,5 +103,19 @@
     svg {
       transform: rotate(180deg);
     }
+  }
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .container {
+    padding: 20px;
+  }
+
+  .button_wrap {
+    flex: 0 0 60px;
+  }
+
+  .info {
+    margin-left: 10px;
   }
 }

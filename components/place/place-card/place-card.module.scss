@@ -56,9 +56,16 @@
 }
 
 .image_list {
+  font-size: 0;
+
+  button {
+    display: block;
+    width: 100%;
+  }
+
   img {
     display: block;
-    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -79,7 +86,7 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $mobile-breakpoint) {
   .container {
     padding: 20px 0;
   }
@@ -99,5 +106,13 @@
 
   .address {
     margin-top: 20px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .button_area {
+    padding: 0 20px;
   }
 }

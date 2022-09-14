@@ -2,10 +2,11 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './setting-menu.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKey, faUnlock } from '@fortawesome/pro-light-svg-icons';
+import { faKey, faRoad, faUnlock } from '@fortawesome/pro-light-svg-icons';
 import Modal from '@src/components/modal/modal';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const cx = classNames.bind(styles);
 
@@ -44,6 +45,19 @@ function SettingMenu() {
                 <FontAwesomeIcon icon={faUnlock} />
                 로그아웃
               </button>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <em>소개</em>
+          <ul>
+            <li>
+              <Link href="/roadmap">
+                <a>
+                  <FontAwesomeIcon icon={faRoad} />
+                  로드맵
+                </a>
+              </Link>
             </li>
           </ul>
         </li>

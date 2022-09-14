@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 $footer-height: 34px;
 
 .container {
@@ -70,7 +72,7 @@ $footer-height: 34px;
   text-align: center;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $mobile-breakpoint) {
   .container {
     display: block;
     position: relative;

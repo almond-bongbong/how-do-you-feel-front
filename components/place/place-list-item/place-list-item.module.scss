@@ -113,7 +113,7 @@ $content-max-lines: 4;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $mobile-breakpoint) {
   .container {
     padding: 24px 20px;
   }

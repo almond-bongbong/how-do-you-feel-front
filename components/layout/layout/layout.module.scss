@@ -1,3 +1,7 @@
+@import 'styles/variables';
+
+$header-height: 60px;
+
 .content {
   position: relative;
   width: 1000px;
@@ -18,26 +22,30 @@
 }
 
 .header {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
   position: relative;
-  padding: 25px 30px 15px;
+  height: $header-height;
+  padding: 18px 30px 17px;
   border-bottom: 1px dashed #ebebeb;
 }
 
+.title {
+  display: inline-block;
+}
+
 .prev_button {
-  flex: 0 0 auto;
-  margin-left: -10px;
+  display: inline-block;
+  margin: -4px 0 0 -10px;
   padding: 4px 10px;
   font-size: 0;
 
   svg {
-    font-size: 17px;
+    font-size: 18px;
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: $tablet-breakpoint) {
+  $header-height: 50px;
+
   .content {
     width: auto;
     padding-left: 0;
@@ -49,7 +57,26 @@
   }
 
   .header {
-    padding: 20px 20px 15px;
-    border-bottom: 1px dashed #ebebeb;
+    height: $header-height;
+    padding: 13px 20px 12px;
+  }
+
+  .has_content {
+    .article {
+      padding: 20px 20px 80px;
+    }
+  }
+
+  .fixed {
+    height: $header-height;
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: #fff;
+    }
   }
 }

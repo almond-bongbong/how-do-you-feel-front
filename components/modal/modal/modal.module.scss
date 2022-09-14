@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 $opacity-transition: opacity 0.3s ease-in-out;
 
 .mask {
@@ -92,7 +94,7 @@ $opacity-transition: opacity 0.3s ease-in-out;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $mobile-breakpoint) {
   .content {
     margin: 50px auto;
   }
