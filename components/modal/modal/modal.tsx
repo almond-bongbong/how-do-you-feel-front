@@ -67,6 +67,8 @@ function Modal({
   useEffect(() => {
     if (visible) {
       setTimeout(() => setLocalVisible(visible), 16);
+    } else {
+      setTimeout(() => setLocalVisible(visible), 300);
     }
   }, [visible]);
 
@@ -90,7 +92,7 @@ function Modal({
     onClose?.();
 
     setTimeout(() => {
-      setLocalVisible(false);
+      // setLocalVisible(false);
       onAfterClose?.();
     }, 300);
   }, [onClose, onAfterClose]);
