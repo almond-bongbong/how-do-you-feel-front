@@ -1,12 +1,17 @@
-.list {
+@import 'styles/variables';
+
+.container {
   overflow: hidden;
-  margin: -0.5px;
+}
+
+.list {
+  margin: -1px;
 }
 
 .item_wrap {
   float: left;
   width: 33.33333333%;
-  padding: 0.5px;
+  padding: 1px;
 }
 
 .item {
@@ -55,4 +60,10 @@
   left: 0;
   text-align: left;
   text-indent: -9999px;
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .item_wrap {
+    width: 50%;
+  }
 }

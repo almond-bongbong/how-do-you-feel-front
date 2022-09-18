@@ -67,8 +67,11 @@ $content-max-lines: 4;
 .location {
   display: block;
   margin-top: 10px;
+  padding-left: 19px;
   font-size: 14px;
   color: $primary-color;
+  text-align: left;
+  text-indent: -19px;
 
   &:disabled {
     cursor: default;

@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .container {
   padding: 30px 30px;
 }
@@ -5,4 +7,10 @@
 .loading {
   padding: 50px 0;
   text-align: center;
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .container {
+    padding: 25px 0;
+  }
 }
