@@ -4,6 +4,7 @@ export const GET_PLACE_QUERY = gql`
   query GetPlace($input: GetPlaceInput!) {
     getPlace(input: $input) {
       id
+      name
       content
       images {
         key

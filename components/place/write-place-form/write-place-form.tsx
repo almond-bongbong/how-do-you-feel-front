@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import styles from './write-place-form.module.scss';
 import Textarea from '@src/components/common/form/textarea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFeatherPointed } from '@fortawesome/pro-solid-svg-icons';
 import ImageUploadButton from '@src/components/common/form/image-upload-button';
 import { faImage, faLocationPlus, faXmark } from '@fortawesome/pro-light-svg-icons';
 import Button from '@src/components/common/form/button';
@@ -17,6 +16,8 @@ import { useRouter } from 'next/router';
 import StaticMap from '@src/components/common/map/static-map';
 import { ReactSortable } from 'react-sortablejs';
 import { v4 as uuidv4 } from 'uuid';
+import FormField from '@src/components/common/form/form-field';
+import Input from '@src/components/common/form/input';
 
 const cx = classNames.bind(styles);
 const MAX_IMAGES_COUNT = 5;
@@ -99,15 +100,20 @@ function WritePlaceForm() {
 
   return (
     <div className={cx('write_form')}>
-      <FontAwesomeIcon icon={faFeatherPointed} className={cx('icon_write')} />
-      <Textarea
-        value={content}
-        id="content"
-        row={18}
-        placeholder="좋은곳은 함께!"
-        max={1000}
-        onChange={(e) => setContent(e.target.value)}
-      />
+      <FormField label="장소명">
+        <Input value="" placeholder="장소명을 알려주세요" max={50} onChange={console.log} />
+      </FormField>
+
+      <FormField label="내용">
+        <Textarea
+          value={content}
+          id="content"
+          row={18}
+          placeholder="좋은곳은 함께 나누어요"
+          max={1000}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      </FormField>
 
       {hasImage && (
         <ReactSortable<Image> className={cx('image_area')} list={images} setList={setImages}>
@@ -159,7 +165,7 @@ function WritePlaceForm() {
           loading={loading}
           onClick={handleSubmit}
         >
-          확인
+          저장
         </Button>
       </div>
     </div>

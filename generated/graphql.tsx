@@ -70,6 +70,7 @@ export type CreatePlaceInput = {
   images?: InputMaybe<Array<ImageInput>>;
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
+  name: Scalars['String'];
 };
 
 export type DeletePlaceCommentInput = {
@@ -306,6 +307,7 @@ export type Place = {
   latitude?: Maybe<Scalars['Float']>;
   likeCount: Scalars['Int'];
   longitude?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
   updatedAt: Scalars['Float'];
 };
 
@@ -530,7 +532,7 @@ export type GetPlaceQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'Place', id: number, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, commentCount: number, createdAt: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } } };
+export type GetPlaceQuery = { __typename?: 'Query', getPlace: { __typename?: 'Place', id: number, name: string, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, commentCount: number, createdAt: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } } };
 
 export type TogglePlaceBookmarkMutationVariables = Exact<{
   input: TogglePlaceBookmarkInput;
@@ -1174,6 +1176,7 @@ export const GetPlaceDocument = gql`
     query GetPlace($input: GetPlaceInput!) {
   getPlace(input: $input) {
     id
+    name
     content
     images {
       key

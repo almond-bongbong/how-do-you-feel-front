@@ -1,4 +1,12 @@
+@import 'styles/variables';
+
 .title {
   font-size: 18px;
   line-height: 28px;
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .title {
+    font-size: 16px;
+  }
 }

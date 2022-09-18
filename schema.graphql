@@ -137,6 +137,7 @@ type Place {
     latitude: Float
     likeCount: Int!
     longitude: Float
+    name: String!
     updatedAt: Float!
 }
 
@@ -214,6 +215,7 @@ input CreatePlaceInput {
     images: [ImageInput!]
     latitude: Float
     longitude: Float
+    name: String!
 }
 
 input DeletePlaceCommentInput {
@@ -236,17 +238,20 @@ input GetBookmarkPlaceListInput {
     accountId: String!
     limit: Int = 10
     offset: Int = 0
+    sinceId: Int
 }
 
 input GetMyLikePlaceListInput {
     limit: Int = 10
     offset: Int = 0
+    sinceId: Int
 }
 
 input GetPlaceCommentListInput {
     limit: Int = 10
     offset: Int = 0
     placeId: Int!
+    sinceId: Int
 }
 
 input GetPlaceInput {
@@ -258,6 +263,7 @@ input GetPlaceListInput {
     bookmarkedAccountId: String
     limit: Int = 10
     offset: Int = 0
+    sinceId: Int
 }
 
 input GetProfileInput {
