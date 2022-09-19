@@ -12,14 +12,20 @@
 .user {
   font-size: 0;
 
-  .photo {
+  .photo_wrap {
     display: inline-block;
     vertical-align: middle;
+  }
+
+  .photo {
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .username {
     display: inline-block;
     margin-left: 12px;
+    color: $accent-font-color;
     font-size: 18px;
     vertical-align: middle;
   }
@@ -35,7 +41,7 @@
 
 .date {
   margin-left: auto;
-  color: #666;
+  color: #888;
 
   svg {
     margin-right: 6px;
@@ -69,10 +75,17 @@
   }
 }
 
-.content {
+.content_wrap {
   padding: 30px;
   white-space: pre-line;
   line-height: 1.5;
+}
+
+.place_name {
+  margin-bottom: 20px;
+  color: $accent-font-color;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .button_area {
@@ -95,6 +108,17 @@
     padding: 0 20px;
   }
 
+  .user {
+    .photo_wrap {
+      width: 40px;
+      height: 40px;
+    }
+
+    .username {
+      font-size: 16px;
+    }
+  }
+
   .extra {
     flex-direction: column-reverse;
     align-items: flex-start;
@@ -102,14 +126,19 @@
 
   .date {
     margin-left: 0;
+    font-size: 12px;
   }
 
   .address {
     margin-top: 20px;
   }
 
-  .content {
+  .content_wrap {
     padding: 20px;
+  }
+
+  .place_name {
+    font-size: 16px;
   }
 
   .button_area {

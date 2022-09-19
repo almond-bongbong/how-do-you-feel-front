@@ -42,7 +42,13 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
       <div className={cx('info')}>
         <div className={cx('main')}>
           <div className={cx('user')}>
-            <ProfileImage size={44} src={place.account.profileImage?.url} className={cx('photo')} />
+            <div className={cx('photo_wrap')}>
+              <ProfileImage
+                className={cx('photo')}
+                size={44}
+                src={place.account.profileImage?.url}
+              />
+            </div>
             <span className={cx('username')}>{place.account.username}</span>
           </div>
         </div>
@@ -78,7 +84,10 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
         </Swiper>
       </div>
 
-      <div className={cx('content')}>{place.content}</div>
+      <div className={cx('content_wrap')}>
+        <div className={cx('place_name')}>{place.name}</div>
+        <div className={cx('content')}>{place.content}</div>
+      </div>
 
       <div className={cx('button_area')}>
         <div className={cx('interaction_area')}>
