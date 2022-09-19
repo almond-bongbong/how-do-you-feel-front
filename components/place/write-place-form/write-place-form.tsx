@@ -30,6 +30,7 @@ interface Image {
 
 function WritePlaceForm() {
   const router = useRouter();
+  const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [images, setImages] = useState<Image[]>([]);
   const [location, setLocation] = useState<SelectedAddress>();
@@ -73,6 +74,7 @@ function WritePlaceForm() {
       await createPlaceMutation({
         variables: {
           input: {
+            name,
             content,
             images: uploadedImages.map((image) => ({
               key: image.key,
@@ -101,7 +103,12 @@ function WritePlaceForm() {
   return (
     <div className={cx('write_form')}>
       <FormField label="장소명">
-        <Input value="" placeholder="장소명을 알려주세요" max={50} onChange={console.log} />
+        <Input
+          value={name}
+          placeholder="장소명을 알려주세요"
+          max={50}
+          onChange={(e) => setName(e.target.value)}
+        />
       </FormField>
 
       <FormField label="내용">
