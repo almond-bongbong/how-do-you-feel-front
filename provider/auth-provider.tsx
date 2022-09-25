@@ -6,6 +6,7 @@ import { TOKEN_KEY } from '../constants/keys';
 import { useMeQuery } from '../generated/graphql';
 import { authVar } from '../apollo/cache';
 import useCurrentUser from '../hooks/auth/use-current-user';
+import LoadingScreen from '@src/components/common/loading/loading-screen';
 
 interface Props {
   children: ReactNode;
@@ -51,7 +52,7 @@ function AuthProvider({ children, isPrivatePage }: Props): ReactElement {
     }
   }, [token, error]);
 
-  if (isPrivatePage && !isLoggedIn) return <div>Auth loading...</div>;
+  if (isPrivatePage && !isLoggedIn) return <LoadingScreen />;
   return <>{children}</>;
 }
 

@@ -1,11 +1,11 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './layout.module.scss';
-import AsideMenu from '../aside-menu';
 import { useRouter } from 'next/router';
 import PageTitle from '@src/components/common/typography/page-title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/pro-light-svg-icons';
+import AsideMenu from '@src/components/layout/aside-menu';
 
 const cx = classNames.bind(styles);
 
@@ -19,24 +19,19 @@ interface Props {
 function Layout({ children, title, hasPrevButton, hasContentType }: Props) {
   const router = useRouter();
   const headerRef = useRef<HTMLDivElement>(null);
-  // const [isHeaderFixed, setIsHeaderFixed] = useState(false);
   const hasHeader = Boolean(title || hasPrevButton);
+  // const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const header = headerRef.current;
-  //     if (!header) return;
-  //
-  //     const headerHeight = header.clientHeight || 0;
-  //     const headerOffsetTop = header.offsetTop | 0;
-  //     const headerOffsetBottom = headerHeight + headerOffsetTop;
-  //     const scrollY = window.scrollY;
-  //     setIsHeaderFixed(scrollY >= headerOffsetBottom);
-  //   };
-  //
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = headerRef.current;
+      if (!header) return;
+      header.style.transform = `translateY(${window.scrollY}px)`;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className={cx('container')}>
@@ -45,7 +40,11 @@ function Layout({ children, title, hasPrevButton, hasContentType }: Props) {
         <main className={cx('main', { has_content: Boolean(hasContentType) })}>
           {hasHeader && (
             <div className={cx('header_wrap', 'fixed')}>
-              <div className={cx('header')} ref={headerRef}>
+              <div
+                className={cx('header')}
+                ref={headerRef}
+                style={{ transform: `translateY(${scrollY}px)` }}
+              >
                 {hasPrevButton && (
                   <button type="button" className={cx('prev_button')} onClick={router.back}>
                     <FontAwesomeIcon icon={faChevronLeft} />
