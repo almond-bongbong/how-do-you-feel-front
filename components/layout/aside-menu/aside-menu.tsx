@@ -4,7 +4,7 @@ import styles from './aside-menu.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/pro-solid-svg-icons';
-import { faGear, faPencil, faRoad, faUser } from '@fortawesome/pro-light-svg-icons';
+import { faGear, faMap, faPencil, faRoad, faUser } from '@fortawesome/pro-light-svg-icons';
 import Button from '../../common/form/button';
 import MyProfile from '../my-profile';
 import { useRouter } from 'next/router';
@@ -25,6 +25,14 @@ function AsideMenu() {
                 <a>
                   <FontAwesomeIcon icon={faHome} />
                   홈으로
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/map">
+                <a>
+                  <FontAwesomeIcon icon={faMap} />
+                  지도
                 </a>
               </Link>
             </li>
