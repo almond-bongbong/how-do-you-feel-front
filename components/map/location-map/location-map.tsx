@@ -2,32 +2,49 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { loadKakaoMapScript } from '@src/libs/map';
 import classNames from 'classnames/bind';
 import styles from './location-map.module.scss';
+import MapNavigator from '@src/components/map/map-navigator';
+import { getCurrentUserLocation } from '@src/libs/geolocation';
+import MapUtils from '@src/components/map/map-utils';
 
 const cx = classNames.bind(styles);
 
 function LocationMap() {
-  const mapRef = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<kakao.maps.Map>();
+  const isLoadedRef = useRef(false);
 
   const initMap = useCallback(async () => {
-    if (!mapRef.current) return;
+    if (!mapContainerRef.current || isLoadedRef.current || mapRef.current) return;
+    isLoadedRef.current = true;
 
     await loadKakaoMapScript();
-    const container = mapRef.current;
+    const container = mapContainerRef.current;
     const options = {
       center: new window.kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
     };
 
-    const map = new window.kakao.maps.Map(container, options);
+    mapRef.current = new window.kakao.maps.Map(container, options);
   }, []);
 
   useEffect(() => {
     initMap();
   }, [initMap]);
 
+  const moveToCurrentUserLocation = useCallback(async () => {
+    const { longitude, latitude } = await getCurrentUserLocation();
+    mapRef.current?.setCenter(new window.kakao.maps.LatLng(latitude, longitude));
+  }, []);
+
+  useEffect(() => {
+    moveToCurrentUserLocation();
+  }, [moveToCurrentUserLocation]);
+
   return (
     <div>
-      <div id="map" className={cx('map')} ref={mapRef} />
+      <MapNavigator />
+      <MapUtils />
+      <div id="map" className={cx('map')} ref={mapContainerRef} />
     </div>
   );
 }
