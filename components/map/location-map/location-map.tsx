@@ -3,7 +3,7 @@ import { loadKakaoMapScript } from '@src/libs/map';
 import classNames from 'classnames/bind';
 import styles from './location-map.module.scss';
 import MapNavigator from '@src/components/map/map-navigator';
-import { getCurrentUserLocation } from '@src/libs/geolocation';
+import { getCurrentUserLocation, watchUserLocation } from '@src/libs/geolocation';
 import MapUtils from '@src/components/map/map-utils';
 
 const cx = classNames.bind(styles);
@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 function LocationMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<kakao.maps.Map>();
+  const currentLocationMarkerRef = useRef<kakao.maps.CustomOverlay>();
   const isLoadedRef = useRef(false);
 
   const initMap = useCallback(async () => {
@@ -40,10 +41,25 @@ function LocationMap() {
     moveToCurrentUserLocation();
   }, [moveToCurrentUserLocation]);
 
+  useEffect(() => {
+    watchUserLocation((position) => {
+      if (!mapRef.current) return;
+
+      const marker =
+        currentLocationMarkerRef.current ??
+        new window.kakao.maps.CustomOverlay({
+          position: new window.kakao.maps.LatLng(position.latitude, position.longitude),
+          content: `<div class="${cx('current_user')}">현재위치</div>`,
+        });
+
+      marker.setMap(mapRef.current);
+    });
+  }, []);
+
   return (
     <div>
       <MapNavigator />
-      <MapUtils />
+      <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
     </div>
   );

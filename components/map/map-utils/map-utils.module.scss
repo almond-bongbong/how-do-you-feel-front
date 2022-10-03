@@ -1,7 +1,21 @@
+@import 'styles/variables';
+
 .container {
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 10;
+  border: 1px solid $input-border-color;
   background-color: rgba(255, 255, 255, 0.9);
+
+  button {
+    display: block;
+    width: 34px;
+    height: 34px;
+    font-size: 0;
+
+    svg {
+      font-size: 20px;
+    }
+  }
 }

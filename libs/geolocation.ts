@@ -12,3 +12,17 @@ export const getCurrentUserLocation = (): Promise<GeolocationCoordinates> =>
       },
     );
   });
+
+export const watchUserLocation = (callback: (position: GeolocationCoordinates) => void): void => {
+  navigator.geolocation.watchPosition(
+    (position) => {
+      callback(position.coords);
+    },
+    (error) => {
+      console.log(error);
+    },
+    {
+      enableHighAccuracy: true,
+    },
+  );
+};
