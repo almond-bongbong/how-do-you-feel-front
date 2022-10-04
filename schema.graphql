@@ -261,9 +261,11 @@ input GetPlaceInput {
 input GetPlaceListInput {
     accountId: String
     bookmarkedAccountId: String
+    bottomLeftPosition: Position
     limit: Int = 10
     offset: Int = 0
     sinceId: Int
+    topRightPosition: Position
 }
 
 input GetProfileInput {
@@ -273,6 +275,11 @@ input GetProfileInput {
 input ImageInput {
     key: String!
     url: String!
+}
+
+input Position {
+    latitude: Float!
+    longitude: Float!
 }
 
 input SignInInput {

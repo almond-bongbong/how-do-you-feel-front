@@ -23,8 +23,6 @@ function CurrentLocationMarker({ map }: Props) {
           content: `<div class="${cx('marker')}">현재위치</div>`,
         });
 
-      console.log(map);
-
       marker.setMap(map);
     });
   }, [map]);

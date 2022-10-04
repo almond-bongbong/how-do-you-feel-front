@@ -14,11 +14,11 @@ import useCurrentUser from '@src/hooks/auth/use-current-user';
 import MapViewModal from '@src/components/modal/map-view-modal';
 import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 import { useRouter } from 'next/router';
-import { omit } from '@src/libs/util';
 import PlaceLikeButton from '@src/components/place/place-like-button';
 import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
 import PlaceCommentButton from '@src/components/place/place-comment-button';
+import { omit } from '@fxts/core';
 
 const cx = classNames.bind(styles);
 
@@ -158,7 +158,7 @@ function PlaceListItem({ place, onDelete }: Props) {
         onClose={() =>
           router.push(
             {
-              query: omit(router.query, ['placeId']),
+              query: omit(['placeId'], router.query),
               pathname: router.pathname,
             },
             undefined,

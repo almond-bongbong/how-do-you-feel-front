@@ -6,6 +6,7 @@ import MapNavigator from '@src/components/map/map-navigator';
 import { getCurrentUserLocation } from '@src/libs/geolocation';
 import MapUtils from '@src/components/map/map-utils';
 import CurrentLocationMarker from '@src/components/map/current-location-marker';
+import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
 
 const cx = classNames.bind(styles);
 
@@ -13,6 +14,7 @@ function LocationMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
+  usePlaceOnMap(map);
 
   const initMap = useCallback(async () => {
     if (!mapContainerRef.current || isLoadedRef.current) return;
