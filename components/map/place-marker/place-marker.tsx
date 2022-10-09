@@ -8,15 +8,13 @@ import Image from 'next/future/image';
 const cx = classNames.bind(styles);
 
 interface Props {
-  map: kakao.maps.Map | null;
+  map: kakao.maps.Map;
   place: Pick<Place, 'name' | 'images' | 'latitude' | 'longitude'>;
 }
 
 function PlaceMarker({ map, place }: Props) {
   useEffect(() => {
-    if (!map || !place?.latitude || !place.longitude) return;
-
-    console.log('place effect', place.name);
+    if (!place?.latitude || !place.longitude) return;
 
     const image = place.images?.[0]?.url;
     const overlay = new window.kakao.maps.CustomOverlay({

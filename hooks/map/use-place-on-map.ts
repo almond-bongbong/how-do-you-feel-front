@@ -37,11 +37,12 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
   useEffect(() => {
     if (!map) return;
 
-    window.kakao.maps.event.addListener(
-      map,
-      'bounds_changed',
-      throttle(handleBoundsChange, 1000, { trailing: true }),
-    );
+    const throttledHandleBoundsChange = throttle(handleBoundsChange, 1000, { trailing: true });
+    window.kakao.maps.event.addListener(map, 'bounds_changed', throttledHandleBoundsChange);
+
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'bounds_changed', throttledHandleBoundsChange);
+    };
   }, [map, handleBoundsChange]);
 
   useEffect(() => {

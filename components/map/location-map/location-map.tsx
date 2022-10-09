@@ -10,12 +10,14 @@ import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
 import PlaceMarker from '@src/components/map/place-marker';
 
 const cx = classNames.bind(styles);
+const DEFAULT_ZOOM_LEVEL = 4;
 
 function LocationMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
   const { places } = usePlaceOnMap(map);
+  const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL);
 
   const initMap = useCallback(async () => {
     if (!mapContainerRef.current || isLoadedRef.current) return;
@@ -25,7 +27,7 @@ function LocationMap() {
     const container = mapContainerRef.current;
     const options = {
       center: new window.kakao.maps.LatLng(37.557701, 126.911667),
-      level: 4,
+      level: DEFAULT_ZOOM_LEVEL,
     };
 
     setMap(new window.kakao.maps.Map(container, options));
@@ -42,19 +44,28 @@ function LocationMap() {
     map.setCenter(new window.kakao.maps.LatLng(latitude, longitude));
   }, [map]);
 
+  // useEffect(() => {
+  // moveToCurrentUserLocation();
+  // }, [moveToCurrentUserLocation]);
+
   useEffect(() => {
-    // moveToCurrentUserLocation();
-  }, [moveToCurrentUserLocation]);
+    if (!map) return;
+
+    const handleZoomChanged = () => setZoomLevel(map.getLevel());
+    window.kakao.maps.event.addListener(map, 'zoom_changed', handleZoomChanged);
+
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChanged);
+    };
+  }, [map]);
 
   return (
-    <div>
+    <div className={`zoom_level_${zoomLevel}`}>
       <MapNavigator />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
-      {places.map((place) => (
-        <PlaceMarker key={place.id} map={map} place={place} />
-      ))}
+      {map && places.map((place) => <PlaceMarker key={place.id} map={map} place={place} />)}
     </div>
   );
 }
