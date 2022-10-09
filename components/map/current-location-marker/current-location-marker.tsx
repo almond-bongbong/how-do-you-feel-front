@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { watchUserLocation } from '@src/libs/geolocation';
 import classNames from 'classnames/bind';
 import styles from './current-location-marker.module.scss';
+import CustomOverlay = kakao.maps.CustomOverlay;
 
 const cx = classNames.bind(styles);
 
@@ -10,20 +11,24 @@ interface Props {
 }
 
 function CurrentLocationMarker({ map }: Props) {
-  const currentLocationMarkerRef = useRef();
+  const currentLocationMarkerRef = useRef<CustomOverlay>();
 
   useEffect(() => {
     watchUserLocation((position) => {
       if (!map) return;
 
-      const marker =
-        currentLocationMarkerRef.current ??
-        new window.kakao.maps.CustomOverlay({
-          position: new window.kakao.maps.LatLng(position.latitude, position.longitude),
-          content: `<div class="${cx('marker')}">현재위치</div>`,
-        });
+      const coords = new window.kakao.maps.LatLng(position.latitude, position.longitude);
 
-      marker.setMap(map);
+      if (currentLocationMarkerRef.current) {
+        currentLocationMarkerRef.current.setPosition(coords);
+        return;
+      }
+
+      currentLocationMarkerRef.current = new window.kakao.maps.CustomOverlay({
+        position: coords,
+        content: `<div class="${cx('marker')}">현재위치</div>`,
+      });
+      currentLocationMarkerRef.current.setMap(map);
     });
   }, [map]);
 

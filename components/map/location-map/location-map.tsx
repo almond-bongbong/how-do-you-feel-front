@@ -7,6 +7,7 @@ import { getCurrentUserLocation } from '@src/libs/geolocation';
 import MapUtils from '@src/components/map/map-utils';
 import CurrentLocationMarker from '@src/components/map/current-location-marker';
 import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
+import PlaceMarker from '@src/components/map/place-marker';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ function LocationMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
-  usePlaceOnMap(map);
+  const { places } = usePlaceOnMap(map);
 
   const initMap = useCallback(async () => {
     if (!mapContainerRef.current || isLoadedRef.current) return;
@@ -23,8 +24,8 @@ function LocationMap() {
     await loadKakaoMapScript();
     const container = mapContainerRef.current;
     const options = {
-      center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
+      center: new window.kakao.maps.LatLng(37.557701, 126.911667),
+      level: 4,
     };
 
     setMap(new window.kakao.maps.Map(container, options));
@@ -42,7 +43,7 @@ function LocationMap() {
   }, [map]);
 
   useEffect(() => {
-    moveToCurrentUserLocation();
+    // moveToCurrentUserLocation();
   }, [moveToCurrentUserLocation]);
 
   return (
@@ -51,6 +52,9 @@ function LocationMap() {
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
+      {places.map((place) => (
+        <PlaceMarker key={place.id} map={map} place={place} />
+      ))}
     </div>
   );
 }

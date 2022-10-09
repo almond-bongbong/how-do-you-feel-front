@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+  width: 100px;
+  padding: 4px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
+  }
+}
+
+.thumbnail {
+  position: relative;
+  overflow: hidden;
+  padding-top: 75%;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.name {
+  margin-top: 5px;
+  font-size: 11px;
+}

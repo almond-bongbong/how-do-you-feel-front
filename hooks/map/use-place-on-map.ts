@@ -1,13 +1,38 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { throttle } from '@src/libs/utils';
+import {
+  GetPlaceListByLocationQuery,
+  useGetPlaceListByLocationLazyQuery,
+} from '@src/generated/graphql';
+import { toArray, uniqBy } from '@fxts/core';
+
+type PlaceItem = GetPlaceListByLocationQuery['getPlaceListByLocation']['items'][0];
 
 function usePlaceOnMap(map: kakao.maps.Map | null) {
-  const handleBoundsChange = useCallback(() => {
+  const [places, setPlaces] = useState<PlaceItem[]>([]);
+  const [getPlaceListByLocation] = useGetPlaceListByLocationLazyQuery();
+
+  const handleBoundsChange = useCallback(async () => {
     if (!map) return;
 
     const bounds = map.getBounds();
-    console.log(bounds.getSouthWest().toString(), bounds.getNorthEast().toString());
-  }, [map]);
+    const { data } = await getPlaceListByLocation({
+      variables: {
+        input: {
+          bottomLeftPosition: {
+            latitude: bounds.getSouthWest().getLat(),
+            longitude: bounds.getSouthWest().getLng(),
+          },
+          topRightPosition: {
+            latitude: bounds.getNorthEast().getLat(),
+            longitude: bounds.getNorthEast().getLng(),
+          },
+        },
+      },
+    });
+    const items = data?.getPlaceListByLocation?.items ?? [];
+    setPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...items])));
+  }, [map, getPlaceListByLocation]);
 
   useEffect(() => {
     if (!map) return;
@@ -19,7 +44,11 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
     );
   }, [map, handleBoundsChange]);
 
-  return {};
+  useEffect(() => {
+    handleBoundsChange();
+  }, [handleBoundsChange]);
+
+  return { places };
 }
 
 export default usePlaceOnMap;

@@ -33,6 +33,24 @@ export const GET_PLACE_LIST_QUERY = gql`
   }
 `;
 
+export const GET_PLACE_LIST_BY_LOCATION_QUERY = gql`
+  query GetPlaceListByLocation($input: GetPlaceListByLocationInput!) {
+    getPlaceListByLocation(input: $input) {
+      total
+      items {
+        id
+        name
+        images {
+          key
+          url
+        }
+        longitude
+        latitude
+      }
+    }
+  }
+`;
+
 export const GET_BOOKMARK_PLACE_LIST_QUERY = gql`
   query GetBookmarkPlaceList($input: GetBookmarkPlaceListInput!) {
     getBookmarkPlaceList(input: $input) {
