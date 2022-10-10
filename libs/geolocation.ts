@@ -8,7 +8,9 @@ export const getCurrentUserLocation = (): Promise<GeolocationCoordinates> =>
         console.log(error);
       },
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: Infinity,
       },
     );
   });
@@ -23,6 +25,8 @@ export const watchUserLocation = (callback: (position: GeolocationCoordinates) =
     },
     {
       enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: Infinity,
     },
   );
 };

@@ -41,6 +41,7 @@ function LocationMap() {
     if (!map) return;
 
     const { longitude, latitude } = await getCurrentUserLocation();
+    console.log('move');
     map.setCenter(new window.kakao.maps.LatLng(latitude, longitude));
   }, [map]);
 

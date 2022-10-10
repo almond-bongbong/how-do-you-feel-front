@@ -6,6 +6,7 @@
 :global(.zoom_level_13) div :has(> .container),
 :global(.zoom_level_14) div :has(> .container) {
   transform: scale(0.7);
+  transform-origin: 50% 100%;
 }
 
 div :has(> .container:hover) {
@@ -19,7 +20,6 @@ div :has(> .container:hover) {
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
-  transform-origin: 50% 100%;
 
   &:after {
     content: '';
