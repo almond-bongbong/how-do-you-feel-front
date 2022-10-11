@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Place } from '@src/generated/graphql';
 import classNames from 'classnames/bind';
 import styles from './place-marker.module.scss';
-import { renderToString } from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server';
 import Image from 'next/future/image';
 
 const cx = classNames.bind(styles);
@@ -13,12 +13,14 @@ interface Props {
 }
 
 function PlaceMarker({ map, place }: Props) {
+  const [zoomLevel, setZoomLevel] = useState(map.getLevel());
+
   useEffect(() => {
     if (!place?.latitude || !place.longitude) return;
 
     const image = place.images?.[0]?.url;
     const overlay = new window.kakao.maps.CustomOverlay({
-      content: renderToString(
+      content: renderToStaticMarkup(
         <div className={cx('container')}>
           <div className={cx('thumbnail')}>
             {image && <Image src={image} width={100} height={100} alt="썸네일" />}
@@ -34,7 +36,16 @@ function PlaceMarker({ map, place }: Props) {
     return () => {
       overlay.setMap(null);
     };
-  }, [map, place]);
+  }, [map, place, zoomLevel]);
+
+  useEffect(() => {
+    const handleZoomChanged = () => setZoomLevel(map.getLevel());
+    window.kakao.maps.event.addListener(map, 'zoom_changed', handleZoomChanged);
+
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChanged);
+    };
+  }, [map]);
 
   return null;
 }
