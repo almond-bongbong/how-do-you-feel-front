@@ -3,8 +3,10 @@ import { gql } from '@apollo/client';
 export const GET_PLACE_LIST_QUERY = gql`
   query GetPlaceList($input: GetPlaceListInput!) {
     getPlaceList(input: $input) {
+      total
       items {
         id
+        name
         content
         images {
           key
@@ -27,25 +29,6 @@ export const GET_PLACE_LIST_QUERY = gql`
             url
           }
         }
-      }
-      total
-    }
-  }
-`;
-
-export const GET_PLACE_LIST_BY_LOCATION_QUERY = gql`
-  query GetPlaceListByLocation($input: GetPlaceListByLocationInput!) {
-    getPlaceListByLocation(input: $input) {
-      total
-      items {
-        id
-        name
-        images {
-          key
-          url
-        }
-        longitude
-        latitude
       }
     }
   }

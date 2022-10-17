@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { throttle } from '@src/libs/utils';
-import {
-  GetPlaceListByLocationQuery,
-  useGetPlaceListByLocationLazyQuery,
-} from '@src/generated/graphql';
 import { toArray, uniqBy } from '@fxts/core';
+import { GetPlaceListQuery, useGetPlaceListLazyQuery } from '@src/generated/graphql';
 
-type PlaceItem = GetPlaceListByLocationQuery['getPlaceListByLocation']['items'][0];
+type PlaceItem = GetPlaceListQuery['getPlaceList']['items'][0];
 
 function usePlaceOnMap(map: kakao.maps.Map | null) {
   const [places, setPlaces] = useState<PlaceItem[]>([]);
-  const [getPlaceListByLocation] = useGetPlaceListByLocationLazyQuery();
+  const [getPlaceListByLocation] = useGetPlaceListLazyQuery();
 
   const handleBoundsChange = useCallback(async () => {
     if (!map) return;
@@ -30,7 +27,7 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
         },
       },
     });
-    const items = data?.getPlaceListByLocation?.items ?? [];
+    const items = data?.getPlaceList?.items ?? [];
     setPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...items])));
   }, [map, getPlaceListByLocation]);
 
