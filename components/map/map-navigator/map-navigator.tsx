@@ -6,10 +6,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/pro-solid-svg-icons';
 import { faChevronLeft } from '@fortawesome/pro-light-svg-icons';
 import { useRouter } from 'next/router';
+import { Place } from '@src/generated/graphql';
+import Image from 'next/future/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 const cx = classNames.bind(styles);
 
-function MapNavigator() {
+interface Props {
+  places: Pick<Place, 'id' | 'name' | 'latitude' | 'longitude' | 'images' | 'address'>[];
+}
+
+function MapNavigator({ places }: Props) {
   const router = useRouter();
 
   return (
@@ -27,6 +35,31 @@ function MapNavigator() {
           </Link>
         </h1>
       </header>
+
+      <article className={cx('content')}>
+        <ul className={cx('place_list')}>
+          {places.map((place) => (
+            <li key={place.id}>
+              {place.images && place.images?.length > 0 && (
+                <Swiper className={cx('images')} spaceBetween={2}>
+                  {place.images.map((image, i) => (
+                    <SwiperSlide
+                      key={image.key}
+                      className={cx('image', {
+                        has_more: i === 0 && place.images && place.images?.length > 1,
+                      })}
+                    >
+                      <Image src={image.url} width={300} height={200} alt="image thumbnail" />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+              <div className={cx('name')}>{place.name}</div>
+              <div className={cx('address')}>{place.address}</div>
+            </li>
+          ))}
+        </ul>
+      </article>
     </div>
   );
 }

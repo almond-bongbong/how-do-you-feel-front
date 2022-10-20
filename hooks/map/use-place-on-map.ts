@@ -6,8 +6,9 @@ import { GetPlaceListQuery, useGetPlaceListLazyQuery } from '@src/generated/grap
 type PlaceItem = GetPlaceListQuery['getPlaceList']['items'][0];
 
 function usePlaceOnMap(map: kakao.maps.Map | null) {
-  const [places, setPlaces] = useState<PlaceItem[]>([]);
   const [getPlaceListByLocation] = useGetPlaceListLazyQuery();
+  const [places, setPlaces] = useState<PlaceItem[]>([]);
+  const [cachedPlaces, setCachedPlaces] = useState<PlaceItem[]>([]);
 
   const handleBoundsChange = useCallback(async () => {
     if (!map) return;
@@ -28,7 +29,9 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
       },
     });
     const items = data?.getPlaceList?.items ?? [];
-    setPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...items])));
+
+    setPlaces(items);
+    setCachedPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...items])));
   }, [map, getPlaceListByLocation]);
 
   useEffect(() => {
@@ -46,7 +49,7 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
     handleBoundsChange();
   }, [handleBoundsChange]);
 
-  return { places };
+  return { places, cachedPlaces };
 }
 
 export default usePlaceOnMap;

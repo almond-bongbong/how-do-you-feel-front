@@ -1,19 +1,29 @@
 @import 'styles/variables';
 
 .container {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 20px;
   left: 20px;
   z-index: 10;
+  max-height: calc(100vh - 40px);
   padding: 15px;
   border: 1px solid $input-border-color;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .header {
   display: flex;
+  flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-top: 20px;
 }
 
 .prev_button {
@@ -31,4 +41,52 @@
   display: block;
   padding: 10px;
   font-size: 18px;
+}
+
+.place_list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 300px;
+  padding-bottom: 40px;
+
+  > li + li {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #ddd;
+  }
+
+  .name {
+    margin-top: 15px;
+    color: $accent-font-color;
+  }
+
+  .image {
+    &.has_more:hover {
+      animation: slide_here 1s ease-in-out 1 alternate;
+    }
+
+    img {
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .address {
+    margin-top: 8px;
+    color: #888;
+    font-size: 13px;
+  }
+}
+
+@keyframes slide_here {
+  0% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: -10px;
+  }
+  100% {
+    margin-left: 0;
+  }
 }

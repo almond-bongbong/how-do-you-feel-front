@@ -16,7 +16,7 @@ function LocationMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
-  const { places } = usePlaceOnMap(map);
+  const { places, cachedPlaces } = usePlaceOnMap(map);
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL);
 
   const initMap = useCallback(async () => {
@@ -61,11 +61,11 @@ function LocationMap() {
 
   return (
     <div className={`zoom_level_${zoomLevel}`}>
-      <MapNavigator />
+      <MapNavigator places={places} />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
-      {map && places.map((place) => <PlaceMarker key={place.id} map={map} place={place} />)}
+      {map && cachedPlaces.map((place) => <PlaceMarker key={place.id} map={map} place={place} />)}
     </div>
   );
 }
