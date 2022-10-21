@@ -7,8 +7,8 @@
   top: 20px;
   left: 20px;
   z-index: 10;
+  padding: 15px 0;
   max-height: calc(100vh - 40px);
-  padding: 15px;
   border: 1px solid $input-border-color;
   background-color: rgba(255, 255, 255, 0.85);
 }
@@ -18,12 +18,13 @@
   flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
+  padding: 0 15px;
 }
 
 .content {
   flex: 1 1 auto;
   overflow-y: auto;
-  margin-top: 20px;
+  padding: 15px;
 }
 
 .prev_button {
@@ -72,10 +73,33 @@
     }
   }
 
+  .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .info_area {
+    margin-top: 10px;
+
+    svg {
+      margin-right: 8px;
+      vertical-align: text-bottom;
+      font-size: 14px;
+    }
+
+    .like {
+      color: #ff5151;
+      font-size: 13px;
+    }
+  }
+
   .address {
-    margin-top: 8px;
-    color: #888;
-    font-size: 13px;
+    margin-top: 4px;
+    color: #999;
+    font-size: 12px;
   }
 }
 

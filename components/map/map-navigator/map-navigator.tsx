@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './map-navigator.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/pro-solid-svg-icons';
+import { faHeart, faHome } from '@fortawesome/pro-solid-svg-icons';
 import { faChevronLeft } from '@fortawesome/pro-light-svg-icons';
 import { useRouter } from 'next/router';
 import { Place } from '@src/generated/graphql';
@@ -14,7 +14,10 @@ import 'swiper/css';
 const cx = classNames.bind(styles);
 
 interface Props {
-  places: Pick<Place, 'id' | 'name' | 'latitude' | 'longitude' | 'images' | 'address'>[];
+  places: Pick<
+    Place,
+    'id' | 'name' | 'latitude' | 'longitude' | 'images' | 'address' | 'content' | 'likeCount'
+  >[];
 }
 
 function MapNavigator({ places }: Props) {
@@ -55,7 +58,15 @@ function MapNavigator({ places }: Props) {
                 </Swiper>
               )}
               <div className={cx('name')}>{place.name}</div>
+              <div className={cx('description')}>{place.content}</div>
               <div className={cx('address')}>{place.address}</div>
+              <div className={cx('info_area')}>
+                <span className={cx('like')}>
+                  <FontAwesomeIcon icon={faHeart} />
+                  {place.likeCount}명이 좋아해요
+                </span>
+                <span className={cx('bookmark')}>{/*<FontAwesomeIcon icon={fa}*/}</span>
+              </div>
             </li>
           ))}
         </ul>
