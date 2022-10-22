@@ -8,6 +8,8 @@ import MapUtils from '@src/components/map/map-utils';
 import CurrentLocationMarker from '@src/components/map/current-location-marker';
 import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
 import PlaceMarker from '@src/components/map/place-marker';
+import PlaceDetailModal from '@src/components/modal/place-detail-modal';
+import { useModal } from '@src/hooks/modal/use-modal';
 
 const cx = classNames.bind(styles);
 const DEFAULT_ZOOM_LEVEL = 4;
@@ -18,6 +20,8 @@ function LocationMap() {
   const isLoadedRef = useRef(false);
   const { places, cachedPlaces } = usePlaceOnMap(map);
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL);
+  const [visibleDetailModal, openDetailModal, closeDetailModal, detailPlaceId] =
+    useModal<number>(false);
 
   const initMap = useCallback(async () => {
     if (!mapContainerRef.current || isLoadedRef.current) return;
@@ -61,11 +65,25 @@ function LocationMap() {
 
   return (
     <div className={`zoom_level_${zoomLevel}`}>
-      <MapNavigator places={places} />
+      <MapNavigator map={map} places={places} onClickPlaceDetail={openDetailModal} />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
-      {map && cachedPlaces.map((place) => <PlaceMarker key={place.id} map={map} place={place} />)}
+      {map &&
+        cachedPlaces.map((place) => (
+          <PlaceMarker
+            key={place.id}
+            map={map}
+            place={place}
+            onClickPlaceDetail={openDetailModal}
+          />
+        ))}
+
+      <PlaceDetailModal
+        visible={visibleDetailModal}
+        onClose={closeDetailModal}
+        placeId={detailPlaceId}
+      />
     </div>
   );
 }

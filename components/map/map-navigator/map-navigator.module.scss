@@ -48,7 +48,6 @@
   overflow-x: hidden;
   overflow-y: auto;
   width: 300px;
-  padding-bottom: 40px;
 
   > li + li {
     margin-top: 20px;
@@ -56,9 +55,17 @@
     border-top: 1px dashed #ddd;
   }
 
-  .name {
-    margin-top: 15px;
-    color: $accent-font-color;
+  .empty {
+    padding: 30px 10px;
+    border: 1px dashed #ddd;
+    text-align: center;
+    font-size: 14px;
+
+    .icon {
+      margin-bottom: 8px;
+      color: #999;
+      font-size: 28px;
+    }
   }
 
   .image {
@@ -73,11 +80,22 @@
     }
   }
 
+  .detail_trigger {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  .name {
+    margin-top: 15px;
+    color: $accent-font-color;
+  }
+
   .description {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-top: 10px;
+    margin-top: 6px;
     font-size: 14px;
   }
 
@@ -97,9 +115,12 @@
   }
 
   .address {
-    margin-top: 4px;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
     color: #999;
-    font-size: 12px;
+    font-size: 13px;
+    text-align: left;
   }
 }
 

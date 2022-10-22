@@ -4,24 +4,35 @@ import styles from './map-navigator.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faHome } from '@fortawesome/pro-solid-svg-icons';
-import { faChevronLeft } from '@fortawesome/pro-light-svg-icons';
+import { faChevronLeft, faFaceSadTear } from '@fortawesome/pro-light-svg-icons';
 import { useRouter } from 'next/router';
-import { Place } from '@src/generated/graphql';
 import Image from 'next/future/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { Place } from '@src/generated/graphql';
 
 const cx = classNames.bind(styles);
 
+type PlaceItem = Pick<
+  Place,
+  'id' | 'name' | 'latitude' | 'longitude' | 'images' | 'address' | 'content' | 'likeCount'
+>;
+
 interface Props {
-  places: Pick<
-    Place,
-    'id' | 'name' | 'latitude' | 'longitude' | 'images' | 'address' | 'content' | 'likeCount'
-  >[];
+  map: kakao.maps.Map | null;
+  places: PlaceItem[];
+  onClickPlaceDetail: (placeId: number) => void;
 }
 
-function MapNavigator({ places }: Props) {
+function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
   const router = useRouter();
+
+  const handleClickPlaceAddress = (place: PlaceItem) => {
+    if (!map || !place.latitude || !place.longitude) return;
+
+    const position = new window.kakao.maps.LatLng(place.latitude, place.longitude);
+    map.panTo(position);
+  };
 
   return (
     <div className={cx('container')}>
@@ -41,6 +52,14 @@ function MapNavigator({ places }: Props) {
 
       <article className={cx('content')}>
         <ul className={cx('place_list')}>
+          {places.length === 0 && (
+            <div className={cx('empty')}>
+              <div className={cx('icon')}>
+                <FontAwesomeIcon icon={faFaceSadTear} />
+              </div>
+              아직 괜찮은 장소를 찾지 못했어요.
+            </div>
+          )}
           {places.map((place) => (
             <li key={place.id}>
               {place.images && place.images?.length > 0 && (
@@ -57,9 +76,21 @@ function MapNavigator({ places }: Props) {
                   ))}
                 </Swiper>
               )}
-              <div className={cx('name')}>{place.name}</div>
-              <div className={cx('description')}>{place.content}</div>
-              <div className={cx('address')}>{place.address}</div>
+              <button
+                className={cx('detail_trigger')}
+                type="button"
+                onClick={() => onClickPlaceDetail(place.id)}
+              >
+                <div className={cx('name')}>{place.name}</div>
+                <div className={cx('description')}>{place.content}</div>
+              </button>
+              <button
+                className={cx('address')}
+                type="button"
+                onClick={() => handleClickPlaceAddress(place)}
+              >
+                {place.address}
+              </button>
               <div className={cx('info_area')}>
                 <span className={cx('like')}>
                   <FontAwesomeIcon icon={faHeart} />
