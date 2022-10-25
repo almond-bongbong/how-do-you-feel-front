@@ -1,8 +1,8 @@
 import React from 'react';
-import LocationMap from '@src/components/map/location-map';
+import PlaceMap from '@src/components/map/place-map';
 
 function Map() {
-  return <LocationMap />;
+  return <PlaceMap />;
 }
 
 export default Map;

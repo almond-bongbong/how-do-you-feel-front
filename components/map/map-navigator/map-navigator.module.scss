@@ -4,13 +4,13 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 0;
+  left: 0;
   z-index: 10;
+  height: 100vh;
   padding: 15px 0;
-  max-height: calc(100vh - 40px);
-  border: 1px solid $input-border-color;
   background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%), 5px 0 15px 0 rgb(0 0 0 / 10%);
 }
 
 .header {

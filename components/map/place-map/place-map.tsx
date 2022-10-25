@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { loadKakaoMapScript } from '@src/libs/map';
 import classNames from 'classnames/bind';
-import styles from './location-map.module.scss';
+import styles from './place-map.module.scss';
 import MapNavigator from '@src/components/map/map-navigator';
 import { getCurrentUserLocation } from '@src/libs/geolocation';
 import MapUtils from '@src/components/map/map-utils';
@@ -14,7 +14,7 @@ import { useModal } from '@src/hooks/modal/use-modal';
 const cx = classNames.bind(styles);
 const DEFAULT_ZOOM_LEVEL = 4;
 
-function LocationMap() {
+function PlaceMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
@@ -64,7 +64,7 @@ function LocationMap() {
   }, [map]);
 
   return (
-    <div className={`zoom_level_${zoomLevel}`}>
+    <div className={cx('place_map', `zoom_level_${zoomLevel}`)}>
       <MapNavigator map={map} places={places} onClickPlaceDetail={openDetailModal} />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
@@ -88,4 +88,4 @@ function LocationMap() {
   );
 }
 
-export default LocationMap;
+export default PlaceMap;
