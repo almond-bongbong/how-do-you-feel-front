@@ -4,7 +4,6 @@ import styles from './place-list-item.module.scss';
 import ProfileImage from '@src/components/common/user/profile-image';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
 import { useModal } from '@src/hooks/modal/use-modal';
 import ImageViewModal from '@src/components/modal/image-view-modal';
 import { GetPlaceListQuery } from '@src/generated/graphql';
@@ -19,6 +18,7 @@ import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
 import PlaceDeleteButton from '@src/components/place/place-delete-button';
 import PlaceCommentButton from '@src/components/place/place-comment-button';
 import { omit } from '@fxts/core';
+import { faMap } from '@fortawesome/pro-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -86,7 +86,7 @@ function PlaceListItem({ place, onDelete }: Props) {
                 openMap({ x: place.longitude, y: place.latitude })
               }
             >
-              <FontAwesomeIcon icon={faLocationArrow} />
+              <FontAwesomeIcon icon={faMap} />
               {address}
             </button>
           )}

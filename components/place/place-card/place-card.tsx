@@ -9,7 +9,7 @@ import MapViewModal from '@src/components/modal/map-view-modal';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { faLocationArrow } from '@fortawesome/pro-solid-svg-icons';
+import { faMap } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PlaceLikeButton from '@src/components/place/place-like-button';
 import PlaceBookmarkButton from '@src/components/place/place-bookmark-button';
@@ -60,7 +60,7 @@ function PlaceCard({ place, onDelete, onClickComment }: Props) {
               disabled={!hasPosition}
               onClick={openMapModal}
             >
-              <FontAwesomeIcon icon={faLocationArrow} />
+              <FontAwesomeIcon icon={faMap} />
               {place.address}
             </button>
           )}

@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './map-navigator.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faHome } from '@fortawesome/pro-solid-svg-icons';
+import { faHeart, faHome, faMap } from '@fortawesome/pro-solid-svg-icons';
 import { faChevronLeft, faFaceSadTear } from '@fortawesome/pro-light-svg-icons';
 import { useRouter } from 'next/router';
 import Image from 'next/future/image';
@@ -89,6 +89,7 @@ function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
                 type="button"
                 onClick={() => handleClickPlaceAddress(place)}
               >
+                <FontAwesomeIcon icon={faMap} />
                 {place.address}
               </button>
               <div className={cx('info_area')}>
