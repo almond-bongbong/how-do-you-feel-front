@@ -13,18 +13,18 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
   const handleBoundsChange = useCallback(async () => {
     if (!map) return;
 
-    const bounds = map.getBounds();
+    // const bounds = map.getBounds();
     const { data } = await getPlaceListByLocation({
       variables: {
         input: {
-          bottomLeftPosition: {
-            latitude: bounds.getSouthWest().getLat(),
-            longitude: bounds.getSouthWest().getLng(),
-          },
-          topRightPosition: {
-            latitude: bounds.getNorthEast().getLat(),
-            longitude: bounds.getNorthEast().getLng(),
-          },
+          // bottomLeftPosition: {
+          //   latitude: bounds.getSouthWest().getLat(),
+          //   longitude: bounds.getSouthWest().getLng(),
+          // },
+          // topRightPosition: {
+          //   latitude: bounds.getNorthEast().getLat(),
+          //   longitude: bounds.getNorthEast().getLng(),
+          // },
         },
       },
     });
