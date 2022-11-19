@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { throttle } from '@src/libs/utils';
 import { toArray, uniqBy } from '@fxts/core';
 import { GetPlaceListQuery, useGetPlaceListLazyQuery } from '@src/generated/graphql';
 
@@ -34,16 +33,16 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
     setCachedPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...items])));
   }, [map, getPlaceListByLocation]);
 
-  useEffect(() => {
-    if (!map) return;
-
-    const throttledHandleBoundsChange = throttle(handleBoundsChange, 1000, { trailing: true });
-    window.kakao.maps.event.addListener(map, 'bounds_changed', throttledHandleBoundsChange);
-
-    return () => {
-      window.kakao.maps.event.removeListener(map, 'bounds_changed', throttledHandleBoundsChange);
-    };
-  }, [map, handleBoundsChange]);
+  // useEffect(() => {
+  //   if (!map) return;
+  //
+  //   const throttledHandleBoundsChange = throttle(handleBoundsChange, 1000, { trailing: true });
+  //   window.kakao.maps.event.addListener(map, 'bounds_changed', throttledHandleBoundsChange);
+  //
+  //   return () => {
+  //     window.kakao.maps.event.removeListener(map, 'bounds_changed', throttledHandleBoundsChange);
+  //   };
+  // }, [map, handleBoundsChange]);
 
   useEffect(() => {
     handleBoundsChange();
