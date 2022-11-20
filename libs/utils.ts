@@ -31,3 +31,15 @@ export function throttle(
     }
   };
 }
+
+export function debounce(fn: (...args: unknown[]) => void, delay: number) {
+  let timer: number | null = null;
+  return function (...args: unknown[]) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = window.setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}

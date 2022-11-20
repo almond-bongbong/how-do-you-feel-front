@@ -10,9 +10,17 @@ import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
 import PlaceMarker from '@src/components/map/place-marker';
 import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 import { useModal } from '@src/hooks/modal/use-modal';
+import { debounce } from '@src/libs/utils';
+import { LATEST_LOCATION_KEY } from '@src/constants/keys';
 
 const cx = classNames.bind(styles);
 const DEFAULT_ZOOM_LEVEL = 4;
+
+// 서울시청 좌표
+const SEOUL_CENTER = {
+  LATITUDE: 37.5659451195856,
+  LONGITUDE: 126.97550018945496,
+};
 
 function PlaceMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -28,9 +36,13 @@ function PlaceMap() {
     isLoadedRef.current = true;
 
     await loadKakaoMapScript();
+    const savedLocation = JSON.parse(localStorage.getItem(LATEST_LOCATION_KEY) || 'null');
     const container = mapContainerRef.current;
     const options = {
-      center: new window.kakao.maps.LatLng(37.557701, 126.911667),
+      center: new window.kakao.maps.LatLng(
+        savedLocation?.latitude || SEOUL_CENTER.LATITUDE,
+        savedLocation?.longitude || SEOUL_CENTER.LONGITUDE,
+      ),
       level: DEFAULT_ZOOM_LEVEL,
     };
 
@@ -48,10 +60,6 @@ function PlaceMap() {
     map.setCenter(new window.kakao.maps.LatLng(latitude, longitude));
   }, [map]);
 
-  // useEffect(() => {
-  // moveToCurrentUserLocation();
-  // }, [moveToCurrentUserLocation]);
-
   useEffect(() => {
     if (!map) return;
 
@@ -60,6 +68,24 @@ function PlaceMap() {
 
     return () => {
       window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChanged);
+    };
+  }, [map]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const handleCenterChanged = debounce(() => {
+      const center = map.getCenter();
+      console.log('call', center.toString());
+      const location = {
+        latitude: center.getLat(),
+        longitude: center.getLng(),
+      };
+      localStorage.setItem(LATEST_LOCATION_KEY, JSON.stringify(location));
+    }, 1000);
+    window.kakao.maps.event.addListener(map, 'center_changed', handleCenterChanged);
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'center_changed', handleCenterChanged);
     };
   }, [map]);
 
