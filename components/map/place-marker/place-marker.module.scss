@@ -16,15 +16,13 @@ div :has(> .container:hover) {
 .container {
   position: relative;
   width: 100px;
-  padding: 4px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  height: 100px;
   transition: transform 0.2s ease-in-out;
 
   &:after {
     content: '';
     position: absolute;
-    top: 100%;
+    bottom: -10px;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
@@ -33,10 +31,18 @@ div :has(> .container:hover) {
   }
 }
 
+.content {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+
 .thumbnail {
   position: relative;
   overflow: hidden;
-  padding-top: 75%;
+  padding-top: 100%;
 
   img {
     position: absolute;
@@ -51,6 +57,16 @@ div :has(> .container:hover) {
 }
 
 .name {
-  margin-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   font-size: 11px;
+  text-align: center;
+  color: #fff;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
