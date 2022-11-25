@@ -76,7 +76,6 @@ function PlaceMap() {
 
     const handleCenterChanged = debounce(() => {
       const center = map.getCenter();
-      console.log('call', center.toString());
       const location = {
         latitude: center.getLat(),
         longitude: center.getLng(),
