@@ -62,42 +62,44 @@ function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
           )}
           {places.map((place) => (
             <li key={place.id}>
-              {place.images && place.images?.length > 0 && (
-                <Swiper className={cx('images')} spaceBetween={2}>
-                  {place.images.map((image, i) => (
-                    <SwiperSlide
-                      key={image.key}
-                      className={cx('image', {
-                        has_more: i === 0 && place.images && place.images?.length > 1,
-                      })}
-                    >
-                      <Image src={image.url} width={300} height={200} alt="image thumbnail" />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              )}
-              <button
-                className={cx('detail_trigger')}
-                type="button"
-                onClick={() => onClickPlaceDetail(place.id)}
-              >
-                <div className={cx('name')}>{place.name}</div>
-                <div className={cx('description')}>{place.content}</div>
-              </button>
-              <button
-                className={cx('address')}
-                type="button"
-                onClick={() => handleClickPlaceAddress(place)}
-              >
-                <FontAwesomeIcon icon={faMap} />
-                {place.address}
-              </button>
-              <div className={cx('info_area')}>
-                <span className={cx('like')}>
-                  <FontAwesomeIcon icon={faHeart} />
-                  {place.likeCount}명이 좋아해요
-                </span>
-                <span className={cx('bookmark')}>{/*<FontAwesomeIcon icon={fa}*/}</span>
+              <div className={cx('inner')}>
+                {place.images && place.images?.length > 0 && (
+                  <Swiper className={cx('images')} spaceBetween={2}>
+                    {place.images.map((image, i) => (
+                      <SwiperSlide
+                        key={image.key}
+                        className={cx('image', {
+                          has_more: i === 0 && place.images && place.images?.length > 1,
+                        })}
+                      >
+                        <Image src={image.url} width={300} height={200} alt="image thumbnail" />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                )}
+                <button
+                  className={cx('detail_trigger')}
+                  type="button"
+                  onClick={() => onClickPlaceDetail(place.id)}
+                >
+                  <div className={cx('name')}>{place.name}</div>
+                  <div className={cx('description')}>{place.content}</div>
+                </button>
+                <button
+                  className={cx('address')}
+                  type="button"
+                  onClick={() => handleClickPlaceAddress(place)}
+                >
+                  <FontAwesomeIcon icon={faMap} />
+                  {place.address}
+                </button>
+                <div className={cx('info_area')}>
+                  <span className={cx('like')}>
+                    <FontAwesomeIcon icon={faHeart} />
+                    {place.likeCount}명이 좋아해요
+                  </span>
+                  <span className={cx('bookmark')}>{/*<FontAwesomeIcon icon={fa}*/}</span>
+                </div>
               </div>
             </li>
           ))}

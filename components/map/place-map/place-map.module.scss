@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .place_map {
   padding-left: 330px;
 }
@@ -5,4 +7,16 @@
 .map {
   width: calc(100vw - 330px);
   height: 100vh;
+}
+
+@media screen and (max-width: $tablet-breakpoint) {
+  .place_map {
+    padding-bottom: 160px;
+    padding-left: 0;
+  }
+
+  .map {
+    width: 100vw;
+    height: calc(100vh - 160px);
+  }
 }
