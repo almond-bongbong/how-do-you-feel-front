@@ -12,6 +12,7 @@ import PlaceDetailModal from '@src/components/modal/place-detail-modal';
 import { useModal } from '@src/hooks/modal/use-modal';
 import { debounce } from '@src/libs/utils';
 import { LATEST_LOCATION_KEY } from '@src/constants/keys';
+import { LatestLocation } from '@src/types/location';
 
 const cx = classNames.bind(styles);
 const DEFAULT_ZOOM_LEVEL = 4;
@@ -36,14 +37,16 @@ function PlaceMap() {
     isLoadedRef.current = true;
 
     await loadKakaoMapScript();
-    const savedLocation = JSON.parse(localStorage.getItem(LATEST_LOCATION_KEY) || 'null');
+    const savedLocation: LatestLocation = JSON.parse(
+      localStorage.getItem(LATEST_LOCATION_KEY) || 'null',
+    );
     const container = mapContainerRef.current;
     const options = {
       center: new window.kakao.maps.LatLng(
         savedLocation?.latitude || SEOUL_CENTER.LATITUDE,
         savedLocation?.longitude || SEOUL_CENTER.LONGITUDE,
       ),
-      level: DEFAULT_ZOOM_LEVEL,
+      level: savedLocation?.zoom ?? DEFAULT_ZOOM_LEVEL,
     };
 
     setMap(new window.kakao.maps.Map(container, options));
@@ -75,13 +78,15 @@ function PlaceMap() {
     if (!map) return;
 
     const handleCenterChanged = debounce(() => {
+      const zoom = map.getLevel();
       const center = map.getCenter();
       const location = {
         latitude: center.getLat(),
         longitude: center.getLng(),
+        zoom,
       };
       localStorage.setItem(LATEST_LOCATION_KEY, JSON.stringify(location));
-    }, 1000);
+    }, 500);
     window.kakao.maps.event.addListener(map, 'center_changed', handleCenterChanged);
     return () => {
       window.kakao.maps.event.removeListener(map, 'center_changed', handleCenterChanged);
