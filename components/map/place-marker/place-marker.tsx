@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Place } from '@src/generated/graphql';
 import classNames from 'classnames/bind';
 import styles from './place-marker.module.scss';
@@ -14,8 +14,6 @@ interface Props {
 }
 
 function PlaceMarker({ map, place, onClickPlaceDetail }: Props) {
-  const [zoomLevel, setZoomLevel] = useState(map.getLevel());
-
   useEffect(() => {
     if (!place?.latitude || !place.longitude) return;
 
@@ -43,16 +41,7 @@ function PlaceMarker({ map, place, onClickPlaceDetail }: Props) {
       overlay.setMap(null);
       overlayWrapper.removeEventListener('click', handleClickOverlay);
     };
-  }, [map, place, zoomLevel, onClickPlaceDetail]);
-
-  useEffect(() => {
-    const handleZoomChanged = () => setZoomLevel(map.getLevel());
-    window.kakao.maps.event.addListener(map, 'zoom_changed', handleZoomChanged);
-
-    return () => {
-      window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChanged);
-    };
-  }, [map]);
+  }, [map, place, onClickPlaceDetail]);
 
   return null;
 }

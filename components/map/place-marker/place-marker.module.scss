@@ -9,6 +9,11 @@
   transform-origin: 50% 100%;
 }
 
+div :has(> .container) {
+  transform: scale(1);
+  transition: transform 0.1s linear;
+}
+
 div :has(> .container:hover) {
   z-index: 10 !important;
 }
@@ -17,7 +22,6 @@ div :has(> .container:hover) {
   position: relative;
   width: 100px;
   height: 100px;
-  transition: transform 0.2s ease-in-out;
 
   &:after {
     content: '';

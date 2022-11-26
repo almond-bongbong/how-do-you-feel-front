@@ -50,6 +50,7 @@ function PlaceMap() {
     };
 
     setMap(new window.kakao.maps.Map(container, options));
+    setZoomLevel(options.level);
   }, []);
 
   useEffect(() => {
