@@ -65,11 +65,19 @@ function Modal({
   }, [checkHasScroll, contentHeight]);
 
   useEffect(() => {
+    let timer: number;
+
     if (visible) {
-      setTimeout(() => setLocalVisible(visible), 16);
+      timer = window.setTimeout(() => setLocalVisible(visible), 16);
     } else {
-      setTimeout(() => setLocalVisible(visible), 300);
+      timer = window.setTimeout(() => setLocalVisible(visible), 300);
     }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [visible]);
 
   useEffect(() => {

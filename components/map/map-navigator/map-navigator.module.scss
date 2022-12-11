@@ -97,6 +97,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
     margin-top: 6px;
     font-size: 0.9em;
   }
@@ -187,7 +188,6 @@
       max-width: 200px;
       height: 100%;
       padding: 0 2px;
-      pointer-events: none;
 
       &:first-child {
         padding-left: 4px;
@@ -203,8 +203,9 @@
         border-top: 0;
       }
 
-      & :global(.swiper) {
+      .images {
         height: 100%;
+        pointer-events: none;
       }
     }
 
@@ -220,11 +221,16 @@
     }
 
     .detail_trigger {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
       position: absolute;
+      top: 0;
       right: 0;
       bottom: 0;
       left: 0;
       z-index: 10;
+      width: 100%;
       padding: 8px 10px;
       color: #fff;
       font-size: 13px;

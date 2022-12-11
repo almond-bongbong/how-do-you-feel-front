@@ -13,6 +13,7 @@ import { useModal } from '@src/hooks/modal/use-modal';
 import { debounce } from '@src/libs/utils';
 import { LATEST_LOCATION_KEY } from '@src/constants/keys';
 import { LatestLocation } from '@src/types/location';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 const DEFAULT_ZOOM_LEVEL = 4;
@@ -29,6 +30,7 @@ function PlaceMap() {
   const isLoadedRef = useRef(false);
   const { places, placesOnCurrentBounds } = usePlaceOnMap(map);
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL);
+  const router = useRouter();
   const [visibleDetailModal, openDetailModal, closeDetailModal, detailPlaceId] =
     useModal<number>(false);
 
@@ -94,9 +96,33 @@ function PlaceMap() {
     };
   }, [map]);
 
+  const onClickPlaceDetail = useCallback(
+    (placeId: number) => {
+      // href={{
+      //   query: {
+      //   ...router.query,
+      //       placeId: place.id,
+      //   },
+      // }}
+      // as={`/place/${place.id}`}
+      // shallow
+      router.push({
+        query: {
+          ...router.query,
+          placeId,
+        },
+      });
+    },
+    [router],
+  );
+
   return (
     <div className={cx('place_map', `zoom_level_${zoomLevel}`)}>
-      <MapNavigator map={map} places={placesOnCurrentBounds} onClickPlaceDetail={openDetailModal} />
+      <MapNavigator
+        map={map}
+        places={placesOnCurrentBounds}
+        onClickPlaceDetail={onClickPlaceDetail}
+      />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
@@ -106,14 +132,14 @@ function PlaceMap() {
             key={place.id}
             map={map}
             place={place}
-            onClickPlaceDetail={openDetailModal}
+            onClickPlaceDetail={onClickPlaceDetail}
           />
         ))}
 
       <PlaceDetailModal
-        visible={visibleDetailModal}
-        onClose={closeDetailModal}
-        placeId={detailPlaceId}
+        visible={!!router.query.placeId}
+        onClose={router.back}
+        placeId={Number(router.query.placeId)}
       />
     </div>
   );
