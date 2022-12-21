@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { toArray, uniqBy } from '@fxts/core';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetBookmarkPlaceListLazyQuery, useGetPlaceListLazyQuery } from '@src/generated/graphql';
 import { throttle } from '@src/libs/utils';
 import { Coordinates } from '@src/types/location';
 import useCurrentUser from '@src/hooks/auth/use-current-user';
 import { useRouter } from 'next/router';
+import { toArray, uniqBy } from '@fxts/core';
 
 type PlaceItem = {
   id: number;
@@ -30,41 +30,56 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
   const router = useRouter();
   const bookMarkedOnly = router.query.bookMarkedOnly === 'true';
   const { currentUser } = useCurrentUser();
-  const [getPlaceList, { called }] = useGetPlaceListLazyQuery();
-  const [getBookMarkPlaceList, { called: bookmarkListCalled }] = useGetBookmarkPlaceListLazyQuery();
+  const [getPlaceList] = useGetPlaceListLazyQuery();
+  const [getBookMarkPlaceList] = useGetBookmarkPlaceListLazyQuery();
   const [places, setPlaces] = useState<PlaceItem[]>([]);
-  const [placesOnCurrentBounds, setPlacesOnCurrentBounds] = useState<PlaceItem[]>([]);
   const fetchedBottomLeft = useRef<Coordinates>(DEFAULT_COORDINATES);
   const fetchedTopRight = useRef<Coordinates>(DEFAULT_COORDINATES);
+  const [currentBounds, setCurrentBounds] = useState<kakao.maps.LatLngBounds | null>(null);
 
-  const handleBoundsChange = useCallback(async () => {
-    if (!map) return;
+  const placesOnCurrentBounds = useMemo(() => {
+    if (!currentBounds) return [];
 
-    const bounds = map.getBounds();
-    const bottomLeftPosition = {
-      latitude: bounds.getSouthWest().getLat(),
-      longitude: bounds.getSouthWest().getLng(),
-    };
-    const topRightPosition = {
-      latitude: bounds.getNorthEast().getLat(),
-      longitude: bounds.getNorthEast().getLng(),
-    };
+    return places.filter(
+      (place) =>
+        (bookMarkedOnly ? place.isBookmarked : true) &&
+        place.latitude &&
+        place.longitude &&
+        place.latitude >= currentBounds.getSouthWest().getLat() &&
+        place.latitude <= currentBounds.getNorthEast().getLat() &&
+        place.longitude >= currentBounds.getSouthWest().getLng() &&
+        place.longitude <= currentBounds.getNorthEast().getLng(),
+    );
+  }, [currentBounds, bookMarkedOnly, places]);
+
+  const fetchPlaces = useCallback(async () => {
+    if (!currentBounds) return;
 
     const isAlreadyFetchedBounds =
-      fetchedBottomLeft.current.latitude < bottomLeftPosition.latitude &&
-      fetchedBottomLeft.current.longitude < bottomLeftPosition.longitude &&
-      fetchedTopRight.current?.latitude > topRightPosition.latitude &&
-      fetchedTopRight.current?.longitude > topRightPosition.longitude;
+      fetchedBottomLeft.current.latitude < currentBounds.getSouthWest().getLat() &&
+      fetchedBottomLeft.current.longitude < currentBounds.getSouthWest().getLng() &&
+      fetchedTopRight.current?.latitude > currentBounds.getNorthEast().getLat() &&
+      fetchedTopRight.current?.longitude > currentBounds.getNorthEast().getLng();
 
     let queryResultItems: PlaceItem[] = [];
     if (!isAlreadyFetchedBounds) {
+      const boundsParams = {
+        bottomLeftPosition: {
+          latitude: currentBounds.getSouthWest().getLat(),
+          longitude: currentBounds.getSouthWest().getLng(),
+        },
+        topRightPosition: {
+          latitude: currentBounds.getNorthEast().getLat(),
+          longitude: currentBounds.getNorthEast().getLng(),
+        },
+      };
+
       if (bookMarkedOnly) {
         const { data } = await getBookMarkPlaceList({
           variables: {
             input: {
               accountId: currentUser?.id || '',
-              bottomLeftPosition,
-              topRightPosition,
+              ...boundsParams,
             },
           },
         });
@@ -72,55 +87,41 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
       } else {
         const { data } = await getPlaceList({
           variables: {
-            input: {
-              bottomLeftPosition,
-              topRightPosition,
-            },
+            input: { ...boundsParams },
           },
         });
         queryResultItems = data?.getPlaceList?.items ?? [];
       }
-      fetchedBottomLeft.current = bottomLeftPosition;
-      fetchedTopRight.current = topRightPosition;
+      fetchedBottomLeft.current = boundsParams.bottomLeftPosition;
+      fetchedTopRight.current = boundsParams.topRightPosition;
     }
 
-    setPlaces((prev) => {
-      const mergedItems = toArray(uniqBy((p) => p.id, [...prev, ...queryResultItems]));
-      const placesOnCurrentBounds = mergedItems.filter(
-        (place) =>
-          place.latitude &&
-          place.longitude &&
-          place.latitude >= bottomLeftPosition.latitude &&
-          place.latitude <= topRightPosition.latitude &&
-          place.longitude >= bottomLeftPosition.longitude &&
-          place.longitude <= topRightPosition.longitude,
-      );
-      setPlacesOnCurrentBounds(placesOnCurrentBounds);
-      return mergedItems;
-    });
-  }, [map, getPlaceList, bookMarkedOnly, currentUser?.id, getBookMarkPlaceList]);
+    setPlaces((prev) => toArray(uniqBy((p) => p.id, [...prev, ...queryResultItems])));
+  }, [bookMarkedOnly, currentBounds, currentUser?.id, getBookMarkPlaceList, getPlaceList]);
+
+  const handleBoundsChange = useCallback(async () => {
+    if (!map) return;
+
+    const bounds = map.getBounds();
+    setCurrentBounds(bounds);
+  }, [map]);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    fetchPlaces();
+  }, [router.isReady, fetchPlaces]);
 
   useEffect(() => {
     if (!map) return;
 
     const throttledHandleBoundsChange = throttle(handleBoundsChange, 1000, { trailing: true });
     window.kakao.maps.event.addListener(map, 'bounds_changed', throttledHandleBoundsChange);
+    setCurrentBounds(map.getBounds());
 
     return () => {
       window.kakao.maps.event.removeListener(map, 'bounds_changed', throttledHandleBoundsChange);
     };
   }, [map, handleBoundsChange]);
-
-  useEffect(() => {
-    if (!router.isReady || bookMarkedOnly) return;
-    handleBoundsChange();
-  }, [router.isReady, handleBoundsChange, bookMarkedOnly, called]);
-
-  useEffect(() => {
-    if (!router.isReady || !bookMarkedOnly) return;
-    setPlaces([]);
-    handleBoundsChange();
-  }, [router.isReady, handleBoundsChange, bookMarkedOnly, bookmarkListCalled]);
 
   return { places, placesOnCurrentBounds };
 }

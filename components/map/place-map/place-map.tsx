@@ -134,7 +134,7 @@ function PlaceMap() {
       <div id="map" className={cx('map')} ref={mapContainerRef} />
       {map && <CurrentLocationMarker map={map} />}
       {map &&
-        places.map((place) => (
+        placesOnCurrentBounds.map((place) => (
           <PlaceMarker
             key={place.id}
             map={map}
