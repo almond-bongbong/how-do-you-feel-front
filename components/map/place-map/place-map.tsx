@@ -9,7 +9,6 @@ import CurrentLocationMarker from '@src/components/map/current-location-marker';
 import usePlaceOnMap from '@src/hooks/map/use-place-on-map';
 import PlaceMarker from '@src/components/map/place-marker';
 import PlaceDetailModal from '@src/components/modal/place-detail-modal';
-import { useModal } from '@src/hooks/modal/use-modal';
 import { debounce } from '@src/libs/utils';
 import { LATEST_LOCATION_KEY } from '@src/constants/keys';
 import { LatestLocation } from '@src/types/location';
@@ -28,11 +27,9 @@ function PlaceMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isLoadedRef = useRef(false);
+  const router = useRouter();
   const { places, placesOnCurrentBounds } = usePlaceOnMap(map);
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL);
-  const router = useRouter();
-  const [visibleDetailModal, openDetailModal, closeDetailModal, detailPlaceId] =
-    useModal<number>(false);
 
   const initMap = useCallback(async () => {
     if (!mapContainerRef.current || isLoadedRef.current) return;
@@ -96,7 +93,7 @@ function PlaceMap() {
     };
   }, [map]);
 
-  const onClickPlaceDetail = useCallback(
+  const onPlaceDetailClick = useCallback(
     (placeId: number) => {
       // href={{
       //   query: {
@@ -116,12 +113,22 @@ function PlaceMap() {
     [router],
   );
 
+  const onBookmarkedFilterClick = useCallback(() => {
+    router.push({
+      query: {
+        ...router.query,
+        bookMarkedOnly: true,
+      },
+    });
+  }, [router]);
+
   return (
     <div className={cx('place_map', `zoom_level_${zoomLevel}`)}>
       <MapNavigator
         map={map}
         places={placesOnCurrentBounds}
-        onClickPlaceDetail={onClickPlaceDetail}
+        onPlaceDetailClick={onPlaceDetailClick}
+        onBookmarkedFilterClick={onBookmarkedFilterClick}
       />
       <MapUtils onClickMoveToCurrentUserLocation={moveToCurrentUserLocation} />
       <div id="map" className={cx('map')} ref={mapContainerRef} />
@@ -132,7 +139,7 @@ function PlaceMap() {
             key={place.id}
             map={map}
             place={place}
-            onClickPlaceDetail={onClickPlaceDetail}
+            onPlaceDetailClick={onPlaceDetailClick}
           />
         ))}
 

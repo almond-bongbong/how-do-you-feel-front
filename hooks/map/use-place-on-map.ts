@@ -1,15 +1,37 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toArray, uniqBy } from '@fxts/core';
-import { GetPlaceListQuery, useGetPlaceListLazyQuery } from '@src/generated/graphql';
+import { useGetBookmarkPlaceListLazyQuery, useGetPlaceListLazyQuery } from '@src/generated/graphql';
 import { throttle } from '@src/libs/utils';
 import { Coordinates } from '@src/types/location';
+import useCurrentUser from '@src/hooks/auth/use-current-user';
+import { useRouter } from 'next/router';
 
-type PlaceItem = GetPlaceListQuery['getPlaceList']['items'][0];
+type PlaceItem = {
+  id: number;
+  name: string;
+  content: string;
+  address?: string | null;
+  buildingName?: string | null;
+  images?:
+    | {
+        key: string;
+        url: string;
+      }[]
+    | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  likeCount: number;
+  isBookmarked: boolean;
+};
 
 const DEFAULT_COORDINATES = { latitude: 0, longitude: 0 };
 
 function usePlaceOnMap(map: kakao.maps.Map | null) {
-  const [getPlaceListByLocation, { called }] = useGetPlaceListLazyQuery();
+  const router = useRouter();
+  const bookMarkedOnly = router.query.bookMarkedOnly === 'true';
+  const { currentUser } = useCurrentUser();
+  const [getPlaceList, { called }] = useGetPlaceListLazyQuery();
+  const [getBookMarkPlaceList, { called: bookmarkListCalled }] = useGetBookmarkPlaceListLazyQuery();
   const [places, setPlaces] = useState<PlaceItem[]>([]);
   const [placesOnCurrentBounds, setPlacesOnCurrentBounds] = useState<PlaceItem[]>([]);
   const fetchedBottomLeft = useRef<Coordinates>(DEFAULT_COORDINATES);
@@ -36,33 +58,47 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
 
     let queryResultItems: PlaceItem[] = [];
     if (!isAlreadyFetchedBounds) {
-      const { data } = await getPlaceListByLocation({
-        variables: {
-          input: {
-            bottomLeftPosition,
-            topRightPosition,
+      if (bookMarkedOnly) {
+        const { data } = await getBookMarkPlaceList({
+          variables: {
+            input: {
+              accountId: currentUser?.id || '',
+              bottomLeftPosition,
+              topRightPosition,
+            },
           },
-        },
-      });
+        });
+        queryResultItems = data?.getBookmarkPlaceList?.items ?? [];
+      } else {
+        const { data } = await getPlaceList({
+          variables: {
+            input: {
+              bottomLeftPosition,
+              topRightPosition,
+            },
+          },
+        });
+        queryResultItems = data?.getPlaceList?.items ?? [];
+      }
       fetchedBottomLeft.current = bottomLeftPosition;
       fetchedTopRight.current = topRightPosition;
-      queryResultItems = data?.getPlaceList?.items ?? [];
     }
 
-    const mergedItems = toArray(uniqBy((p) => p.id, [...places, ...queryResultItems]));
-    setPlaces(mergedItems);
-
-    const placesOnCurrentBounds = mergedItems.filter(
-      (place) =>
-        place.latitude &&
-        place.longitude &&
-        place.latitude >= bottomLeftPosition.latitude &&
-        place.latitude <= topRightPosition.latitude &&
-        place.longitude >= bottomLeftPosition.longitude &&
-        place.longitude <= topRightPosition.longitude,
-    );
-    setPlacesOnCurrentBounds(placesOnCurrentBounds);
-  }, [map, places, getPlaceListByLocation]);
+    setPlaces((prev) => {
+      const mergedItems = toArray(uniqBy((p) => p.id, [...prev, ...queryResultItems]));
+      const placesOnCurrentBounds = mergedItems.filter(
+        (place) =>
+          place.latitude &&
+          place.longitude &&
+          place.latitude >= bottomLeftPosition.latitude &&
+          place.latitude <= topRightPosition.latitude &&
+          place.longitude >= bottomLeftPosition.longitude &&
+          place.longitude <= topRightPosition.longitude,
+      );
+      setPlacesOnCurrentBounds(placesOnCurrentBounds);
+      return mergedItems;
+    });
+  }, [map, getPlaceList, bookMarkedOnly, currentUser?.id, getBookMarkPlaceList]);
 
   useEffect(() => {
     if (!map) return;
@@ -76,9 +112,15 @@ function usePlaceOnMap(map: kakao.maps.Map | null) {
   }, [map, handleBoundsChange]);
 
   useEffect(() => {
-    if (called) return;
+    if (!router.isReady || bookMarkedOnly) return;
     handleBoundsChange();
-  }, [handleBoundsChange, called]);
+  }, [router.isReady, handleBoundsChange, bookMarkedOnly, called]);
+
+  useEffect(() => {
+    if (!router.isReady || !bookMarkedOnly) return;
+    setPlaces([]);
+    handleBoundsChange();
+  }, [router.isReady, handleBoundsChange, bookMarkedOnly, bookmarkListCalled]);
 
   return { places, placesOnCurrentBounds };
 }

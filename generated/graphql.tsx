@@ -526,7 +526,7 @@ export type GetBookmarkPlaceListQueryVariables = Exact<{
 }>;
 
 
-export type GetBookmarkPlaceListQuery = { __typename?: 'Query', getBookmarkPlaceList: { __typename?: 'GetBookmarkPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, address?: string | null, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null }> } };
+export type GetBookmarkPlaceListQuery = { __typename?: 'Query', getBookmarkPlaceList: { __typename?: 'GetBookmarkPlaceListOutput', total: number, items: Array<{ __typename?: 'Place', id: number, name: string, content: string, address?: string | null, longitude?: number | null, latitude?: number | null, buildingName?: string | null, isLiked: boolean, likeCount: number, isBookmarked: boolean, bookmarkCount: number, commentCount: number, images?: Array<{ __typename?: 'Image', key: string, url: string }> | null, account: { __typename?: 'Account', id: string, username: string, profileImage?: { __typename?: 'Image', key: string, url: string } | null } }> } };
 
 export type GetMyLikePlaceListQueryVariables = Exact<{
   input: GetMyLikePlaceListInput;
@@ -1095,10 +1095,28 @@ export const GetBookmarkPlaceListDocument = gql`
     total
     items {
       id
-      address
+      name
+      content
       images {
         key
         url
+      }
+      address
+      longitude
+      latitude
+      buildingName
+      isLiked
+      likeCount
+      isBookmarked
+      bookmarkCount
+      commentCount
+      account {
+        id
+        username
+        profileImage {
+          key
+          url
+        }
       }
     }
   }

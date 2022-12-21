@@ -40,10 +40,28 @@ export const GET_BOOKMARK_PLACE_LIST_QUERY = gql`
       total
       items {
         id
-        address
+        name
+        content
         images {
           key
           url
+        }
+        address
+        longitude
+        latitude
+        buildingName
+        isLiked
+        likeCount
+        isBookmarked
+        bookmarkCount
+        commentCount
+        account {
+          id
+          username
+          profileImage {
+            key
+            url
+          }
         }
       }
     }

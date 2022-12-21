@@ -4,7 +4,7 @@ import styles from './map-navigator.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faHome, faMap } from '@fortawesome/pro-solid-svg-icons';
-import { faChevronLeft, faFaceSadTear } from '@fortawesome/pro-light-svg-icons';
+import { faBookmark, faChevronLeft, faFaceSadTear } from '@fortawesome/pro-light-svg-icons';
 import { useRouter } from 'next/router';
 import Image from 'next/future/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,10 +21,11 @@ type PlaceItem = Pick<
 interface Props {
   map: kakao.maps.Map | null;
   places: PlaceItem[];
-  onClickPlaceDetail: (placeId: number) => void;
+  onPlaceDetailClick: (placeId: number) => void;
+  onBookmarkedFilterClick: () => void;
 }
 
-function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
+function MapNavigator({ map, places, onPlaceDetailClick, onBookmarkedFilterClick }: Props) {
   const router = useRouter();
 
   const handleClickPlaceAddress = (place: PlaceItem) => {
@@ -49,6 +50,17 @@ function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
           </Link>
         </h1>
       </header>
+
+      <nav>
+        <button
+          type="button"
+          className={cx('bookmark_view_button')}
+          onClick={onBookmarkedFilterClick}
+        >
+          <FontAwesomeIcon icon={faBookmark} />
+          저장된 장소
+        </button>
+      </nav>
 
       <article className={cx('content')}>
         <ul className={cx('place_list')}>
@@ -80,7 +92,7 @@ function MapNavigator({ map, places, onClickPlaceDetail }: Props) {
                 <button
                   className={cx('detail_trigger')}
                   type="button"
-                  onClick={() => onClickPlaceDetail(place.id)}
+                  onClick={() => onPlaceDetailClick(place.id)}
                 >
                   <div className={cx('name')}>{place.name}</div>
                   <div className={cx('description')}>{place.content}</div>

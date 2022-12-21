@@ -10,10 +10,10 @@ const cx = classNames.bind(styles);
 interface Props {
   map: kakao.maps.Map;
   place: Pick<Place, 'id' | 'name' | 'images' | 'latitude' | 'longitude'>;
-  onClickPlaceDetail: (placeId: number) => void;
+  onPlaceDetailClick: (placeId: number) => void;
 }
 
-function PlaceMarker({ map, place, onClickPlaceDetail }: Props) {
+function PlaceMarker({ map, place, onPlaceDetailClick }: Props) {
   useEffect(() => {
     if (!place?.latitude || !place.longitude) return;
 
@@ -28,7 +28,7 @@ function PlaceMarker({ map, place, onClickPlaceDetail }: Props) {
         <div className={cx('name')}>{place.name}</div>
       </div>,
     );
-    const handleClickOverlay = () => onClickPlaceDetail(place.id);
+    const handleClickOverlay = () => onPlaceDetailClick(place.id);
     overlayWrapper.addEventListener('click', handleClickOverlay);
     const overlay = new window.kakao.maps.CustomOverlay({
       content: overlayWrapper,
@@ -41,7 +41,7 @@ function PlaceMarker({ map, place, onClickPlaceDetail }: Props) {
       overlay.setMap(null);
       overlayWrapper.removeEventListener('click', handleClickOverlay);
     };
-  }, [map, place, onClickPlaceDetail]);
+  }, [map, place, onPlaceDetailClick]);
 
   return null;
 }
